@@ -65,20 +65,41 @@ const handleDelete = (event) => {
 
 const handleEdit = (event) => {
   const task = event.target.closest(".task");
-  const input = createTaskInput(task.innerText);
-  task.replaceWith(input);
-  input.focus();
 
-  // move cursor to the end
+  // Extract current values from task
+  const nameText = task.querySelector("#name").innerText;
+  const timeText = task.querySelector("#time").innerText;
+  const difficultyText = task.querySelector("#difficulty").innerText;
+
+  // Create editable input fields with current values
+  const input = createTaskInput(nameText, timeText, difficultyText);
+  task.replaceWith(input);
+  input.querySelector("#name").focus();
+
+  // Move cursor to the end of the task name field
   const selection = window.getSelection();
-  selection.selectAllChildren(input);
-  selection.collapseToEnd();
+  const nameField = input.querySelector("#name");
+  const range = document.createRange();
+  range.selectNodeContents(nameField);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
 };
 
 const handleBlur = (event) => {
-  const input = event.target;
-  const content = input.innerText.trim() || "Untitled";
-  const task = createTask(content.replace(/\n/g, "<br>"));
+  const input = event.target.closest(".task-Container");
+
+  // Extract values from each field
+  const nameText = input.querySelector("#name").innerText.trim() || "Untitled";
+  const timeText = input.querySelector("#time").innerText.trim() || "No time set";
+  let difficultyText;
+  if(input.querySelector("#difficulty").value != "select"){
+    difficultyText = input.querySelector("#difficulty").value;
+  }else{
+    difficultyText ="No difficulty set";
+  }
+  // Create a task element with extracted values
+  const task = createTask(nameText, timeText, difficultyText);
   input.replaceWith(task);
 };
 
@@ -104,28 +125,42 @@ const observeTaskChanges = () => {
 
 observeTaskChanges();
 
-const createTask = (content) => {
+const createTask = (nameText, timeText, difficultyText) => {
   const task = document.createElement("div");
   task.className = "task";
   task.draggable = true;
   task.innerHTML = `
-  <div>${content}</div>
-  <menu>
+  <div style = "display: flex; flex-direction: column; margin: 2px">
+    <div id="name" style = "font-weight:bolder;">${nameText}</div>
+    <div>Est.Time:<span id="time">${timeText}</span></div>
+    <div id="difficulty">Difficulty: ${difficultyText}</div>
+    <menu>
       <button data-edit><i class="bi bi-pencil-square"></i></button>
       <button data-delete><i class="bi bi-trash"></i></button>
-  </menu>`;
+    </menu>
+  </div>`;
   task.addEventListener("dragstart", handleDragstart);
   task.addEventListener("dragend", handleDragend);
   return task;
 };
 
-const createTaskInput = (text = "") => {
+const createTaskInput = (nameText = "", timeText = "", difficultyText = "") => {
   const input = document.createElement("div");
-  input.className = "task-input";
-  input.dataset.placeholder = "Task name";
-  input.contentEditable = true;
-  input.innerText = text;
-  input.addEventListener("blur", handleBlur);
+  input.className = "task-Container";
+
+  input.innerHTML = `
+  <div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
+  <div class="task-input" id="time"contenteditable="true" data-placeholder="Estimated Time">${timeText}</div>
+  <select class="task-input" id="difficulty">
+    <option value="select" ${difficultyText.toLowerCase() === "select difficulty" ? "selected" : ""}>Select Difficulty</option>
+    <option value="easy" ${difficultyText.toLowerCase() === "easy" ? "selected" : ""}>Easy</option>
+    <option value="medium" ${difficultyText.toLowerCase() === "medium" ? "selected" : ""}>Medium</option>
+    <option value="hard" ${difficultyText.toLowerCase() === "hard" ? "selected" : ""}>Hard</option>
+  </select>
+  <button id = "createButton">Create</button>
+  `;
+  const createButton = input.querySelector("#createButton");
+  createButton.addEventListener("click", () => handleBlur({ target: input }));
   return input;
 };
 
@@ -158,34 +193,36 @@ modal.querySelector("#cancel").addEventListener("click", () => modal.close());
 // clear current task
 modal.addEventListener("close", () => (currentTask = null));
 
+
+
 //* placeholder tasks
 
-let tasks = [
-  [
-    "Gather inspiration for layout ideas 🖌️",
-    "Research Color Palette 🖍️",
-    "Brand and Logo Design 🎨",
-  ],
-  [
-    "Optimize Image Assets 🏞️",
-    "Cross-Browser Testing 🌐",
-    "Integrate Livechat 💬",
-  ],
-  [
-    "Set Up Custom Domain 🌍",
-    "Deploy Website 🚀",
-    "Fix Bugs 🛠️",
-    "Team Meeting 📅",
-  ],
-  [
-    "Write Report 📊",
-    "Code Review 💻",
-    "Implement Billing and Subscription 💰",
-  ],
-];
+// let tasks = [
+//   [
+//     "Gather inspiration for layout ideas 🖌️",
+//     "Research Color Palette 🖍️",
+//     "Brand and Logo Design 🎨",
+//   ],
+//   [
+//     "Optimize Image Assets 🏞️",
+//     "Cross-Browser Testing 🌐",
+//     "Integrate Livechat 💬",
+//   ],
+//   [
+//     "Set Up Custom Domain 🌍",
+//     "Deploy Website 🚀",
+//     "Fix Bugs 🛠️",
+//     "Team Meeting 📅",
+//   ],
+//   [
+//     "Write Report 📊",
+//     "Code Review 💻",
+//     "Implement Billing and Subscription 💰",
+//   ],
+// ];
 
-tasks.forEach((col, idx) => {
-  for (const item of col) {
-    columns[idx].querySelector(".tasks").appendChild(createTask(item));
-  }
-});
+// tasks.forEach((col, idx) => {
+//   for (const item of col) {
+//     columns[idx].querySelector(".tasks").appendChild(createTask(item));
+//   }
+// });
