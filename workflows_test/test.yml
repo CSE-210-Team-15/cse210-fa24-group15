@@ -1,7 +1,10 @@
 name: Run Tests
 
 on:
-  push
+  push:
+    branches: [test]
+  pull_request:
+    branches: [test]
 
 jobs:
   hello:
@@ -10,10 +13,10 @@ jobs:
     steps:
       - name: Demo Test
         uses: actions/checkout@v3
-      # - name: Setup Node
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 16.18
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.18
       - name: Install Dependencies
         run: npm install
       - name: Run tests
