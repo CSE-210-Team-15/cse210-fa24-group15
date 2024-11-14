@@ -12,6 +12,16 @@ const handleDragover = (event) => {
   const draggedTask = document.querySelector(".dragging");
   const target = event.target.closest(".task, .tasks");
 
+  const sourceColumn = draggedTask.closest(".column").querySelector("h3").textContent.trim();
+  const targetColumn = target.closest(".column").querySelector("h3").textContent.trim();
+
+  if (
+    (sourceColumn === "In Progress" && targetColumn === "To Do") || // Block In Progress to To Do
+    (sourceColumn === "Done" && (targetColumn === "To Do" || targetColumn === "In Progress")) // Block Done to To Do or In Progress
+  ) {
+    return; // Prevent drop specifically in these cases
+  }
+
   if (!target || target === draggedTask) return;
 
   if (target.classList.contains("tasks")) {
