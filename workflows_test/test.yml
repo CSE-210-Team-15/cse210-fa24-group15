@@ -9,9 +9,9 @@ jobs:
 
     steps:
       - name: Demo Test
-        uses: action/checkout@v2
+        uses: action/checkout@v1
       - name: Setup Node
-        uses: action/setup-node@v2
+        uses: action/setup-node@v1
         with:
           node-version: 16.18
       - name: Install Dependencies
