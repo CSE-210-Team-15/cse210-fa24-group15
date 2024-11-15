@@ -3,6 +3,44 @@ const columnsContainer = document.querySelector(".columns");
 const columns = columnsContainer.querySelectorAll(".column");
 
 let currentTask = null;
+let tasks = [];
+
+//* classes
+
+// Task object to store task information. Can't handle pausing of timer right now. 
+class Task {
+  constructor(name, estTime, difficulty) {
+    this.name = name;
+    this.estTime = estTime; // should be in milliseconds
+    this.startTime = new Date();
+    this.remainingTime = estTime;
+    this.difficulty = difficulty;
+    // might need column number 
+  }
+
+  getRemainingTime() {
+    const currentTime = new Date();
+    this.remainingTime = this.estTime - (currentTime - this.startTime);
+    return this.remainingTime;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      estTime: this.estTime,
+      startTime: this.startTime.toISOString(),
+      remainingTime: this.remainingTime,
+      difficulty: this.difficulty
+    };
+  }
+
+  static fromJSON(json) {
+    const task = Object.assign(new Task(), json);
+    task.startTime = new Date(json.startTime);
+    return task;
+  }
+}
+
 
 //* functions
 
@@ -72,6 +110,7 @@ const handleEdit = (event) => {
   const difficultyText = task.querySelector("#difficulty").innerText;
 
   // Create editable input fields with current values
+  deleteTaskFromLocalStorage(task);
   const input = createTaskInput(nameText, timeText, difficultyText);
   task.replaceWith(input);
   input.querySelector("#name").focus();
@@ -111,8 +150,8 @@ const handleAdd = (event) => {
 };
 
 const updateTaskCount = (column) => {
-  const tasks = column.querySelector(".tasks").children;
-  const taskCount = tasks.length;
+  const colTasks = column.querySelector(".tasks").children;
+  const taskCount = colTasks.length;
   column.querySelector(".column-title h3").dataset.tasks = taskCount;
 };
 
@@ -126,6 +165,11 @@ const observeTaskChanges = () => {
 observeTaskChanges();
 
 const createTask = (nameText, timeText, difficultyText) => {
+  const newTask = new Task(nameText, timeText, difficultyText);
+  tasks = loadTasks();
+  tasks.push(newTask); 
+  saveTasks(tasks);
+  
   const task = document.createElement("div");
   task.className = "task";
   task.draggable = true;
@@ -164,6 +208,36 @@ const createTaskInput = (nameText = "", timeText = "", difficultyText = "") => {
   return input;
 };
 
+// Function to save tasks to local storage
+const saveTasks = (tasks) => {
+  const tasksJSON = tasks.map(task => task.toJSON());
+  localStorage.setItem('tasks', JSON.stringify(tasksJSON));
+};
+
+// Function to load tasks from local storage
+const loadTasks = () => {
+  const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
+  return tasksJSON.map(Task.fromJSON);
+};
+
+const deleteTaskFromLocalStorage = (task) => {
+  // Load tasks from local storage
+  const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
+  
+  // Find index of the task to be deleted
+  const taskIndex = tasksJSON.findIndex(storedTask => storedTask.name === task.querySelector("#name").innerText);
+  
+  // Remove task from array
+  if (taskIndex !== -1) {
+    tasksJSON.splice(taskIndex, 1);
+    // Save updated array back to local storage
+    localStorage.setItem('tasks', JSON.stringify(tasksJSON));
+  }
+
+  // Load tasks from local storage and print
+  tasks = loadTasks();
+}
+
 //* event listeners
 
 // dragover and drop
@@ -185,7 +259,12 @@ columnsContainer.addEventListener("click", (event) => {
 });
 
 // confirm deletion
-modal.addEventListener("submit", () => currentTask && currentTask.remove());
+modal.addEventListener("submit", () => {
+  if (currentTask) {
+    deleteTaskFromLocalStorage(currentTask); // Call the function to delete from local storage
+    currentTask.remove(); // Remove the task from the DOM
+  }
+});
 
 // cancel deletion
 modal.querySelector("#cancel").addEventListener("click", () => modal.close());
