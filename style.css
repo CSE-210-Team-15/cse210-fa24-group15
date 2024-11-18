@@ -146,17 +146,18 @@ button:is(:active, :hover) {
 .task-input {
   outline: none;
   overflow-wrap: anywhere;
-  padding-left: 2.5rem;
+  padding: 0.5rem 0.5rem 0.5rem; /* Unified padding for better structure */
+  border: 1px solid black; /* Explicit border style */
+  border-radius: 4px; /* Slightly more rounded corners */
+  background-color: #f9f9f9; /* Light background for readability */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transition effects */
+  margin-bottom: 0.5rem;
 }
 
-.task-input::before {
-  content: "\F392";
-  font-family: "bootstrap-icons";
-  position: absolute;
-  left: 0.875rem;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0.5;
+.task-input:focus {
+  border-color: #007bff; /* Highlight border on focus */
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25); /* Enhanced shadow on focus */
 }
 
 .task-input:empty::after {
@@ -251,4 +252,14 @@ button:is(:active, :hover) {
 .confirm-modal button#confirm:hover {
   border-color: var(--confirm-hover-color);
   background: var(--confirm-hover-color);
+}
+
+#createButton {
+  background-color: green;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px; 
+  cursor: pointer; 
+  font-size: 16px; 
 }
