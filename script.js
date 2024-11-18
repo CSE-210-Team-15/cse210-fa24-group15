@@ -3,9 +3,67 @@ const columnsContainer = document.querySelector(".columns");
 const columns = columnsContainer.querySelectorAll(".column");
 
 let currentTask = null;
+let tasks = [];
+
+//* classes
+
+// Task object to store task information. Can't handle pausing of timer right now. 
+class Task {
+  constructor(name, estTime, difficulty) {
+    this.name = name;
+    this.estTime = estTime; // should be in milliseconds
+    this.startTime = new Date();
+    this.remainingTime = estTime;
+    this.difficulty = difficulty;
+    // might need column number 
+  }
+
+  getRemainingTime() {
+    const currentTime = new Date();
+    this.remainingTime = this.estTime - (currentTime - this.startTime);
+    return this.remainingTime;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      estTime: this.estTime,
+      startTime: this.startTime.toISOString(),
+      remainingTime: this.remainingTime,
+      difficulty: this.difficulty
+    };
+  }
+
+  static fromJSON(json) {
+    const task = Object.assign(new Task(), json);
+    task.startTime = new Date(json.startTime);
+    return task;
+  }
+}
+
 
 //* functions
 
+/**
+ * Handles the dragover event to allow dragging and dropping tasks.
+ * 
+ * This function prevents the default dragover behavior, identifies the dragged task,
+ * and determines where to place it within the target list or relative to other tasks.
+ *
+ * @param {DragEvent} event - The dragover event triggered by dragging an element.
+ * 
+ * @returns {void}
+ *
+ * The function performs the following actions:
+ * 1. Prevents the default behavior to allow dropping.
+ * 2. Identifies the currently dragged task using the ".dragging" class.
+ * 3. Finds the closest droppable target (either a `.task` or `.tasks` container).
+ * 4. If the target is a `.tasks` container:
+ *    - Appends the dragged task if the container is empty.
+ *    - Appends the dragged task after the last task if the cursor is below it.
+ * 5. If the target is a `.task` element:
+ *    - Inserts the dragged task before or after the target based on cursor position.
+ */
 const handleDragover = (event) => {
   event.preventDefault(); // allow drop
 
@@ -75,20 +133,42 @@ const handleDelete = (event) => {
 
 const handleEdit = (event) => {
   const task = event.target.closest(".task");
-  const input = createTaskInput(task.innerText);
-  task.replaceWith(input);
-  input.focus();
 
-  // move cursor to the end
+  // Extract current values from task
+  const nameText = task.querySelector("#name").innerText;
+  const timeText = task.querySelector("#time").innerText;
+  const difficultyText = task.querySelector("#difficulty").innerText;
+
+  // Create editable input fields with current values
+  deleteTaskFromLocalStorage(task);
+  const input = createTaskInput(nameText, timeText, difficultyText);
+  task.replaceWith(input);
+  input.querySelector("#name").focus();
+
+  // Move cursor to the end of the task name field
   const selection = window.getSelection();
-  selection.selectAllChildren(input);
-  selection.collapseToEnd();
+  const nameField = input.querySelector("#name");
+  const range = document.createRange();
+  range.selectNodeContents(nameField);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
 };
 
 const handleBlur = (event) => {
-  const input = event.target;
-  const content = input.innerText.trim() || "Untitled";
-  const task = createTask(content.replace(/\n/g, "<br>"));
+  const input = event.target.closest(".task-Container");
+
+  // Extract values from each field
+  const nameText = input.querySelector("#name").innerText.trim() || "Untitled";
+  const timeText = input.querySelector("#time").innerText.trim() || "No time set";
+  let difficultyText;
+  if(input.querySelector("#difficulty").value != "select"){
+    difficultyText = input.querySelector("#difficulty").value;
+  }else{
+    difficultyText ="No difficulty set";
+  }
+  // Create a task element with extracted values
+  const task = createTask(nameText, timeText, difficultyText);
   input.replaceWith(task);
 };
 
@@ -100,8 +180,8 @@ const handleAdd = (event) => {
 };
 
 const updateTaskCount = (column) => {
-  const tasks = column.querySelector(".tasks").children;
-  const taskCount = tasks.length;
+  const colTasks = column.querySelector(".tasks").children;
+  const taskCount = colTasks.length;
   column.querySelector(".column-title h3").dataset.tasks = taskCount;
 };
 
@@ -114,30 +194,79 @@ const observeTaskChanges = () => {
 
 observeTaskChanges();
 
-const createTask = (content) => {
+const createTask = (nameText, timeText, difficultyText) => {
+  const newTask = new Task(nameText, timeText, difficultyText);
+  tasks = loadTasks();
+  tasks.push(newTask); 
+  saveTasks(tasks);
+  
   const task = document.createElement("div");
   task.className = "task";
   task.draggable = true;
   task.innerHTML = `
-  <div>${content}</div>
-  <menu>
+  <div style = "display: flex; flex-direction: column; margin: 2px">
+    <div id="name" style = "font-weight:bolder;">${nameText}</div>
+    <div>Est.Time:<span id="time">${timeText}</span></div>
+    <div id="difficulty">Difficulty: ${difficultyText}</div>
+    <menu>
       <button data-edit><i class="bi bi-pencil-square"></i></button>
       <button data-delete><i class="bi bi-trash"></i></button>
-  </menu>`;
+    </menu>
+  </div>`;
   task.addEventListener("dragstart", handleDragstart);
   task.addEventListener("dragend", handleDragend);
   return task;
 };
 
-const createTaskInput = (text = "") => {
+const createTaskInput = (nameText = "", timeText = "", difficultyText = "") => {
   const input = document.createElement("div");
-  input.className = "task-input";
-  input.dataset.placeholder = "Task name";
-  input.contentEditable = true;
-  input.innerText = text;
-  input.addEventListener("blur", handleBlur);
+  input.className = "task-Container";
+
+  input.innerHTML = `
+  <div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
+  <div class="task-input" id="time"contenteditable="true" data-placeholder="Estimated Time">${timeText}</div>
+  <select class="task-input" id="difficulty">
+    <option value="select" ${difficultyText.toLowerCase() === "select difficulty" ? "selected" : ""}>Select Difficulty</option>
+    <option value="easy" ${difficultyText.toLowerCase() === "easy" ? "selected" : ""}>Easy</option>
+    <option value="medium" ${difficultyText.toLowerCase() === "medium" ? "selected" : ""}>Medium</option>
+    <option value="hard" ${difficultyText.toLowerCase() === "hard" ? "selected" : ""}>Hard</option>
+  </select>
+  <button id = "createButton">Create</button>
+  `;
+  const createButton = input.querySelector("#createButton");
+  createButton.addEventListener("click", () => handleBlur({ target: input }));
   return input;
 };
+
+// Function to save tasks to local storage
+const saveTasks = (tasks) => {
+  const tasksJSON = tasks.map(task => task.toJSON());
+  localStorage.setItem('tasks', JSON.stringify(tasksJSON));
+};
+
+// Function to load tasks from local storage
+const loadTasks = () => {
+  const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
+  return tasksJSON.map(Task.fromJSON);
+};
+
+const deleteTaskFromLocalStorage = (task) => {
+  // Load tasks from local storage
+  const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
+  
+  // Find index of the task to be deleted
+  const taskIndex = tasksJSON.findIndex(storedTask => storedTask.name === task.querySelector("#name").innerText);
+  
+  // Remove task from array
+  if (taskIndex !== -1) {
+    tasksJSON.splice(taskIndex, 1);
+    // Save updated array back to local storage
+    localStorage.setItem('tasks', JSON.stringify(tasksJSON));
+  }
+
+  // Load tasks from local storage and print
+  tasks = loadTasks();
+}
 
 //* event listeners
 
@@ -160,7 +289,12 @@ columnsContainer.addEventListener("click", (event) => {
 });
 
 // confirm deletion
-modal.addEventListener("submit", () => currentTask && currentTask.remove());
+modal.addEventListener("submit", () => {
+  if (currentTask) {
+    deleteTaskFromLocalStorage(currentTask); // Call the function to delete from local storage
+    currentTask.remove(); // Remove the task from the DOM
+  }
+});
 
 // cancel deletion
 modal.querySelector("#cancel").addEventListener("click", () => modal.close());
@@ -168,34 +302,36 @@ modal.querySelector("#cancel").addEventListener("click", () => modal.close());
 // clear current task
 modal.addEventListener("close", () => (currentTask = null));
 
+
+
 //* placeholder tasks
 
-let tasks = [
-  [
-    "Gather inspiration for layout ideas 🖌️",
-    "Research Color Palette 🖍️",
-    "Brand and Logo Design 🎨",
-  ],
-  [
-    "Optimize Image Assets 🏞️",
-    "Cross-Browser Testing 🌐",
-    "Integrate Livechat 💬",
-  ],
-  [
-    "Set Up Custom Domain 🌍",
-    "Deploy Website 🚀",
-    "Fix Bugs 🛠️",
-    "Team Meeting 📅",
-  ],
-  [
-    "Write Report 📊",
-    "Code Review 💻",
-    "Implement Billing and Subscription 💰",
-  ],
-];
+// let tasks = [
+//   [
+//     "Gather inspiration for layout ideas 🖌️",
+//     "Research Color Palette 🖍️",
+//     "Brand and Logo Design 🎨",
+//   ],
+//   [
+//     "Optimize Image Assets 🏞️",
+//     "Cross-Browser Testing 🌐",
+//     "Integrate Livechat 💬",
+//   ],
+//   [
+//     "Set Up Custom Domain 🌍",
+//     "Deploy Website 🚀",
+//     "Fix Bugs 🛠️",
+//     "Team Meeting 📅",
+//   ],
+//   [
+//     "Write Report 📊",
+//     "Code Review 💻",
+//     "Implement Billing and Subscription 💰",
+//   ],
+// ];
 
-tasks.forEach((col, idx) => {
-  for (const item of col) {
-    columns[idx].querySelector(".tasks").appendChild(createTask(item));
-  }
-});
+// tasks.forEach((col, idx) => {
+//   for (const item of col) {
+//     columns[idx].querySelector(".tasks").appendChild(createTask(item));
+//   }
+// });
