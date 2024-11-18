@@ -22,5 +22,8 @@
     "*.{css, scss, html, md, json}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "jsdoc": "^4.0.4"
   }
 }
