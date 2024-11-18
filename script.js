@@ -44,6 +44,26 @@ class Task {
 
 //* functions
 
+/**
+ * Handles the dragover event to allow dragging and dropping tasks.
+ * 
+ * This function prevents the default dragover behavior, identifies the dragged task,
+ * and determines where to place it within the target list or relative to other tasks.
+ *
+ * @param {DragEvent} event - The dragover event triggered by dragging an element.
+ * 
+ * @returns {void}
+ *
+ * The function performs the following actions:
+ * 1. Prevents the default behavior to allow dropping.
+ * 2. Identifies the currently dragged task using the ".dragging" class.
+ * 3. Finds the closest droppable target (either a `.task` or `.tasks` container).
+ * 4. If the target is a `.tasks` container:
+ *    - Appends the dragged task if the container is empty.
+ *    - Appends the dragged task after the last task if the cursor is below it.
+ * 5. If the target is a `.task` element:
+ *    - Inserts the dragged task before or after the target based on cursor position.
+ */
 const handleDragover = (event) => {
   event.preventDefault(); // allow drop
 
