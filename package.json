@@ -1,28 +1,16 @@
 {
-  "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.15.0",
-    "eslint": "^9.15.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "husky": "^8.0.0",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3"
-    "jest": "^29.7.0"
-  },
-  "scripts": {
-    "lint": "eslint . --fix",
-    "format": "prettier --write .",
-    "prepare": "husky install"
-    "test": "jest"
-  },
-  "lint-staged": {
-    "*.{js, jsx, ts, tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{css, scss, html, md, json}": [
-      "prettier --write"
-    ]
-  }
+    "name": "learning-jest",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "jest": "^29.7.0"
+    }
 }
+
