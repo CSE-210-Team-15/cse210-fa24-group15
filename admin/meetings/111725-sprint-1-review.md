@@ -1,14 +1,14 @@
 ## Attendence
 
-*Joey
-*Soumya
-*Matthew
-*Yuan
-*Steve
-*Gavin
-*Sakshi
-*Li
-*Kuber
+- Joey
+- Soumya
+- Matthew
+- Yuan
+- Steve
+- Gavin
+- Sakshi
+- Li
+- Kuber
 
 ## Accomplishments
 
@@ -31,18 +31,18 @@ including adding fields to task creation and saving task objects to localstorage
 
 ### Individual Notes
 
-*Joey: Set up repo, project and issues tracker. Planned first sprint
-*Matthew: Created task class and implemented saving tasks to localstorage after
+- Joey: Set up repo, project and issues tracker. Planned first sprint
+- Matthew: Created task class and implemented saving tasks to localstorage after
 creation
-*Yuan: Add Jest to our repo and enable automated testing on pushing to main branch
-*Steve: Add new fields to task class according to design, making them editable
-*Gavin: Did research into deployment methods. Set up automated deployment via
+- Yuan: Add Jest to our repo and enable automated testing on pushing to main branch
+- Steve: Add new fields to task class according to design, making them editable
+- Gavin: Did research into deployment methods. Set up automated deployment via
 Firebase
-*Soumya: Implement some restrictions on existing kanban board, removed some
+- Soumya: Implement some restrictions on existing kanban board, removed some
 unnecessary features from codebase
-*Sakshi: Investigated Jest and its features
-*Li: Figured out how to use JSDocs to generate documentation
-*Kuber: Added linter+styler to repo via ESLint and Prettier, enabled
+- Sakshi: Investigated Jest and its features
+- Li: Figured out how to use JSDocs to generate documentation
+- Kuber: Added linter+styler to repo via ESLint and Prettier, enabled
 pre-commit checks in addition to local VSCode checks
 
 ![image](misc/img1.jpg)
