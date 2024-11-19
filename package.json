@@ -11,8 +11,7 @@
   },
   "scripts": {
     "lint": "eslint . --fix",
-    "format": "prettier --write .",
-    "prepare": "husky install"
+    "format": "prettier --write ."
   },
   "lint-staged": {
     "*.{js, jsx, ts, tsx}": [
