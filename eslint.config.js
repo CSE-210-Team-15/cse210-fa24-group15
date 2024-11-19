@@ -21,6 +21,8 @@ export default [
       'prettier/prettier': 'error',
       'no-unused-vars': 'warn',
       'no-console': 'off',
+      'no-undef': 'off',
+      'no-useless-escape': 'off',
       eqeqeq: 'error',
       curly: 'error',
       semi: ['error', 'always'],

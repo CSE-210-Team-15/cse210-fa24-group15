@@ -15,5 +15,3 @@ A lightweight task management tool to organize tasks into different columns.
 ### Screenshots
 
 ![Kanban Board](https://raw.githubusercontent.com/refinedguides/kanban-board/main/screenshot.png)
-
-

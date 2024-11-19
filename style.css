@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600&display=swap');
 
 :root {
   --bg-color: #e2e8f0;
@@ -151,7 +151,9 @@ button:is(:active, :hover) {
   border-radius: 4px; /* Slightly more rounded corners */
   background-color: #f9f9f9; /* Light background for readability */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transition effects */
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out; /* Smooth transition effects */
   margin-bottom: 0.5rem;
 }
 
@@ -259,7 +261,7 @@ button:is(:active, :hover) {
   border: none;
   color: white;
   padding: 10px 20px;
-  border-radius: 50px; 
-  cursor: pointer; 
-  font-size: 16px; 
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
 }

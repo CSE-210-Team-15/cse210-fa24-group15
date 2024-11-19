@@ -23,5 +23,5 @@ before each midday, every team member will write one message
 on what they plan to work on (or not work at all) for that day
 
 ### Conclusion:
-The sprint laid a solid foundation for both CICD processes and application functionality. Moving forward, we plan to expand test coverage with more edge cases, implement comprehensive testing.
 
+The sprint laid a solid foundation for both CICD processes and application functionality. Moving forward, we plan to expand test coverage with more edge cases, implement comprehensive testing.

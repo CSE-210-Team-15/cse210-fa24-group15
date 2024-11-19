@@ -1,13 +1,13 @@
-const modal = document.querySelector(".confirm-modal");
-const columnsContainer = document.querySelector(".columns");
-const columns = columnsContainer.querySelectorAll(".column");
+const modal = document.querySelector('.confirm-modal');
+const columnsContainer = document.querySelector('.columns');
+const columns = columnsContainer.querySelectorAll('.column');
 
 let currentTask = null;
 let tasks = [];
 
 //* classes
 
-// Task object to store task information. Can't handle pausing of timer right now. 
+// Task object to store task information. Can't handle pausing of timer right now.
 class Task {
   constructor(name, estTime, difficulty) {
     this.name = name;
@@ -15,7 +15,7 @@ class Task {
     this.startTime = new Date();
     this.remainingTime = estTime;
     this.difficulty = difficulty;
-    // might need column number 
+    // might need column number
   }
 
   getRemainingTime() {
@@ -30,7 +30,7 @@ class Task {
       estTime: this.estTime,
       startTime: this.startTime.toISOString(),
       remainingTime: this.remainingTime,
-      difficulty: this.difficulty
+      difficulty: this.difficulty,
     };
   }
 
@@ -41,17 +41,16 @@ class Task {
   }
 }
 
-
 //* functions
 
 /**
  * Handles the dragover event to allow dragging and dropping tasks.
- * 
+ *
  * This function prevents the default dragover behavior, identifies the dragged task,
  * and determines where to place it within the target list or relative to other tasks.
  *
  * @param {DragEvent} event - The dragover event triggered by dragging an element.
- * 
+ *
  * @returns {void}
  *
  * The function performs the following actions:
@@ -67,22 +66,31 @@ class Task {
 const handleDragover = (event) => {
   event.preventDefault(); // allow drop
 
-  const draggedTask = document.querySelector(".dragging");
-  const target = event.target.closest(".task, .tasks");
+  const draggedTask = document.querySelector('.dragging');
+  const target = event.target.closest('.task, .tasks');
 
-  const sourceColumn = draggedTask.closest(".column").querySelector("h3").textContent.trim();
-  const targetColumn = target.closest(".column").querySelector("h3").textContent.trim();
+  const sourceColumn = draggedTask
+    .closest('.column')
+    .querySelector('h3')
+    .textContent.trim();
+  const targetColumn = target
+    .closest('.column')
+    .querySelector('h3')
+    .textContent.trim();
 
   if (
-    (sourceColumn === "In Progress" && targetColumn === "To Do") || // Block In Progress to To Do
-    (sourceColumn === "Done" && (targetColumn === "To Do" || targetColumn === "In Progress")) // Block Done to To Do or In Progress
+    (sourceColumn === 'In Progress' && targetColumn === 'To Do') || // Block In Progress to To Do
+    (sourceColumn === 'Done' &&
+      (targetColumn === 'To Do' || targetColumn === 'In Progress')) // Block Done to To Do or In Progress
   ) {
     return; // Prevent drop specifically in these cases
   }
 
-  if (!target || target === draggedTask) return;
+  if (!target || target === draggedTask) {
+    return;
+  }
 
-  if (target.classList.contains("tasks")) {
+  if (target.classList.contains('tasks')) {
     // target is the tasks element
     const lastTask = target.lastElementChild;
     if (!lastTask) {
@@ -110,20 +118,20 @@ const handleDrop = (event) => {
 };
 
 const handleDragend = (event) => {
-  event.target.classList.remove("dragging");
+  event.target.classList.remove('dragging');
 };
 
 const handleDragstart = (event) => {
-  event.dataTransfer.effectsAllowed = "move";
-  event.dataTransfer.setData("text/plain", "");
-  requestAnimationFrame(() => event.target.classList.add("dragging"));
+  event.dataTransfer.effectsAllowed = 'move';
+  event.dataTransfer.setData('text/plain', '');
+  requestAnimationFrame(() => event.target.classList.add('dragging'));
 };
 
 const handleDelete = (event) => {
-  currentTask = event.target.closest(".task");
+  currentTask = event.target.closest('.task');
 
   // show preview
-  modal.querySelector(".preview").innerText = currentTask.innerText.substring(
+  modal.querySelector('.preview').innerText = currentTask.innerText.substring(
     0,
     100
   );
@@ -132,22 +140,22 @@ const handleDelete = (event) => {
 };
 
 const handleEdit = (event) => {
-  const task = event.target.closest(".task");
+  const task = event.target.closest('.task');
 
   // Extract current values from task
-  const nameText = task.querySelector("#name").innerText;
-  const timeText = task.querySelector("#time").innerText;
-  const difficultyText = task.querySelector("#difficulty").innerText;
+  const nameText = task.querySelector('#name').innerText;
+  const timeText = task.querySelector('#time').innerText;
+  const difficultyText = task.querySelector('#difficulty').innerText;
 
   // Create editable input fields with current values
   deleteTaskFromLocalStorage(task);
   const input = createTaskInput(nameText, timeText, difficultyText);
   task.replaceWith(input);
-  input.querySelector("#name").focus();
+  input.querySelector('#name').focus();
 
   // Move cursor to the end of the task name field
   const selection = window.getSelection();
-  const nameField = input.querySelector("#name");
+  const nameField = input.querySelector('#name');
   const range = document.createRange();
   range.selectNodeContents(nameField);
   range.collapse(false);
@@ -156,16 +164,17 @@ const handleEdit = (event) => {
 };
 
 const handleBlur = (event) => {
-  const input = event.target.closest(".task-Container");
+  const input = event.target.closest('.task-Container');
 
   // Extract values from each field
-  const nameText = input.querySelector("#name").innerText.trim() || "Untitled";
-  const timeText = input.querySelector("#time").innerText.trim() || "No time set";
+  const nameText = input.querySelector('#name').innerText.trim() || 'Untitled';
+  const timeText =
+    input.querySelector('#time').innerText.trim() || 'No time set';
   let difficultyText;
-  if(input.querySelector("#difficulty").value != "select"){
-    difficultyText = input.querySelector("#difficulty").value;
-  }else{
-    difficultyText ="No difficulty set";
+  if (input.querySelector('#difficulty').value !== 'select') {
+    difficultyText = input.querySelector('#difficulty').value;
+  } else {
+    difficultyText = 'No difficulty set';
   }
   // Create a task element with extracted values
   const task = createTask(nameText, timeText, difficultyText);
@@ -173,35 +182,38 @@ const handleBlur = (event) => {
 };
 
 const handleAdd = (event) => {
-  const tasksEl = event.target.closest(".column").lastElementChild;
+  const tasksEl = event.target.closest('.column').lastElementChild;
   const input = createTaskInput();
   tasksEl.appendChild(input);
   input.focus();
 };
 
 const updateTaskCount = (column) => {
-  const colTasks = column.querySelector(".tasks").children;
+  const colTasks = column.querySelector('.tasks').children;
   const taskCount = colTasks.length;
-  column.querySelector(".column-title h3").dataset.tasks = taskCount;
+  column.querySelector('.column-title h3').dataset.tasks = taskCount;
 };
 
 const observeTaskChanges = () => {
   for (const column of columns) {
     const observer = new MutationObserver(() => updateTaskCount(column));
-    observer.observe(column.querySelector(".tasks"), { childList: true });
+    observer.observe(column.querySelector('.tasks'), { childList: true });
   }
 };
 
 observeTaskChanges();
 
+/*
+estimated time formatting: hh:mm
+*/
 const createTask = (nameText, timeText, difficultyText) => {
   const newTask = new Task(nameText, timeText, difficultyText);
   tasks = loadTasks();
-  tasks.push(newTask); 
+  tasks.push(newTask);
   saveTasks(tasks);
-  
-  const task = document.createElement("div");
-  task.className = "task";
+
+  const task = document.createElement('div');
+  task.className = 'task';
   task.draggable = true;
   task.innerHTML = `
   <div style = "display: flex; flex-direction: column; margin: 2px">
@@ -213,34 +225,37 @@ const createTask = (nameText, timeText, difficultyText) => {
       <button data-delete><i class="bi bi-trash"></i></button>
     </menu>
   </div>`;
-  task.addEventListener("dragstart", handleDragstart);
-  task.addEventListener("dragend", handleDragend);
+  task.addEventListener('dragstart', handleDragstart);
+  task.addEventListener('dragend', handleDragend);
   return task;
 };
 
-const createTaskInput = (nameText = "", timeText = "", difficultyText = "") => {
-  const input = document.createElement("div");
-  input.className = "task-Container";
+/*
+estimated time formatting: hh:mm
+*/
+const createTaskInput = (nameText = '', timeText = '', difficultyText = '') => {
+  const input = document.createElement('div');
+  input.className = 'task-Container';
 
   input.innerHTML = `
   <div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
   <div class="task-input" id="time"contenteditable="true" data-placeholder="Estimated Time">${timeText}</div>
   <select class="task-input" id="difficulty">
-    <option value="select" ${difficultyText.toLowerCase() === "select difficulty" ? "selected" : ""}>Select Difficulty</option>
-    <option value="easy" ${difficultyText.toLowerCase() === "easy" ? "selected" : ""}>Easy</option>
-    <option value="medium" ${difficultyText.toLowerCase() === "medium" ? "selected" : ""}>Medium</option>
-    <option value="hard" ${difficultyText.toLowerCase() === "hard" ? "selected" : ""}>Hard</option>
+    <option value="select" ${difficultyText.toLowerCase() === 'select difficulty' ? 'selected' : ''}>Select Difficulty</option>
+    <option value="easy" ${difficultyText.toLowerCase() === 'easy' ? 'selected' : ''}>Easy</option>
+    <option value="medium" ${difficultyText.toLowerCase() === 'medium' ? 'selected' : ''}>Medium</option>
+    <option value="hard" ${difficultyText.toLowerCase() === 'hard' ? 'selected' : ''}>Hard</option>
   </select>
   <button id = "createButton">Create</button>
   `;
-  const createButton = input.querySelector("#createButton");
-  createButton.addEventListener("click", () => handleBlur({ target: input }));
+  const createButton = input.querySelector('#createButton');
+  createButton.addEventListener('click', () => handleBlur({ target: input }));
   return input;
 };
 
 // Function to save tasks to local storage
 const saveTasks = (tasks) => {
-  const tasksJSON = tasks.map(task => task.toJSON());
+  const tasksJSON = tasks.map((task) => task.toJSON());
   localStorage.setItem('tasks', JSON.stringify(tasksJSON));
 };
 
@@ -253,10 +268,12 @@ const loadTasks = () => {
 const deleteTaskFromLocalStorage = (task) => {
   // Load tasks from local storage
   const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
-  
+
   // Find index of the task to be deleted
-  const taskIndex = tasksJSON.findIndex(storedTask => storedTask.name === task.querySelector("#name").innerText);
-  
+  const taskIndex = tasksJSON.findIndex(
+    (storedTask) => storedTask.name === task.querySelector('#name').innerText
+  );
+
   // Remove task from array
   if (taskIndex !== -1) {
     tasksJSON.splice(taskIndex, 1);
@@ -266,30 +283,30 @@ const deleteTaskFromLocalStorage = (task) => {
 
   // Load tasks from local storage and print
   tasks = loadTasks();
-}
+};
 
 //* event listeners
 
 // dragover and drop
-tasksElements = columnsContainer.querySelectorAll(".tasks");
+tasksElements = columnsContainer.querySelectorAll('.tasks');
 for (const tasksEl of tasksElements) {
-  tasksEl.addEventListener("dragover", handleDragover);
-  tasksEl.addEventListener("drop", handleDrop);
+  tasksEl.addEventListener('dragover', handleDragover);
+  tasksEl.addEventListener('drop', handleDrop);
 }
 
 // add, edit and delete task
-columnsContainer.addEventListener("click", (event) => {
-  if (event.target.closest("button[data-add]")) {
+columnsContainer.addEventListener('click', (event) => {
+  if (event.target.closest('button[data-add]')) {
     handleAdd(event);
-  } else if (event.target.closest("button[data-edit]")) {
+  } else if (event.target.closest('button[data-edit]')) {
     handleEdit(event);
-  } else if (event.target.closest("button[data-delete]")) {
+  } else if (event.target.closest('button[data-delete]')) {
     handleDelete(event);
   }
 });
 
 // confirm deletion
-modal.addEventListener("submit", () => {
+modal.addEventListener('submit', () => {
   if (currentTask) {
     deleteTaskFromLocalStorage(currentTask); // Call the function to delete from local storage
     currentTask.remove(); // Remove the task from the DOM
@@ -297,12 +314,10 @@ modal.addEventListener("submit", () => {
 });
 
 // cancel deletion
-modal.querySelector("#cancel").addEventListener("click", () => modal.close());
+modal.querySelector('#cancel').addEventListener('click', () => modal.close());
 
 // clear current task
-modal.addEventListener("close", () => (currentTask = null));
-
-
+modal.addEventListener('close', () => (currentTask = null));
 
 //* placeholder tasks
 
