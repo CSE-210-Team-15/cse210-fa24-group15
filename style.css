@@ -272,3 +272,9 @@ button:is(:active, :hover) {
   left: 10px;
   z-index: 1000; 
 }
+.bottom-left-second-gif {
+  position: fixed;
+  bottom: 10px;
+  right: 150px;
+  z-index: 1000; 
+}
