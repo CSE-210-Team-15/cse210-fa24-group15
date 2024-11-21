@@ -265,3 +265,24 @@ button:is(:active, :hover) {
   cursor: pointer;
   font-size: 16px;
 }
+
+#titleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#shopButton {
+  margin: 2rem 0;
+  padding: 10px;
+  background-color: gold;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#shopButton:hover {
+  background-color: #0056b3;
+}
