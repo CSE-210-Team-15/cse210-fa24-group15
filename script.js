@@ -3,40 +3,32 @@ const columnsContainer = document.querySelector('.columns');
 const columns = columnsContainer.querySelectorAll('.column');
 
 let currentTask = null;
-let tasks = [];
 
 //* classes
 
 // Task object to store task information. Can't handle pausing of timer right now.
 class Task {
-  constructor(name, estTime, difficulty) {
+  constructor(name, estTime, difficulty, column) {
     this.name = name;
     this.estTime = estTime; // should be in milliseconds
-    this.startTime = new Date();
-    this.remainingTime = estTime;
+    this.timeSpent = 0;
     this.difficulty = difficulty;
-    // might need column number
+    this.column = column;
   }
 
-  getRemainingTime() {
-    const currentTime = new Date();
-    this.remainingTime = this.estTime - (currentTime - this.startTime);
-    return this.remainingTime;
-  }
 
   toJSON() {
     return {
       name: this.name,
       estTime: this.estTime,
-      startTime: this.startTime.toISOString(),
-      remainingTime: this.remainingTime,
+      timeSpent: this.timeSpent,
       difficulty: this.difficulty,
+      column: this.column
     };
   }
 
   static fromJSON(json) {
     const task = Object.assign(new Task(), json);
-    task.startTime = new Date(json.startTime);
     return task;
   }
 }
@@ -111,6 +103,8 @@ const handleDragover = (event) => {
       target.after(draggedTask);
     }
   }
+
+  updateTaskColumn(draggedTask, targetColumn);
 };
 
 const handleDrop = (event) => {
@@ -177,7 +171,9 @@ const handleBlur = (event) => {
     difficultyText = 'No difficulty set';
   }
   // Create a task element with extracted values
-  const task = createTask(nameText, timeText, difficultyText);
+  const columnElement = event.target.closest('.column');
+  const columnName = columnElement.querySelector('h3').textContent.trim();
+  const task = createTask(nameText, timeText, difficultyText, columnName, false);
   input.replaceWith(task);
 };
 
@@ -206,12 +202,14 @@ observeTaskChanges();
 /*
 estimated time formatting: hh:mm
 */
-const createTask = (nameText, timeText, difficultyText) => {
-  const newTask = new Task(nameText, timeText, difficultyText);
-  tasks = loadTasks();
-  tasks.push(newTask);
-  saveTasks(tasks);
-
+const createTask = (nameText, timeText, difficultyText, columnName, isPopulate) => {
+  if(!isPopulate){
+    const newTask = new Task(nameText, timeText, difficultyText, columnName);
+    const tasks = loadTasks();
+    tasks.push(newTask);
+    saveTasks(tasks);
+  }
+  
   const task = document.createElement('div');
   task.className = 'task';
   task.draggable = true;
@@ -281,11 +279,49 @@ const deleteTaskFromLocalStorage = (task) => {
     localStorage.setItem('tasks', JSON.stringify(tasksJSON));
   }
 
-  // Load tasks from local storage and print
-  tasks = loadTasks();
+};
+
+// Updates task column in local storage
+const updateTaskColumn = (taskElement, newColumn) => {
+  const tasks = loadTasks();
+  const taskName = taskElement.querySelector('#name').textContent;
+  
+  const task = tasks.find(t => t.name === taskName);
+  if (task) {
+    task.column = newColumn;
+    // taskElement.dataset.column = newColumn;
+    saveTasks(tasks);
+  }
+};
+
+// Function to populate tasks from local storage on page load
+const populateTasksFromStorage = () => {
+  const tasks = loadTasks();
+  const columnMap = {
+    'To Do': columns[0],
+    'In Progress': columns[1],
+    'Done': columns[2]
+  };
+
+  // Clear existing tasks from all columns
+  columns.forEach(column => {
+    const tasksContainer = column.querySelector('.tasks');
+    tasksContainer.innerHTML = '';
+  });
+
+  // Populate tasks into their respective columns
+  tasks.forEach(task => {
+    const column = columnMap[task.column];
+    if (column) {
+      const taskElement = createTask(task.name, task.estTime, task.difficulty, task.column, true);
+      column.querySelector('.tasks').appendChild(taskElement);
+    }
+  });
 };
 
 //* event listeners
+
+document.addEventListener('DOMContentLoaded', populateTasksFromStorage);
 
 // dragover and drop
 tasksElements = columnsContainer.querySelectorAll('.tasks');
