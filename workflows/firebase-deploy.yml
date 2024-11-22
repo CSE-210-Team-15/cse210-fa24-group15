@@ -3,7 +3,7 @@ name: Firebase Deployment
 on:
   push:
     branches:
-      - deployment # Deploy when changes are pushed to the deployment branch
+      - main # Deploy when changes are pushed to the main branch
 
 jobs:
   deploy:
