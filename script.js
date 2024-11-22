@@ -16,14 +16,13 @@ class Task {
     this.column = column;
   }
 
-
   toJSON() {
     return {
       name: this.name,
       estTime: this.estTime,
       timeSpent: this.timeSpent,
       difficulty: this.difficulty,
-      column: this.column
+      column: this.column,
     };
   }
 
@@ -163,7 +162,8 @@ const handleBlur = (event) => {
   // Extract values from each field
   const nameText = input.querySelector('#name').innerText.trim() || 'Untitled';
   const timeText =
-    input.querySelector('#time').innerText.trim() || 'No time set';
+    input.querySelector('#time').inputmask.unmaskedvalue().trim() ||
+    'No time set';
   let difficultyText;
   if (input.querySelector('#difficulty').value !== 'select') {
     difficultyText = input.querySelector('#difficulty').value;
@@ -173,7 +173,18 @@ const handleBlur = (event) => {
   // Create a task element with extracted values
   const columnElement = event.target.closest('.column');
   const columnName = columnElement.querySelector('h3').textContent.trim();
-  const task = createTask(nameText, timeText, difficultyText, columnName, false);
+
+  const hours = parseInt(timeText.slice(0, 2), 10);
+  const seconds = parseInt(timeText.slice(2), 10);
+  const timeInMilliseconds = hours * 60 * 60 * 1000 + seconds * 60 * 1000;
+
+  const task = createTask(
+    nameText,
+    timeInMilliseconds,
+    difficultyText,
+    columnName,
+    false
+  );
   input.replaceWith(task);
 };
 
@@ -199,24 +210,37 @@ const observeTaskChanges = () => {
 
 observeTaskChanges();
 
-/*
-estimated time formatting: hh:mm
-*/
-const createTask = (nameText, timeText, difficultyText, columnName, isPopulate) => {
-  if(!isPopulate){
+// Helper function to convert milliseconds to "59h 59m" format
+const convertMillisecondsToTime = (milliseconds) => {
+  const totalMinutes = Math.floor(milliseconds / 60000);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${hours}h ${minutes}m`;
+};
+
+const createTask = (
+  nameText,
+  timeText,
+  difficultyText,
+  columnName,
+  isPopulate
+) => {
+  if (!isPopulate) {
     const newTask = new Task(nameText, timeText, difficultyText, columnName);
     const tasks = loadTasks();
     tasks.push(newTask);
     saveTasks(tasks);
   }
-  
+
+  const formattedTime = convertMillisecondsToTime(timeText);
+
   const task = document.createElement('div');
   task.className = 'task';
   task.draggable = true;
   task.innerHTML = `
   <div style = "display: flex; flex-direction: column; margin: 2px">
     <div id="name" style = "font-weight:bolder;">${nameText}</div>
-    <div>Est.Time:<span id="time">${timeText}</span></div>
+    <div>Est.Time:<span id="time">${formattedTime}</span></div>
     <div id="difficulty">Difficulty: ${difficultyText}</div>
     <menu>
       <button data-edit><i class="bi bi-pencil-square"></i></button>
@@ -237,7 +261,7 @@ const createTaskInput = (nameText = '', timeText = '', difficultyText = '') => {
 
   input.innerHTML = `
   <div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
-  <div class="task-input" id="time"contenteditable="true" data-placeholder="Estimated Time">${timeText}</div>
+  <input type="text" class="task-input" id="time" value="${timeText}" placeholder="HH:MM" data-placeholder="Estimated Time">
   <select class="task-input" id="difficulty">
     <option value="select" ${difficultyText.toLowerCase() === 'select difficulty' ? 'selected' : ''}>Select Difficulty</option>
     <option value="easy" ${difficultyText.toLowerCase() === 'easy' ? 'selected' : ''}>Easy</option>
@@ -247,7 +271,38 @@ const createTaskInput = (nameText = '', timeText = '', difficultyText = '') => {
   <button id = "createButton">Create</button>
   `;
   const createButton = input.querySelector('#createButton');
-  createButton.addEventListener('click', () => handleBlur({ target: input }));
+  // createButton.addEventListener('click', () => handleBlur({ target: input }));
+  createButton.addEventListener('click', () => {
+    const nameInput = input.querySelector('#name');
+    const timeInput = input.querySelector('#time');
+    const difficultySelect = input.querySelector('#difficulty');
+
+    const nameText = nameInput.textContent.trim();
+    const timeText = timeInput.value.trim();
+    const difficultyText = difficultySelect.value;
+
+    if (!nameText || !timeText || difficultyText === 'select') {
+      alert('Please fill all the fields.');
+      return;
+    }
+    handleBlur({ target: input });
+  });
+
+  // Apply input mask to the time input field
+  $(input)
+    .find('#time')
+    .inputmask('99:59', {
+      placeholder: 'HH:MM',
+      insertMode: false,
+      showMaskOnHover: false,
+      definitions: {
+        5: {
+          validator: '[0-5]',
+          cardinality: 1,
+        },
+      },
+    });
+
   return input;
 };
 
@@ -278,15 +333,14 @@ const deleteTaskFromLocalStorage = (task) => {
     // Save updated array back to local storage
     localStorage.setItem('tasks', JSON.stringify(tasksJSON));
   }
-
 };
 
 // Updates task column in local storage
 const updateTaskColumn = (taskElement, newColumn) => {
   const tasks = loadTasks();
   const taskName = taskElement.querySelector('#name').textContent;
-  
-  const task = tasks.find(t => t.name === taskName);
+
+  const task = tasks.find((t) => t.name === taskName);
   if (task) {
     task.column = newColumn;
     // taskElement.dataset.column = newColumn;
@@ -300,20 +354,26 @@ const populateTasksFromStorage = () => {
   const columnMap = {
     'To Do': columns[0],
     'In Progress': columns[1],
-    'Done': columns[2]
+    Done: columns[2],
   };
 
   // Clear existing tasks from all columns
-  columns.forEach(column => {
+  columns.forEach((column) => {
     const tasksContainer = column.querySelector('.tasks');
     tasksContainer.innerHTML = '';
   });
 
   // Populate tasks into their respective columns
-  tasks.forEach(task => {
+  tasks.forEach((task) => {
     const column = columnMap[task.column];
     if (column) {
-      const taskElement = createTask(task.name, task.estTime, task.difficulty, task.column, true);
+      const taskElement = createTask(
+        task.name,
+        task.estTime,
+        task.difficulty,
+        task.column,
+        true
+      );
       column.querySelector('.tasks').appendChild(taskElement);
     }
   });
@@ -366,7 +426,7 @@ modal.addEventListener('close', () => (currentTask = null));
 //   [
 //     "Optimize Image Assets 🏞️",
 //     "Cross-Browser Testing 🌐",
-//     "Integrate Livechat 💬",
+//     "Integrate Livechat ����",
 //   ],
 //   [
 //     "Set Up Custom Domain 🌍",
