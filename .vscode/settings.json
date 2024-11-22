@@ -1,0 +1,5 @@
+{
+  "editor.formatOnSave": true, // Format code automatically on save
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // Use Prettier for formatting
+  "eslint.validate": ["javascript"] // Enable ESLint validation for JavaScript
+}
