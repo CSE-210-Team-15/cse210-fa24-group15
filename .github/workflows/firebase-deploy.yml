@@ -12,6 +12,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+      - name: Debug Current Directory
+        run: pwd
+
+      - name: List Files
+        run: ls -a
 
       - name: Install Node.js
         uses: actions/setup-node@v3
