@@ -266,15 +266,23 @@ button:is(:active, :hover) {
   font-size: 16px;
 }
 
-.bottom-left-gif {
-  position: fixed;
-  bottom: 10px;
-  left: 10px;
-  z-index: 1000; 
+#titleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
-.bottom-left-second-gif {
-  position: fixed;
-  bottom: 10px;
-  right: 150px;
-  z-index: 1000; 
+
+#shopButton {
+  margin: 2rem 0;
+  padding: 10px;
+  background-color: gold;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#shopButton:hover {
+  background-color: #0056b3;
 }

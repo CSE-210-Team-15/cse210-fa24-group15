@@ -350,3 +350,62 @@ modal.addEventListener('close', () => (currentTask = null));
 //     columns[idx].querySelector(".tasks").appendChild(createTask(item));
 //   }
 // });
+
+//shopScript:
+document.addEventListener('DOMContentLoaded', async () => {
+  const shopButton = document.getElementById('shopButton');
+
+  let pets = [
+    { name: 'Fluffy', image: 'https://via.placeholder.com/100', price: '$50' },
+    { name: 'Sparky', image: 'https://via.placeholder.com/100', price: '$70' },
+    { name: 'Buddy', image: 'https://via.placeholder.com/100', price: '$60' },
+    { name: 'Fluffy', image: 'https://via.placeholder.com/100', price: '$50' },
+    { name: 'Sparky', image: 'https://via.placeholder.com/100', price: '$70' },
+    { name: 'Buddy', image: 'https://via.placeholder.com/100', price: '$60' },
+    { name: 'Fluffy', image: 'https://via.placeholder.com/100', price: '$50' },
+    { name: 'Sparky', image: 'https://via.placeholder.com/100', price: '$70' },
+    { name: 'Buddy', image: 'https://via.placeholder.com/100', price: '$60' },
+    { name: 'Fluffy', image: 'https://via.placeholder.com/100', price: '$50' },
+    { name: 'Sparky', image: 'https://via.placeholder.com/100', price: '$70' },
+    { name: 'Buddy', image: 'https://via.placeholder.com/100', price: '$60' },
+    { name: 'Buddy', image: 'https://via.placeholder.com/100', price: '$60' },
+    { name: 'Fluffy', image: 'https://via.placeholder.com/100', price: '$50' },
+  ];
+
+  // Load the shop popup HTML
+  const response = await fetch('shop.html');
+  const html = await response.text();
+
+  // Create a container for the popup
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  document.body.appendChild(template.content.cloneNode(true));
+  const popup = document.querySelector('.shop-popup');
+  const popupContentBox = document.querySelector('.shop-popup-content');
+  popup.style.display = 'none';
+
+  // Show popup on button click
+  shopButton.addEventListener('click', () => {
+    popup.style.display = 'flex';
+  });
+
+  // Close popup on close button click
+  popup.addEventListener('click', (event) => {
+    if (!popupContentBox.contains(event.target)) {
+      popup.style.display = 'none';
+    }
+  });
+
+  //load pets
+  const petList = popup.querySelector('.pet-list');
+  pets.forEach((pet) => {
+    const petHTML = `
+      <div class="pet-item">
+        <img src="${pet.image}" alt="${pet.name}">
+        <h4>${pet.name}</h4>
+        <button class="price-button">${pet.price}</button>
+      </div>
+    `;
+    petList.innerHTML += petHTML;
+  });
+});
