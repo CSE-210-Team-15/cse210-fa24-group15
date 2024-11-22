@@ -20,5 +20,4 @@ jobs:
       env:
         CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_TOKEN }}
       run: |
-        curl -L https://coverage.codacy.com/get.sh | bash
-        ./codacy-coverage-reporter report -l JavaScript
+        echo "Codacy Dashboard: https://app.codacy.com/gh/CSE-210-Team-15/cse210-fa24-group15/dashboard"
