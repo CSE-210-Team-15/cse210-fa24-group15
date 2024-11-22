@@ -20,9 +20,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-#
-#      - name: Build project
-#        run: npm run build # Adjust if your build script is different
 
       - name: Deploy to Firebase
         env:
