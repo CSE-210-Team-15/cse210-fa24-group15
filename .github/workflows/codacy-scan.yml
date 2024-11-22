@@ -1,0 +1,24 @@
+name: Codacy Code Quality
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  codacy-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Check out the repository code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Run Codacy static analysis
+    - name: Run Codacy Analysis
+      env:
+        CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_TOKEN }}
+      run: |
+        curl -L https://coverage.codacy.com/get.sh | sh
+        ./codacy-coverage-reporter report -l JavaScript
