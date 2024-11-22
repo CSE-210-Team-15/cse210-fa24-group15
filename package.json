@@ -14,8 +14,8 @@
   "scripts": {
     "lint": "eslint . --fix",
     "format": "prettier --write .",
-    "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky",
+    "test": "jest"
   },
   "lint-staged": {
     "*.{js, jsx, ts, tsx}": [
