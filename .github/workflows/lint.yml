@@ -1,4 +1,4 @@
-name: Lint-Staged Check
+name: Lint Check
 
 on:
   pull_request:
@@ -28,5 +28,5 @@ jobs:
         run: npm install
 
       # Run lint-staged
-      - name: Run lint-staged
-        run: npx lint-staged
+      - name: Run lint
+        run: npx lint
