@@ -20,5 +20,5 @@ jobs:
       env:
         CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_TOKEN }}
       run: |
-        curl -L https://coverage.codacy.com/get.sh | sh
+        curl -L https://coverage.codacy.com/get.sh | bash
         ./codacy-coverage-reporter report -l JavaScript
