@@ -353,7 +353,6 @@ modal.addEventListener('close', () => (currentTask = null));
 
 //shopScript:
 document.addEventListener('DOMContentLoaded', async () => {
-  const shopButton = document.getElementById('shopButton');
 
   let pets = [
     { name: 'Fluffy', image: 'https://via.placeholder.com/100', price: '$50' },
@@ -372,6 +371,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     { name: 'Fluffy', image: 'https://via.placeholder.com/100', price: '$50' },
   ];
 
+  let ownedPet = [
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$50' },
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$70' },
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$60' },
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$50' },
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$70' },
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$60' },
+  ];
+
   // Load the shop popup HTML
   const response = await fetch('shop.html');
   const html = await response.text();
@@ -380,32 +388,57 @@ document.addEventListener('DOMContentLoaded', async () => {
   const template = document.createElement('template');
   template.innerHTML = html;
   document.body.appendChild(template.content.cloneNode(true));
+
   const popup = document.querySelector('.shop-popup');
   const popupContentBox = document.querySelector('.shop-popup-content');
   popup.style.display = 'none';
-
+  const shopButton = document.getElementById('shopButton');
+  const ownedButton = document.getElementById('ownedButton');
   // Show popup on button click
   shopButton.addEventListener('click', () => {
     popup.style.display = 'flex';
+    title = document.getElementById("popup-title");
+    title.textContent = "SHOP"
+    const petList = popup.querySelector('.pet-list');
+    pets.forEach((pet) => {
+      const petHTML = `
+        <div class="pet-item">
+          <img src="${pet.image}" alt="${pet.name}">
+          <h4>${pet.name}</h4>
+          <button class="price-button">${pet.price}</button>
+        </div>
+      `;
+      petList.innerHTML += petHTML;
+    });
+    petList.scrollTop = 0;
+  });
+
+  ownedButton.addEventListener('click', () => {
+    popup.style.display = 'flex';
+    title = document.getElementById("popup-title");
+    title.textContent = "Owned Pet"
+    const petList = popup.querySelector('.pet-list');
+    ownedPet.forEach((pet) => {
+      const petHTML = `
+        <div class="pet-item">
+          <img src="${pet.image}" alt="${pet.name}">
+          <h4>${pet.name}</h4>
+          <button class="price-button">${pet.price}</button>
+        </div>
+      `;
+      petList.innerHTML += petHTML;
+    });
+    petList.scrollTop = 0;
   });
 
   // Close popup on close button click
   popup.addEventListener('click', (event) => {
     if (!popupContentBox.contains(event.target)) {
       popup.style.display = 'none';
+      petItems = document.querySelectorAll(".pet-item")
+      petItems.forEach((petItem) => {
+        petItem.remove();
+      });
     }
-  });
-
-  //load pets
-  const petList = popup.querySelector('.pet-list');
-  pets.forEach((pet) => {
-    const petHTML = `
-      <div class="pet-item">
-        <img src="${pet.image}" alt="${pet.name}">
-        <h4>${pet.name}</h4>
-        <button class="price-button">${pet.price}</button>
-      </div>
-    `;
-    petList.innerHTML += petHTML;
   });
 });
