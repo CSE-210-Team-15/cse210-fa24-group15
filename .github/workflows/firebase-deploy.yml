@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - main # Deploy when changes are pushed to the main branch
-
+      
+defaults:
+  run:
+    working-directory: ../../
+    
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,7 +26,6 @@ jobs:
         run: npm install
 
       - name: Deploy to Firebase
-        working-directory: ../../
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
