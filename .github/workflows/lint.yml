@@ -1,4 +1,4 @@
-name: Lint Check
+name: ESLint Check
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  lint-staged:
+  eslint:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,13 +20,11 @@ jobs:
       # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
-        with:
-          node-version: '18' 
 
       # Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Run lint-staged
-      - name: Run lint
-        run: npx lint
+      # Run ESLint
+      - name: Run ESLint
+        run: npx eslint .
