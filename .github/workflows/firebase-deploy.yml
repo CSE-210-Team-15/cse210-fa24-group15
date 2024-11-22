@@ -5,10 +5,6 @@ on:
     branches:
       - main # Deploy when changes are pushed to the main branch
       
-defaults:
-  run:
-    working-directory: ../../
-    
 jobs:
   deploy:
     runs-on: ubuntu-latest
