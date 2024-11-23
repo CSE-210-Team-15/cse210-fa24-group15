@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Check out the repository code
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Run Codacy static analysis
-    - name: Run Codacy Analysis
-      env:
-        CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_TOKEN }}
-      run: |
-        echo "Codacy Dashboard: https://app.codacy.com/gh/CSE-210-Team-15/cse210-fa24-group15/dashboard"
+      # Run Codacy static analysis
+      - name: Run Codacy Analysis
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_TOKEN }}
+        run: |
+          echo "Codacy Dashboard: https://app.codacy.com/gh/CSE-210-Team-15/cse210-fa24-group15/dashboard"
