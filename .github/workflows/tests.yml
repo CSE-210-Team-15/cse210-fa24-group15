@@ -20,5 +20,8 @@ jobs:
       - name: Run Hello World
         run: echo "Hello World"
 
+      - name: Install dependencies
+        run: npm install # Installs all dependencies from package.json
+
       - name: Run Tests
         run: npm test
