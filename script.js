@@ -1,9 +1,14 @@
-const modal = document.querySelector('.confirm-modal');
-const columnsContainer = document.querySelector('.columns');
-const columns = columnsContainer.querySelectorAll('.column');
+let modal, columnsContainer, columns, currentTask, tasks;
 
-let currentTask = null;
-let tasks = [];
+document.addEventListener('DOMContentLoaded', () => {
+  modal = document.querySelector('.confirm-modal');
+  columnsContainer = document.querySelector('.columns');
+  columns = columnsContainer.querySelectorAll('.column');
+
+  currentTask = null;
+  tasks = [];
+});
+
 
 //* classes
 
@@ -201,7 +206,7 @@ const observeTaskChanges = () => {
   }
 };
 
-observeTaskChanges();
+// observeTaskChanges();
 
 /*
 estimated time formatting: hh:mm
@@ -255,7 +260,7 @@ const createTaskInput = (nameText = '', timeText = '', difficultyText = '') => {
 
 // Function to save tasks to local storage
 const saveTasks = (tasks) => {
-  console.log(tasks[-1]);
+  console.log(tasks);
   const tasksJSON = tasks.map((task) => task.toJSON());
   localStorage.setItem('tasks', JSON.stringify(tasksJSON));
 };
@@ -289,36 +294,36 @@ const deleteTaskFromLocalStorage = (task) => {
 //* event listeners
 
 // dragover and drop
-tasksElements = columnsContainer.querySelectorAll('.tasks');
-for (const tasksEl of tasksElements) {
-  tasksEl.addEventListener('dragover', handleDragover);
-  tasksEl.addEventListener('drop', handleDrop);
-}
+// tasksElements = columnsContainer.querySelectorAll('.tasks');
+// for (const tasksEl of tasksElements) {
+//   tasksEl.addEventListener('dragover', handleDragover);
+//   tasksEl.addEventListener('drop', handleDrop);
+// }
 
 // add, edit and delete task
-columnsContainer.addEventListener('click', (event) => {
-  if (event.target.closest('button[data-add]')) {
-    handleAdd(event);
-  } else if (event.target.closest('button[data-edit]')) {
-    handleEdit(event);
-  } else if (event.target.closest('button[data-delete]')) {
-    handleDelete(event);
-  }
-});
+// columnsContainer.addEventListener('click', (event) => {
+//   if (event.target.closest('button[data-add]')) {
+//     handleAdd(event);
+//   } else if (event.target.closest('button[data-edit]')) {
+//     handleEdit(event);
+//   } else if (event.target.closest('button[data-delete]')) {
+//     handleDelete(event);
+//   }
+// });
 
 // confirm deletion
-modal.addEventListener('submit', () => {
-  if (currentTask) {
-    deleteTaskFromLocalStorage(currentTask); // Call the function to delete from local storage
-    currentTask.remove(); // Remove the task from the DOM
-  }
-});
+// modal.addEventListener('submit', () => {
+//   if (currentTask) {
+//     deleteTaskFromLocalStorage(currentTask); // Call the function to delete from local storage
+//     currentTask.remove(); // Remove the task from the DOM
+//   }
+// });
 
-// cancel deletion
-modal.querySelector('#cancel').addEventListener('click', () => modal.close());
+// // cancel deletion
+// modal.querySelector('#cancel').addEventListener('click', () => modal.close());
 
-// clear current task
-modal.addEventListener('close', () => (currentTask = null));
+// // clear current task
+// modal.addEventListener('close', () => (currentTask = null));
 
 //* placeholder tasks
 
@@ -351,3 +356,4 @@ modal.addEventListener('close', () => (currentTask = null));
 //     columns[idx].querySelector(".tasks").appendChild(createTask(item));
 //   }
 // });
+module.exports = { saveTasks };
