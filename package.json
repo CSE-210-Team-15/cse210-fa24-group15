@@ -12,7 +12,7 @@
     "prettier": "^3.3.3"
   },
   "scripts": {
-    "lint": "eslint . --fix",
+    "lint": "eslint . --ignore-pattern 'out/' --fix",
     "format": "prettier --write .",
     "prepare": "husky",
     "test": "jest"
@@ -27,7 +27,7 @@
     ]
   },
   "dependencies": {
-    "jsdoc": "^4.0.4",
-    "firebase": "^11.0.1"
+    "firebase": "^11.0.1",
+    "jsdoc": "^4.0.4"
   }
 }
