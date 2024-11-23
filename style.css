@@ -184,6 +184,7 @@ button:is(:active, :hover) {
 }
 
 #createButton {
+  float: right;
   background-color: green;
   border: none;
   color: white;

@@ -131,7 +131,12 @@ const createTaskInput = (nameText = '', timeText = '', difficultyText = '') => {
 
     input.innerHTML = `
     <div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
+    <div class="task-row">
+    Estimated Time: 
     <input type="text" class="task-input" id="time" value="${timeText}" placeholder="HH:MM" data-placeholder="Estimated Time">
+    </div>
+    <div class="task-row">
+    Difficulty: 
     <select class="task-input" id="difficulty">
     <option value="select" ${difficultyText.toLowerCase() === 'select difficulty' ? 'selected' : ''}>Select Difficulty</option>
     <option value="easy" ${difficultyText.toLowerCase() === 'easy' ? 'selected' : ''}>Easy</option>
@@ -139,6 +144,7 @@ const createTaskInput = (nameText = '', timeText = '', difficultyText = '') => {
     <option value="hard" ${difficultyText.toLowerCase() === 'hard' ? 'selected' : ''}>Hard</option>
     </select>
     <button id = "createButton">Create</button>
+    </div>
     `;
     const createButton = input.querySelector('#createButton');
     // createButton.addEventListener('click', () => handleBlur({ target: input }));
