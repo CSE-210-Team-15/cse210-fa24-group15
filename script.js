@@ -255,6 +255,7 @@ const createTaskInput = (nameText = '', timeText = '', difficultyText = '') => {
 
 // Function to save tasks to local storage
 const saveTasks = (tasks) => {
+  console.log(tasks[-1]);
   const tasksJSON = tasks.map((task) => task.toJSON());
   localStorage.setItem('tasks', JSON.stringify(tasksJSON));
 };
