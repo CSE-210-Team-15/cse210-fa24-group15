@@ -30,8 +30,8 @@ class Game {
 
   buyPet(name) {
     if (name in this._pets) {
-      this._pets[name].bought(true);
-      this._coins -= this._pets[name].price(); // assume enough coins
+      this._pets[name].bought = true;
+      this._coins -= this._pets[name].price; // assume enough coins
     }
   }
 
