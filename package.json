@@ -13,7 +13,7 @@
   "scripts": {
     "lint": "eslint . --ignore-pattern 'out/' --fix",
     "format": "prettier --write .",
-    "prepare": "husky",
+    "prepare": "husky && husky install",
     "prettier": "npx prettier . --check",
     "prettier:fix": "npm run prettier -- --write"
   },
@@ -24,7 +24,8 @@
     ],
     "*.{css, scss, html, md, json}": [
       "prettier --write"
-    ]
+    ],
+    "*.js": "eslint --cache --fix"
   },
   "dependencies": {
     "firebase": "^11.0.1",
