@@ -18,14 +18,14 @@
     "prettier:fix": "npm run prettier -- --write"
   },
   "lint-staged": {
-    "*.{js, jsx, ts, tsx}": [
+    "**/*.{js,ts,tsx,jsx}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{css, scss, html, md, json}": [
+    "**/*.{css,scss,html,md,json}": [
       "prettier --write"
     ],
-    "*.js": "eslint --cache --fix"
+    "**/*.js": "eslint --cache --fix"
   },
   "dependencies": {
     "firebase": "^11.0.1",
