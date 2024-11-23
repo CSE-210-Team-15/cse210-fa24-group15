@@ -203,7 +203,7 @@ const populateTasksFromStorage = () => {
 document.addEventListener('DOMContentLoaded', populateTasksFromStorage);
 
 // dragover and drop
-tasksElements = columnsContainer.querySelectorAll('.tasks');
+let tasksElements = columnsContainer.querySelectorAll('.tasks');
 for (const tasksEl of tasksElements) {
   tasksEl.addEventListener('dragover', handleDragover);
   tasksEl.addEventListener('drop', handleDrop);

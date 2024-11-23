@@ -8,22 +8,27 @@
     "eslint-plugin-prettier": "^5.2.1",
     "husky": "^8.0.0",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3"
+    "prettier": "3.3.3"
   },
   "scripts": {
-    "lint": "eslint . --fix",
-    "format": "prettier --write ."
+    "lint": "eslint . --ignore-pattern 'out/' --fix",
+    "format": "prettier --write .",
+    "prepare": "husky && husky install",
+    "prettier": "npx prettier . --check",
+    "prettier:fix": "npm run prettier -- --write"
   },
   "lint-staged": {
-    "*.{js, jsx, ts, tsx}": [
+    "**/*.{js,ts,tsx,jsx}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{css, scss, html, md, json}": [
+    "**/*.{css,scss,html,md,json}": [
       "prettier --write"
-    ]
+    ],
+    "**/*.js": "eslint --cache --fix"
   },
   "dependencies": {
+    "firebase": "^11.0.1",
     "jsdoc": "^4.0.4"
   }
 }
