@@ -1,4 +1,4 @@
-// Task object to store task information. Can't handle pausing of timer right now.
+// Task object to store task information
 class Task {
     constructor(name, estTime, difficulty, column) {
       this.name = name;
@@ -24,16 +24,17 @@ class Task {
     }
 }
 
-// Helper function to convert minutes to HH:MM format
-const formatTimeHHMM = (minutes) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+// Helper function to convert seconds to HH:MM:SS format
+const formatTimeHHMMSS = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 };
 
 const createTask = (
     nameText,
-    timeInMinutes,
+    timeInSeconds,
     difficultyText,
     columnName,
     isPopulate
@@ -44,7 +45,7 @@ const createTask = (
         newTask = tasks.find(t => t.name === nameText);
     }
     else {
-        newTask = new Task(nameText, timeInMinutes, difficultyText, columnName);
+        newTask = new Task(nameText, timeInSeconds, difficultyText, columnName);
         const tasks = loadTasks();
         tasks.push(newTask);
         saveTasks(tasks);
@@ -57,14 +58,14 @@ const createTask = (
     <div style="display: flex; flex-direction: column; margin: 2px">
         <div id="name" style="font-weight: bolder;">${nameText}</div>
         <div class="time-tracking">
-            Time: <span id="time-spent">${formatTimeHHMM(newTask.timeSpent)}</span> / 
-            <span id="estimated-time">${formatTimeHHMM(timeInMinutes)}</span>
+            Actual Time/Estimated Time: <span id="time-spent">${formatTimeHHMMSS(newTask.timeSpent)}</span> / 
+            <span id="estimated-time">${formatTimeHHMMSS(timeInSeconds)}</span>
         </div>
         <div id="difficulty">Difficulty: ${difficultyText}</div>
         <menu>
             <button data-edit><i class="bi bi-pencil-square"></i></button>
             <button data-delete><i class="bi bi-trash"></i></button>
-            <button data-timer><i class="bi bi-play-circle""></i></button>
+            <button data-timer><i class="bi bi-play-circle"></i></button>
         </menu>
     </div>`;
 
@@ -75,7 +76,6 @@ const createTask = (
     const timerButton = task.querySelector('[data-timer]');
     let timerInterval;
     let isTimerRunning = false;
-    let secondsCount = 0;
 
     timerButton.addEventListener('click', () => {
         if (!isTimerRunning) {
@@ -84,25 +84,20 @@ const createTask = (
             timerButton.querySelector('i').classList.replace('bi-play-circle', 'bi-stop-circle');
             
             timerInterval = setInterval(() => {
-                secondsCount++;
-                if (secondsCount === 60) { // Only update after a full minute
-                    const tasks = loadTasks();
-                    const taskData = tasks.find(t => t.name === nameText);
-                    if (taskData) {
-                        taskData.timeSpent += 1; // Add 1 minute
-                        const timeSpentElement = task.querySelector('#time-spent');
-                        timeSpentElement.textContent = formatTimeHHMM(taskData.timeSpent);
-                        saveTasks(tasks);
-                    }
-                    secondsCount = 0; // Reset seconds counter
+                const tasks = loadTasks();
+                const taskData = tasks.find(t => t.name === nameText);
+                if (taskData) {
+                    taskData.timeSpent += 1; // Add 1 second
+                    const timeSpentElement = task.querySelector('#time-spent');
+                    timeSpentElement.textContent = formatTimeHHMMSS(taskData.timeSpent);
+                    saveTasks(tasks);
                 }
-            }, 1000); // Still check every second, but only increment after 60 seconds
+            }, 1000); // Update every second
         } else {
             // Stop timer
             isTimerRunning = false;
             timerButton.querySelector('i').classList.replace('bi-stop-circle', 'bi-play-circle');
             clearInterval(timerInterval);
-            secondsCount = 0; // Reset seconds counter when stopped
         }
     });
 
@@ -116,7 +111,6 @@ const handleEdit = (event) => {
     const nameText = task.querySelector('#name').innerText;
     const timeElement = task.querySelector('#estimated-time');
     const [hours, minutes] = timeElement.innerText.split(':').map(Number);
-    const totalMinutes = hours * 60 + minutes;
     const difficultyText = task.querySelector('#difficulty').innerText;
 
     // Create editable input fields with current values
@@ -155,11 +149,11 @@ const handleBlur = (event) => {
 
     const hours = parseInt(timeText.slice(0, 2), 10);
     const minutes = parseInt(timeText.slice(2), 10);
-    const totalMinutes = hours * 60 + minutes;
+    const totalSeconds = hours * 3600 + minutes * 60;
 
     const task = createTask(
     nameText,
-    totalMinutes,
+    totalSeconds,
     difficultyText,
     columnName,
     false
