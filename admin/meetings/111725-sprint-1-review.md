@@ -30,24 +30,25 @@ some simple code to make sure each component is behaving as expected.
 We also made simple features to the codebase in preparation for our next sprint,
 including adding fields to task creation and saving task objects to localstorage.
 
-### Status of the Pipeline 
+### Status of the Pipeline
+
 - Development (Local)
-    - Make a small change or add a feature. 
+  - Make a small change or add a feature.
 - Linting and coding styling
-    - Enabled ESLint for linting and Prettier for code styling on our local editor (via IDE setting and extension). Can run scripts for linting and formatting before committing the code
-    - Enabled pre-commit checks for consistent linting and formatting through Husky. 
+  - Enabled ESLint for linting and Prettier for code styling on our local editor (via IDE setting and extension). Can run scripts for linting and formatting before committing the code
+  - Enabled pre-commit checks for consistent linting and formatting through Husky.
 - Documentation
-    - Generate a folder based on JSDoc comments
-    - Display detailed information about function/method
+  - Generate a folder based on JSDoc comments
+  - Display detailed information about function/method
 - Environment Separation (dev vs prod)
-    - dev vs prod branching
-    - PR and merge staging
+  - dev vs prod branching
+  - PR and merge staging
 - Unit Testing (local vs dev vs prod) (Automated Test, Jest)
-    - Automated testing when code is pushed to Github, using workflow
-    - Shows result in Github Actions section after push
-- Deployment 
-    - The decision is made based on the pros and cons of different servers and platforms.
-    - Automated deployment pipeline with Firebase on GitHub
+  - Automated testing when code is pushed to Github, using workflow
+  - Shows result in Github Actions section after push
+- Deployment
+  - The decision is made based on the pros and cons of different servers and platforms.
+  - Automated deployment pipeline with Firebase on GitHub
 
 ### Individual Notes
 

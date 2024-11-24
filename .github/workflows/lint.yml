@@ -1,0 +1,34 @@
+name: ESLint and Prettier Check
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Run Prettier
+      - name: Run Prettier
+        run: npx prettier . --check
+
+      # Run ESLint
+      - name: Run ESLint
+        run: npx eslint . --ignore-pattern 'out/'
