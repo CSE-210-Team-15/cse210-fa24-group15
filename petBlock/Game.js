@@ -1,3 +1,5 @@
+const Pet = require('./Pet')
+
 class Game {
   constructor() {
     // if localStorage.getItem('game') !== null {
@@ -47,3 +49,5 @@ class Game {
     }
   }
 }
+
+module.exports = Game
