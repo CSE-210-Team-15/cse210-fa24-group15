@@ -94,79 +94,6 @@ button:is(:active, :hover) {
   font-size: 2rem;
 }
 
-.tasks {
-  min-height: var(--task-size);
-  display: grid;
-  align-content: start;
-  gap: 0.5rem;
-}
-
-.tasks > * {
-  background: #fff;
-  border-radius: 0.25rem;
-  padding: 0.875rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
-  min-height: var(--task-size);
-}
-
-.task {
-  cursor: move;
-  transition: 0.3s;
-}
-
-.task.dragging {
-  cursor: default;
-  box-shadow: none;
-  background: var(--secondary-color);
-  opacity: 0.5;
-}
-
-.task.dragging * {
-  visibility: hidden;
-}
-
-.task:not(.dragging):hover {
-  background: var(--task-color);
-}
-
-.task menu {
-  margin-top: 0.875rem;
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-.task button {
-  width: 1.5rem;
-  height: 1.5rem;
-  font-size: 1.25rem;
-}
-
-.task-input {
-  outline: none;
-  overflow-wrap: anywhere;
-  padding: 0.5rem 0.5rem 0.5rem; /* Unified padding for better structure */
-  border: 1px solid black; /* Explicit border style */
-  border-radius: 4px; /* Slightly more rounded corners */
-  background-color: #f9f9f9; /* Light background for readability */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  transition:
-    border-color 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out; /* Smooth transition effects */
-  margin-bottom: 0.5rem;
-}
-
-.task-input:focus {
-  border-color: #007bff; /* Highlight border on focus */
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25); /* Enhanced shadow on focus */
-}
-
-.task-input:empty::after {
-  content: attr(data-placeholder);
-  opacity: 0.5;
-}
-
 .confirm-modal[open] {
   opacity: 1;
   transform: translate(-50%, -50%) translateY(0);
@@ -257,6 +184,7 @@ button:is(:active, :hover) {
 }
 
 #createButton {
+  float: right;
   background-color: green;
   border: none;
   color: white;
