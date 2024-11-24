@@ -5,6 +5,7 @@ demo_game_1 = new Game()
 demo_game_2 = new Game()
 demo_game_3 = new Game()
 demo_game_4 = new Game()
+demo_game_5 = new Game()
 
 
 describe("detect Footnote Category", () => {
@@ -39,6 +40,9 @@ describe("detect Footnote Category", () => {
     demo_game_4.buyPet('Cat')
     
     demo_game_4.changeAllHp(-20)
+    test('remains 170 coins', () => {
+        expect(demo_game_4.coins).toBe(170);
+    });
     test('dog -10 hp', () => {
         expect(demo_game_4.pets["Dog"].hp).toBe(80);
     });
@@ -54,6 +58,18 @@ describe("detect Footnote Category", () => {
         expect(demo_game_4.pets["Dog"].bought).toBe(true);
         expect(demo_game_4.pets["Cat"].bought).toBe(true);
         expect(demo_game_4.pets["Horse"].bought).toBe(false);
+    });
+
+    demo_game_5.changeCoins(100)
+    demo_game_5.buyPet('Horse')
+    test('Horse is bought', () => {
+        expect(demo_game_5.pets["Horse"].hp).toBe(100);
+        expect(demo_game_5.coins).toBe(50)
+    });
+    test('Horse -100 Hp, bought status should change back to false, and hp change back to 100', () => {
+        demo_game_5.changeHp('Horse', -100)
+        expect(demo_game_5.pets["Horse"].hp).toBe(100);
+        expect(demo_game_5.pets['Horse'].bought).toBe(false)
     });
 
 

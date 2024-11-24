@@ -34,7 +34,7 @@ class Pet {
       this._hp = 100;
     }
     if (this._hp <= 0) {
-      this._hp = 0;
+      this._hp = 100;           // pet hp changes back to 100 since it is not bought
       this._bought = false;
     }
   }
