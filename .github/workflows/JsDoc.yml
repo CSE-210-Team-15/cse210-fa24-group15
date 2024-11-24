@@ -1,0 +1,36 @@
+name: Generate JSDoc
+
+on:
+  push:
+    branches:
+      - main # Trigger the workflow on pushes to the 'main' branch
+  pull_request:
+    branches:
+      - main # Optionally trigger the workflow on pull requests targeting 'main'
+
+jobs:
+  generate-jsdoc:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.9.0' # Use the appropriate Node.js version
+
+      # Step 3: Install dependencies (if any, adjust as needed)
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run JSDoc to generate documentation
+      - name: Generate JSDoc
+        run: npx jsdoc ./script.js
+
+      # Step 5: Verify the output folder
+      - name: Verify JSDoc Output
+        run: ls -R out
