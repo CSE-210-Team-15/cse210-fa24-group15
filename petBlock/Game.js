@@ -45,7 +45,10 @@ class Game {
 
   changeAllHp(hp) {
     for (const key in this._pets) {
-      this._pets[key].changeHp(hp);
+      if (this._pets[key].bought) {
+        this._pets[key].changeHp(hp);
+      }
+      
     }
   }
 }
