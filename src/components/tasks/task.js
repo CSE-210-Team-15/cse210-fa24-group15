@@ -289,8 +289,7 @@ const createTask = (
   const task = document.createElement('div');
   task.className = 'task';
   task.draggable = true;
-  task.innerHTML = `
-    <div style="display: flex; flex-direction: column; margin: 2px">
+  task.innerHTML = `<div style="display: flex; flex-direction: column; margin: 2px">
         <div id="name" style="font-weight: bolder;">${nameText}</div>
         <div class="time-tracking">
             Actual Time/Estimated Time: <span id="time-spent">${formatTimeHHMMSS(newTask.timeSpent)}</span> / 
@@ -406,8 +405,7 @@ const createTaskInput = (
   const input = document.createElement('div');
   input.className = 'task-Container';
 
-  input.innerHTML = `
-    <div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
+  input.innerHTML = `<div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
     <div class="task-row">
     Estimated Time: 
     <input type="number" class="task-input" id="timeHour" value="${timeHour}" placeholder="Hours" data-placeholder="Estimated Time" min="0" max=99>
