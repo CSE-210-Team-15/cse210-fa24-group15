@@ -39,15 +39,15 @@ Codacy to automate code quality checking as part of the pre-merge checks on GitH
 - Matthew: Implemented fetching from localstorage on refresh, timer functionality on tasks, play/pause
   creation
 - Yuan: Added pet object representing a pet and its status, game object that tracks pets available and coins,
-wrote test cases for game and pet objects  
+  wrote test cases for game and pet objects
 - Steve: Implemented pet shop and pet management UI
 - Gavin: Added pet object representing a pet and its status, game object that tracks pets available and coins, implemented automated deployment, code quality checker, and release versioning
   Firebase
 - Soumya: Implemented pet rendering, automated linting and formatting on GitHub side, some testing,
-created wireframes for our application
+  created wireframes for our application
 - Sakshi: Improving test coverage and wrote test cases
 - Kuber: Worked on task entry for estimated time, help with automated linting
-- Li: Worked on pet object representing a pet and its status  
+- Li: Worked on pet object representing a pet and its status
 
 ## Spillover
 
