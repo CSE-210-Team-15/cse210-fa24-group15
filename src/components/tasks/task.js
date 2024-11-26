@@ -448,3 +448,11 @@ const createTaskInput = (
 
   return input;
 };
+
+module.exports = {
+  saveTasks,
+  loadTasks,
+  updateTaskColumn,
+  deleteTaskFromLocalStorage,
+  Task
+};
