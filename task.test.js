@@ -1,4 +1,9 @@
-const { saveTasks, updateTaskColumn, loadTasks, deleteTaskFromLocalStorage } = require('./src/components/tasks/task.js'); 
+const {
+  saveTasks,
+  updateTaskColumn,
+  loadTasks,
+  deleteTaskFromLocalStorage,
+} = require('./src/components/tasks/task.js');
 
 class MockTask {
   constructor(name, estTime, difficulty, column) {
@@ -33,8 +38,8 @@ describe('Task Management Functions', () => {
 
     // Dummy data for testing
     tasks = [
-      new MockTask("Task 1", 3600000, "Medium", "To Do"),
-      new MockTask("Task 2", 1800000, "Low", "In Progress"),
+      new MockTask('Task 1', 3600000, 'Medium', 'To Do'),
+      new MockTask('Task 2', 1800000, 'Low', 'In Progress'),
     ];
   });
 
@@ -48,7 +53,7 @@ describe('Task Management Functions', () => {
     expect(savedTasks).toHaveLength(2);
     expect(savedTasks[0].name).toBe('Task 1');
     expect(savedTasks[1].name).toBe('Task 2');
-  });  
+  });
 
   test('should handle saving an empty list of tasks', () => {
     // Save empty tasks
@@ -58,7 +63,7 @@ describe('Task Management Functions', () => {
 
     expect(savedTasks).toHaveLength(0);
   });
-  
+
   test('should load tasks from localStorage', () => {
     // Save the tasks
     saveTasks(tasks);
@@ -71,7 +76,7 @@ describe('Task Management Functions', () => {
     expect(loadedTasks[1]).toMatchObject(tasks[1].toJSON());
   });
 
-    test('should delete a task from localStorage', () => {
+  test('should delete a task from localStorage', () => {
     // Save tasks to localStorage
     saveTasks(tasks);
 
@@ -94,9 +99,9 @@ describe('Task Management Functions', () => {
     expect(updatedTasks[0].name).toBe('Task 2');
   });
 
-    test('should preserve additional task properties during save and load', () => {
+  test('should preserve additional task properties during save and load', () => {
     // Add additional properties to tasks
-    tasks[0].additionalProperty = "Some Value";
+    tasks[0].additionalProperty = 'Some Value';
     saveTasks(tasks);
 
     const loadedTasks = loadTasks();
@@ -104,7 +109,7 @@ describe('Task Management Functions', () => {
     expect(loadedTasks[0].additionalProperty).toBeUndefined();
   });
 
-    test('should not update task column if task is not found', () => {
+  test('should not update task column if task is not found', () => {
     // Save tasks to localStorage
     saveTasks(tasks);
 
@@ -121,7 +126,9 @@ describe('Task Management Functions', () => {
     updateTaskColumn(taskElement, 'Done');
 
     const updatedTasks = loadTasks();
-    expect(updatedTasks.find((task) => task.name === 'Task 1').column).toBe('To Do');
+    expect(updatedTasks.find((task) => task.name === 'Task 1').column).toBe(
+      'To Do'
+    );
   });
 
   test('should update task column in localStorage', () => {
@@ -130,7 +137,7 @@ describe('Task Management Functions', () => {
 
     // Simulate a task element
     const taskElement = {
-      querySelector: () => ({ textContent: 'Task 1' })
+      querySelector: () => ({ textContent: 'Task 1' }),
     };
 
     // Update task column
@@ -138,12 +145,12 @@ describe('Task Management Functions', () => {
 
     // Load tasks and verify the column was updated
     const updatedTasks = loadTasks();
-    const updatedTask = updatedTasks.find(task => task.name === 'Task 1');
+    const updatedTask = updatedTasks.find((task) => task.name === 'Task 1');
 
     expect(updatedTask.column).toBe('In Progress');
   });
 
-    test('should handle loading tasks when localStorage is empty', () => {
+  test('should handle loading tasks when localStorage is empty', () => {
     // Ensure localStorage is clear
     localStorage.clear();
 

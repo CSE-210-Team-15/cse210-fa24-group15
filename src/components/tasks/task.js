@@ -95,10 +95,8 @@ const handleDelete = (event) => {
   currentTask = event.target.closest('.task');
 
   // show preview
-  document.querySelector('.confirm-modal').querySelector('.preview').innerText = currentTask.innerText.substring(
-    0,
-    100
-  );
+  document.querySelector('.confirm-modal').querySelector('.preview').innerText =
+    currentTask.innerText.substring(0, 100);
 
   document.querySelector('.confirm-modal').showModal();
 };
@@ -122,7 +120,6 @@ const observeTaskChanges = () => {
     observer.observe(column.querySelector('.tasks'), { childList: true });
   }
 };
-
 
 // Function to save tasks to local storage
 const saveTasks = (tasks) => {
@@ -225,16 +222,17 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTask.remove(); // Remove the task from the DOM
       }
     });
-  
+
     // cancel deletion
-    modal.querySelector('#cancel').addEventListener('click', () => modal.close());
-  
+    modal
+      .querySelector('#cancel')
+      .addEventListener('click', () => modal.close());
+
     // clear current task
     modal.addEventListener('close', () => (currentTask = null));
   });
   populateTasksFromStorage();
 });
-
 
 // Task object to store task information
 class Task {
@@ -454,5 +452,5 @@ module.exports = {
   loadTasks,
   updateTaskColumn,
   deleteTaskFromLocalStorage,
-  Task
+  Task,
 };
