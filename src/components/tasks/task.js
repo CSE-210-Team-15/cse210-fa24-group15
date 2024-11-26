@@ -1,7 +1,6 @@
-const modal = document.querySelector('.confirm-modal');
-const columnsContainer = document.querySelector('.columns');
-const columns = columnsContainer.querySelectorAll('.column');
-
+let modal = null;
+let columnsContainer = null;
+let columns = null;
 let currentTask = null;
 
 //* functions
@@ -96,12 +95,12 @@ const handleDelete = (event) => {
   currentTask = event.target.closest('.task');
 
   // show preview
-  modal.querySelector('.preview').innerText = currentTask.innerText.substring(
+  document.querySelector('.confirm-modal').querySelector('.preview').innerText = currentTask.innerText.substring(
     0,
     100
   );
 
-  modal.showModal();
+  document.querySelector('.confirm-modal').showModal();
 };
 
 const handleAdd = (event) => {
@@ -124,7 +123,6 @@ const observeTaskChanges = () => {
   }
 };
 
-observeTaskChanges();
 
 // Function to save tasks to local storage
 const saveTasks = (tasks) => {
@@ -200,39 +198,43 @@ const populateTasksFromStorage = () => {
 };
 
 //* event listeners
-document.addEventListener('DOMContentLoaded', populateTasksFromStorage);
-
-// dragover and drop
-let tasksElements = columnsContainer.querySelectorAll('.tasks');
-for (const tasksEl of tasksElements) {
-  tasksEl.addEventListener('dragover', handleDragover);
-  tasksEl.addEventListener('drop', handleDrop);
-}
-
-// add, edit and delete task
-columnsContainer.addEventListener('click', (event) => {
-  if (event.target.closest('button[data-add]')) {
-    handleAdd(event);
-  } else if (event.target.closest('button[data-edit]')) {
-    handleEdit(event);
-  } else if (event.target.closest('button[data-delete]')) {
-    handleDelete(event);
+document.addEventListener('DOMContentLoaded', () => {
+  modal = document.querySelector('.confirm-modal');
+  columnsContainer = document.querySelector('.columns');
+  columns = columnsContainer.querySelectorAll('.column');
+  observeTaskChanges();
+  // dragover and drop
+  let tasksElements = columnsContainer.querySelectorAll('.tasks');
+  for (const tasksEl of tasksElements) {
+    tasksEl.addEventListener('dragover', handleDragover);
+    tasksEl.addEventListener('drop', handleDrop);
   }
+  // add, edit and delete task
+  columnsContainer.addEventListener('click', (event) => {
+    if (event.target.closest('button[data-add]')) {
+      handleAdd(event);
+    } else if (event.target.closest('button[data-edit]')) {
+      handleEdit(event);
+    } else if (event.target.closest('button[data-delete]')) {
+      handleDelete(event);
+    }
+    // confirm deletion
+    modal.addEventListener('submit', () => {
+      if (currentTask) {
+        deleteTaskFromLocalStorage(currentTask); // Call the function to delete from local storage
+        currentTask.remove(); // Remove the task from the DOM
+      }
+    });
+  
+    // cancel deletion
+    modal.querySelector('#cancel').addEventListener('click', () => modal.close());
+  
+    // clear current task
+    modal.addEventListener('close', () => (currentTask = null));
+  });
+  populateTasksFromStorage();
 });
 
-// confirm deletion
-modal.addEventListener('submit', () => {
-  if (currentTask) {
-    deleteTaskFromLocalStorage(currentTask); // Call the function to delete from local storage
-    currentTask.remove(); // Remove the task from the DOM
-  }
-});
-
-// cancel deletion
-modal.querySelector('#cancel').addEventListener('click', () => modal.close());
-
-// clear current task
-modal.addEventListener('close', () => (currentTask = null));
 
 // Task object to store task information
 class Task {
