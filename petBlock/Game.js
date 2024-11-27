@@ -1,16 +1,9 @@
-const Pet = require('./Pet')
+import Pet from './Pet.js';
 
-class Game {
+export default class Game {
   constructor() {
-    // if localStorage.getItem('game') !== null {
-    //   this.game = localStorage.getItem('game');
-    // }
-    // For script
-    this._coins = 0;
+    this._coins = 100;
     this._pets = {
-      Dog: new Pet('Dog', 10),
-      Cat: new Pet('Cat', 20),
-      Horse: new Pet('Horse', 50),
     };
   }
 
@@ -32,25 +25,22 @@ class Game {
 
   buyPet(name) {
     if (name in this._pets) {
-      this._pets[name].bought = true;
-      this._coins -= this._pets[name].price; // assume enough coins
+      this._pets[name][0].bought = true;
+      this._coins -= this._pets[name][0].price;
     }
   }
 
   changeHp(name, hp) {
     if (name in this._pets) {
-      this._pets[name].changeHp(hp);
+      this._pets[name][0].changeHp(hp);
     }
   }
 
   changeAllHp(hp) {
     for (const key in this._pets) {
-      if (this._pets[key].bought) {
-        this._pets[key].changeHp(hp);
+      if (this._pets[key][0].bought) {
+        this._pets[key][0].changeHp(hp);
       }
-      
     }
   }
 }
-
-module.exports = Game
