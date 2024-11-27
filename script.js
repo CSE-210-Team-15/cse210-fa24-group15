@@ -372,9 +372,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   ];
 
   let ownedPet = [
-    { name: 'own', image: 'https://via.placeholder.com/100', price: '$50', health: 232},
-    { name: 'own', image: 'https://via.placeholder.com/100', price: '$70', health: 232},
-    { name: 'own', image: 'https://via.placeholder.com/100', price: '$60', health: 232},
     { name: 'own', image: 'https://via.placeholder.com/100', price: '$50', health: 232 },
     { name: 'own', image: 'https://via.placeholder.com/100', price: '$70', health: 232 },
     { name: 'own', image: 'https://via.placeholder.com/100', price: '$60', health: 232 },
@@ -393,35 +390,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const popupContentBox = document.querySelector('.shop-popup-content');
   popup.style.display = 'none';
   const shopButton = document.getElementById('shopButton');
-  const ownedButton = document.getElementById('ownedButton');
   const coins = document.getElementById("coins")
   // Show popup on button click
   shopButton.addEventListener('click', () => {
     popup.style.display = 'flex';
     title = document.getElementById("popup-title");
     title.textContent = "SHOP"
-    const petList = popup.querySelector('.pet-list');
-    pets.forEach((pet) => {
-      const petHTML = `
-        <div class="pet-item">
-          <img src="${pet.image}" alt="${pet.name}">
-          <div class="price-button">
-            <span>${pet.name}</span>
-            <span>${pet.price}</span>
-          </div>
-        </div>
-      `;
-      petList.innerHTML += petHTML;
-    });
-    petList.scrollTop = 0;
-    coins.style.display = "flex"
-  });
-
-  ownedButton.addEventListener('click', () => {
-    popup.style.display = 'flex';
-    title = document.getElementById("popup-title");
-    title.textContent = "Owned Pet"
-    const petList = popup.querySelector('.pet-list');
+    const owned = document.getElementById("owned")
+    const shop = document.getElementById("shop")
     ownedPet.forEach((pet) => {
       const petHTML = `
         <div class="pet-item">
@@ -436,10 +412,22 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
       `;
-      petList.innerHTML += petHTML;
+      owned.innerHTML += petHTML;
+    });
+    pets.forEach((pet) => {
+      const petHTML = `
+        <div class="pet-item">
+          <img src="${pet.image}" alt="${pet.name}">
+          <div class="price-button">
+            <span>${pet.name}</span>
+            <span>${pet.price}</span>
+          </div>
+        </div>
+      `;
+      shop.innerHTML += petHTML;
     });
     petList.scrollTop = 0;
-    coins.style.display = "none"
+    coins.style.display = "flex"
   });
 
   // Close popup on close button click
