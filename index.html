@@ -9,15 +9,14 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="src/components/tasks/task.css" />
-    <link rel="stylesheet" href="src/components/pets/pets.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="src/components/tasks/task.js"></script>
+    <link rel="stylesheet" href="src/components/pets/pets.css">
+    <script type="module" src="script.js" defer></script>
     <script src="src/components/pets/pets.js" defer></script>
   </head>
   <body>
-    <div class="container">
-      <h1>Task List</h1>
+    <div class="container" id="titleContainer">
+      <h1>Pet Shop</h1>
+      <div id="shopButton"></div>
     </div>
 
     <div class="container columns">
@@ -59,13 +58,40 @@
 
     <!-- Adding the GIF at the bottom -->
     <div id="petsdiv" class="pets">
-      <img src="src/components/pets/assets/piplup.png" class="pet" id="pet1" />
-      <img src="src/components/pets/assets/snorlax.png" class="pet" id="pet2" />
-      <img src="src/components/pets/assets/eevee.png" class="pet" id="pet3" />
-      <img src="src/components/pets/assets/turtwig.png" class="pet" id="pet4" />
-      <img src="src/components/pets/assets/rattata.png" class="pet" id="pet5" />
-      <img src="src/components/pets/assets/vulpix.png" class="pet" id="pet6" />
+      <img 
+        src="src/components/pets/assets/piplup.png"
+        class="pet" 
+        id="pet1"
+      />
+      <img 
+        src="src/components/pets/assets/snorlax.png"
+        class="pet"
+        id="pet2"
+      />
+      <img 
+        src="src/components/pets/assets/eevee.png"
+        class="pet"
+        id="pet3"
+      />
+      <img 
+        src="src/components/pets/assets/turtwig.png"
+        class="pet"
+        id="pet4"
+      />
+      <img 
+        src="src/components/pets/assets/rattata.png"
+        class="pet"
+        id="pet5"
+      />
+      <img 
+        src="src/components/pets/assets/vulpix.png"
+        class="pet"
+        id="pet6"
+      />
     </div>
     <button id="toggleButton">Hide Pets</button>
+
+
+    
   </body>
 </html>
