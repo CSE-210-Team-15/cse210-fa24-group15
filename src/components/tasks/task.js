@@ -8,7 +8,7 @@ let currentTask = null;
 /**
  * Handles the dragover event to allow dragging and dropping tasks.
  *
- * This function prevents the default dragover behavior, identifies the dragged task,
+ * This function prevents default dragover behavior, identifies the dragged task,
  * and determines where to place it within the target list or relative to other tasks.
  *
  * @param {DragEvent} event - The dragover event triggered by dragging an element.
