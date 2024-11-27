@@ -446,3 +446,17 @@ const createTaskInput = (
 
   return input;
 };
+
+module.exports = {
+  saveTasks,
+  loadTasks,
+  updateTaskColumn,
+  deleteTaskFromLocalStorage,
+  Task,
+};
+
+// exports.saveTasks = saveTasks;
+// exports.loadTasks = loadTasks;
+// exports.updateTaskColumn = updateTaskColumn;
+// exports.deleteTaskFromLocalStorage = deleteTaskFromLocalStorage;
+// exports.Task = Task;
