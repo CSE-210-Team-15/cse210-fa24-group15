@@ -372,12 +372,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   ];
 
   let ownedPet = [
-    { name: 'own', image: 'https://via.placeholder.com/100', price: '$50' },
-    { name: 'own', image: 'https://via.placeholder.com/100', price: '$70' },
-    { name: 'own', image: 'https://via.placeholder.com/100', price: '$60' },
-    { name: 'own', image: 'https://via.placeholder.com/100', price: '$50' },
-    { name: 'own', image: 'https://via.placeholder.com/100', price: '$70' },
-    { name: 'own', image: 'https://via.placeholder.com/100', price: '$60' },
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$50', health: 232},
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$70', health: 232},
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$60', health: 232},
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$50', health: 232 },
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$70', health: 232 },
+    { name: 'own', image: 'https://via.placeholder.com/100', price: '$60', health: 232 },
   ];
 
   // Load the shop popup HTML
@@ -394,6 +394,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   popup.style.display = 'none';
   const shopButton = document.getElementById('shopButton');
   const ownedButton = document.getElementById('ownedButton');
+  const coins = document.getElementById("coins")
   // Show popup on button click
   shopButton.addEventListener('click', () => {
     popup.style.display = 'flex';
@@ -404,13 +405,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       const petHTML = `
         <div class="pet-item">
           <img src="${pet.image}" alt="${pet.name}">
-          <h4>${pet.name}</h4>
-          <button class="price-button">${pet.price}</button>
+          <div class="price-button">
+            <span>${pet.name}</span>
+            <span>${pet.price}</span>
+          </div>
         </div>
       `;
       petList.innerHTML += petHTML;
     });
     petList.scrollTop = 0;
+    coins.style.display = "flex"
   });
 
   ownedButton.addEventListener('click', () => {
@@ -422,13 +426,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       const petHTML = `
         <div class="pet-item">
           <img src="${pet.image}" alt="${pet.name}">
-          <h4>${pet.name}</h4>
-          <button class="price-button">${pet.price}</button>
+          <div class = "pet-status">
+            <span>${pet.name}</span>
+            <span>HP: ${pet.health}</span>
+          </div>
+          <div class="price-button">
+            <span>Feed</span>
+            <span>${pet.price}</span>
+          </div>
         </div>
       `;
       petList.innerHTML += petHTML;
     });
     petList.scrollTop = 0;
+    coins.style.display = "none"
   });
 
   // Close popup on close button click
