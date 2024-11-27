@@ -3,7 +3,7 @@ const {
   updateTaskColumn,
   loadTasks,
   deleteTaskFromLocalStorage,
-} = require('./src/components/tasks/task.js');
+} = require('../src/components/tasks/task.js');
 
 class MockTask {
   constructor(name, estTime, difficulty, column) {
