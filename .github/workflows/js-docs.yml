@@ -29,7 +29,7 @@ jobs:
 
       # Step 4: Run JSDoc to generate documentation
       - name: Generate JSDoc
-        run: npx jsdoc ./script.js
+        run: npx jsdoc ./src/components/tasks/task.js
 
       # Step 5: Verify the output folder
       - name: Verify JSDoc Output
