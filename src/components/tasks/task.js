@@ -74,8 +74,41 @@ const handleDragover = (event) => {
     }
   }
 
+  updateTaskState(draggedTask, sourceColumn, targetColumn);
   updateTaskColumn(draggedTask, targetColumn);
 };
+
+/**
+ * Perform the appropriate action(s) when dragging a task to
+ * a different column
+ * 
+ * To Do -> In Progress: render buttons, auto start timer
+ * In Progress -> Done: render buttons, auto stop timer
+ * 
+ * @param {HTMLElement} task       DOM task element
+ * @param {string}      sourceColumn source column name
+ * @param {string}      targetColumn target column name
+ */
+const updateTaskState = (task, sourceColumn, targetColumn) => {
+  const timerButton = task.querySelector('[data-timer]');
+
+  // if source = todo and target = in progress, start timer and render play/pause button
+  if (sourceColumn === 'To Do' && targetColumn === 'In Progress') {
+    renderTaskButtons(task, targetColumn);
+    timerButton.click();
+  }
+
+  // if source = in progress and target = done, stop timer and hide edit and play/pause
+  if (sourceColumn === 'In Progress' && targetColumn === 'Done') {
+    renderTaskButtons(task, targetColumn)
+    // only stop timer if it's currently active
+    if (timerButton
+        .querySelector('i')
+        .classList.contains('bi-stop-circle')){
+          timerButton.click();
+    }
+  }
+}
 
 const handleDrop = (event) => {
   event.preventDefault();
@@ -339,8 +372,44 @@ const createTask = (
     }
   });
 
+  // render buttons based on column
+  renderTaskButtons(task, columnName);
   return task;
 };
+
+
+/**
+ * Renders appropriate buttons on tasks based on the column 
+ * they are under
+ * 
+ * To Do: no play/pause button
+ * Done: no edit and no play/pause button
+ * 
+ * @param {HTMLElement} task       DOM task element
+ * @param {string}      columnName column name
+ */
+const renderTaskButtons = (task, columnName) => {
+  const timerButton = task.querySelector('[data-timer]');
+  const editButton = task.querySelector('[data-edit]');
+
+  switch (columnName) {
+    case 'To Do':
+      timerButton.style.display = 'none';
+      editButton.style.display = 'block';
+      break;
+    case 'In Progress':
+      timerButton.style.display = 'block';
+      editButton.style.display = 'block';
+      break;
+    case 'Done':
+      timerButton.style.display = 'none';
+      editButton.style.display = 'none';
+      break;
+    default:
+      timerButton.style.display = 'block';
+      editButton.style.display = 'block';
+  }
+}
 
 const handleEdit = (event) => {
   const task = event.target.closest('.task');
