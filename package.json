@@ -37,4 +37,5 @@
   "jest": {
     "testEnvironment": "jest-environment-jsdom"
   }
+  "transform": {}
 }
