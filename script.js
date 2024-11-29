@@ -362,11 +362,20 @@ function getRandomPrice(min = 10, max = 100) {
 }
 // Function to create a list of random pets
 function generateRandomPets(numPets = 5) {
-  const petNames = ['Dog', 'Cat', 'Horse', 'Rabbit', 'Parrot', 'Hamster', 'Fish', 'Turtle'];
+  const petNames = [
+    'Dog',
+    'Cat',
+    'Horse',
+    'Rabbit',
+    'Parrot',
+    'Hamster',
+    'Fish',
+    'Turtle',
+  ];
   const pets = {};
 
   for (let i = 0; i < numPets; i++) {
-    const name = petNames[i]
+    const name = petNames[i];
     const price = getRandomPrice();
     pets[name] = [new Pet(name, price), 'https://via.placeholder.com/100'];
   }
@@ -381,14 +390,15 @@ function updateCoinCount() {
   const coinCountShop = document.getElementById('coinCount');
   coinCountMain.textContent = game.coins;
   coinCountShop.textContent = game.coins;
+  localStorage.setItem('coins', JSON.stringify(game.coins));
 }
 
 function renderShop() {
-  console.log(game.pets)
+  console.log(game.pets);
   const popup = document.querySelector('.shop-popup');
   popup.style.display = 'flex';
-  const owned = document.getElementById("owned");
-  const shop = document.getElementById("shop");
+  const owned = document.getElementById('owned');
+  const shop = document.getElementById('shop');
 
   // Clear previous content
   owned.innerHTML = '';
@@ -423,15 +433,17 @@ function renderShop() {
     const feedButton = petElement.querySelector('.price-button');
 
     feedButton.addEventListener('click', (event) => {
-      event.stopPropagation(); 
+      event.stopPropagation();
       const pet = game.pets[index][0]; // Access the Pet instance
       if (game.coins >= pet.feedprice) {
-        if (pet.hp >= 100){
-          alert("this pet is at full health")
+        if (pet.hp >= 100) {
+          alert('this pet is at full health');
         } else {
           game.changeCoins(-pet.feedprice); // Deduct coins
           pet.changeHp(10); // Change HP by a fixed amount (e.g., 10)
-          console.log(`Fed ${pet.name}, new HP: ${pet.hp}, remaining coins: ${game.coins}`);
+          console.log(
+            `Fed ${pet.name}, new HP: ${pet.hp}, remaining coins: ${game.coins}`
+          );
           updateCoinCount();
           renderShop();
         }
@@ -466,10 +478,11 @@ function renderShop() {
     const buyButton = petElement.querySelector('.price-button');
 
     buyButton.addEventListener('click', (event) => {
-      event.stopPropagation(); 
+      event.stopPropagation();
       const pet = game.pets[index][0]; // Access the Pet instance
       if (game.coins >= pet.price) {
         game.buyPet(pet.name); // Mark the pet as bought
+        localStorage.setItem('pets', JSON.stringify(game.pets));
         console.log(`Bought ${pet.name}, remaining coins: ${game.coins}`);
         updateCoinCount();
         renderShop(); // Refresh the shop after buying
@@ -494,8 +507,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const popupContentBox = document.querySelector('.shop-popup-content');
   popup.style.display = 'none';
   const shopButton = document.getElementById('shopButton');
-  const coins = document.getElementById("coins")
-  updateCoinCount()
+  const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
+  const coins = JSON.parse(
+    localStorage.getItem('coins') || document.getElementById('coins')
+  );
+  //|| document.getElementById('coins');
+  updateCoinCount();
   // Show popup on button click
   shopButton.addEventListener('click', () => {
     popup.style.display = 'flex';
