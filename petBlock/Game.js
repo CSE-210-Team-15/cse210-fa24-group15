@@ -44,3 +44,8 @@ export default class Game {
     }
   }
 }
+
+// export for testing
+export {
+  Game
+}
