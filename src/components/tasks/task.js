@@ -514,6 +514,12 @@ const createTaskInput = (
     const timeMinInput = input.querySelector('#timeMin').value;
     const difficultyText = input.querySelector('#difficulty').value;
 
+    const tasks = loadTasks();
+    if (tasks.find((t) => t.name === nameText)) {
+      alert('Task with the same name already exists.');
+      return;
+    }
+
     if (
       !nameText ||
       !timeHourInput ||
