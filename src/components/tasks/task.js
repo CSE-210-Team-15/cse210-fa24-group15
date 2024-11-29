@@ -144,7 +144,9 @@ const deleteTaskFromLocalStorage = (task) => {
 
   // Find index of the task to be deleted
   const taskIndex = tasksJSON.findIndex(
-    (storedTask) => storedTask.name === task.querySelector('#name').innerText
+    (storedTask) =>
+      storedTask.name.toLowerCase() ===
+      task.querySelector('#name').innerText.toLowerCase()
   );
 
   // Remove task from array
@@ -278,7 +280,9 @@ const createTask = (
   let newTask;
   if (isPopulate) {
     const tasks = loadTasks();
-    newTask = tasks.find((t) => t.name === nameText);
+    newTask = tasks.find(
+      (t) => t.name.toLowerCase() === nameText.toLowerCase()
+    );
   } else {
     newTask = new Task(nameText, timeInSeconds, difficultyText, columnName);
     const tasks = loadTasks();
@@ -515,7 +519,7 @@ const createTaskInput = (
     const difficultyText = input.querySelector('#difficulty').value;
 
     const tasks = loadTasks();
-    if (tasks.find((t) => t.name === nameText)) {
+    if (tasks.find((t) => t.name.toLowerCase() === nameText.toLowerCase())) {
       alert('Task with the same name already exists.');
       return;
     }
