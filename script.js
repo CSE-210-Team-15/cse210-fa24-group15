@@ -44,24 +44,17 @@ class Task {
 //* functions
 
 /**
- * Handles the dragover event to allow dragging and dropping tasks.
+ * Handles the dragover event for drag-and-drop task management.
  *
- * This function prevents the default dragover behavior, identifies the dragged task,
- * and determines where to place it within the target list or relative to other tasks.
- *
- * @param {DragEvent} event - The dragover event triggered by dragging an element.
+ * @param {DragEvent} event - The event triggered during dragging.
  *
  * @returns {void}
  *
- * The function performs the following actions:
- * 1. Prevents the default behavior to allow dropping.
- * 2. Identifies the currently dragged task using the ".dragging" class.
- * 3. Finds the closest droppable target (either a `.task` or `.tasks` container).
- * 4. If the target is a `.tasks` container:
- *    - Appends the dragged task if the container is empty.
- *    - Appends the dragged task after the last task if the cursor is below it.
- * 5. If the target is a `.task` element:
- *    - Inserts the dragged task before or after the target based on cursor position.
+ * Actions performed:
+ * 1. Prevents default behavior to enable dropping.
+ * 2. Identifies the dragged task via the ".dragging" class.
+ * 3. Finds the closest droppable target (`.task` or `.tasks` container).
+ * 4. Adjusts the task's position based on the cursor and target type.
  */
 const handleDragover = (event) => {
   event.preventDefault(); // allow drop
@@ -113,32 +106,60 @@ const handleDragover = (event) => {
   }
 };
 
+/**
+ * @function handleDrop
+ * @description Prevents the browser's default behavior for drag-and-drop events.
+ * @param {DragEvent} event - The drop event object.
+ * @returns {void}
+ */
 const handleDrop = (event) => {
   event.preventDefault();
 };
 
+/**
+ * @function handleDragend
+ * @description Removes the "dragging" class from the element when the drag operation ends.
+ * @param {DragEvent} event - The dragend event object.
+ * @returns {void}
+ */
 const handleDragend = (event) => {
   event.target.classList.remove('dragging');
 };
 
+/**
+ * @function handleDragstart
+ * @description Initializes the drag operation, sets the allowed effect, and adds the "dragging" class to the dragged element.
+ * @param {DragEvent} event - The dragstart event object.
+ * @returns {void}
+ */
 const handleDragstart = (event) => {
   event.dataTransfer.effectsAllowed = 'move';
   event.dataTransfer.setData('text/plain', '');
   requestAnimationFrame(() => event.target.classList.add('dragging'));
 };
 
+/**
+ * @function handleDelete
+ * @description Prepares a task for deletion by displaying a preview of its content in a modal dialog.
+ * @param {Event} event - The event triggered by the delete button click.
+ * @returns {void}
+ */
 const handleDelete = (event) => {
   currentTask = event.target.closest('.task');
-
   // show preview
   modal.querySelector('.preview').innerText = currentTask.innerText.substring(
     0,
     100
   );
-
   modal.showModal();
 };
 
+/**
+ * @function handleEdit
+ * @description Replaces the task with editable input fields, pre-filled with current values.
+ * @param {Event} event - The event triggered by the edit action.
+ * @returns {void}
+ */
 const handleEdit = (event) => {
   const task = event.target.closest('.task');
 
@@ -163,6 +184,12 @@ const handleEdit = (event) => {
   selection.addRange(range);
 };
 
+/**
+ * @function handleBlur
+ * @description Saves the edited task values and replaces the input fields with a task element.
+ * @param {Event} event - The event triggered when the input fields lose focus.
+ * @returns {void}
+ */
 const handleBlur = (event) => {
   const input = event.target.closest('.task-Container');
 
@@ -181,6 +208,12 @@ const handleBlur = (event) => {
   input.replaceWith(task);
 };
 
+/**
+ * @function handleAdd
+ * @description Adds a new task input field to the column and focuses on it.
+ * @param {Event} event - The event triggered by the add action.
+ * @returns {void}
+ */
 const handleAdd = (event) => {
   const tasksEl = event.target.closest('.column').lastElementChild;
   const input = createTaskInput();
@@ -188,12 +221,23 @@ const handleAdd = (event) => {
   input.focus();
 };
 
+/**
+ * @function updateTaskCount
+ * @description Updates the task count displayed in the column title based on the number of tasks.
+ * @param {HTMLElement} column - The column element whose task count needs to be updated.
+ * @returns {void}
+ */
 const updateTaskCount = (column) => {
   const colTasks = column.querySelector('.tasks').children;
   const taskCount = colTasks.length;
   column.querySelector('.column-title h3').dataset.tasks = taskCount;
 };
 
+/**
+ * @function observeTaskChanges
+ * @description Sets up a MutationObserver to track changes in task lists and update the task count in each column.
+ * @returns {void}
+ */
 const observeTaskChanges = () => {
   for (const column of columns) {
     const observer = new MutationObserver(() => updateTaskCount(column));
@@ -203,9 +247,15 @@ const observeTaskChanges = () => {
 
 observeTaskChanges();
 
-/*
-estimated time formatting: hh:mm
-*/
+/**
+ * @function createTask
+ * @description estimated time formatting: hh:mm
+ *
+ * @param {string} nameText - The name of the task.
+ * @param {string} timeText - The estimated time for the task, formatted as hh:mm.
+ * @param {string} difficultyText - The difficulty level of the task.
+ * @returns {HTMLElement} The newly created task element.
+ */
 const createTask = (nameText, timeText, difficultyText) => {
   const newTask = new Task(nameText, timeText, difficultyText);
   tasks = loadTasks();
@@ -230,16 +280,22 @@ const createTask = (nameText, timeText, difficultyText) => {
   return task;
 };
 
-/*
-estimated time formatting: hh:mm
-*/
+/**
+ * @function createTaskInput
+ * @description estimated time formatting: hh:mm
+ *
+ * @param {string} [nameText=''] - The initial task name.
+ * @param {string} [timeText=''] - The initial estimated time for the task.
+ * @param {string} [difficultyText=''] - The initial difficulty level of the task.
+ * @returns {HTMLElement} The newly created task input container element.
+ */
 const createTaskInput = (nameText = '', timeText = '', difficultyText = '') => {
   const input = document.createElement('div');
   input.className = 'task-Container';
 
   input.innerHTML = `
   <div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
-  <div class="task-input" id="time"contenteditable="true" data-placeholder="Estimated Time">${timeText}</div>
+  <div class="task-input" id="time" contenteditable="true" data-placeholder="Estimated Time">${timeText}</div>
   <select class="task-input" id="difficulty">
     <option value="select" ${difficultyText.toLowerCase() === 'select difficulty' ? 'selected' : ''}>Select Difficulty</option>
     <option value="easy" ${difficultyText.toLowerCase() === 'easy' ? 'selected' : ''}>Easy</option>
@@ -253,18 +309,36 @@ const createTaskInput = (nameText = '', timeText = '', difficultyText = '') => {
   return input;
 };
 
-// Function to save tasks to local storage
+/**
+ * @function saveTasks
+ * @description Function to save tasks to local storage
+ *
+ * @param {Array} tasks - An array of task objects to be saved.
+ * @returns {void}
+ */
 const saveTasks = (tasks) => {
   const tasksJSON = tasks.map((task) => task.toJSON());
   localStorage.setItem('tasks', JSON.stringify(tasksJSON));
 };
 
-// Function to load tasks from local storage
+/**
+ * @function loadTasks
+ * @description Function to load tasks from local storage
+ *
+ * @returns {Array} An array of task objects.
+ */
 const loadTasks = () => {
   const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
   return tasksJSON.map(Task.fromJSON);
 };
 
+/**
+ * @function deleteTaskFromLocalStorage
+ * @description Deletes a task from local storage based on its name.
+ *
+ * @param {HTMLElement} task - The task element to delete.
+ * @returns {void}
+ */
 const deleteTaskFromLocalStorage = (task) => {
   // Load tasks from local storage
   const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
