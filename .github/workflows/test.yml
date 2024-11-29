@@ -7,7 +7,7 @@ on:
     branches: ["*"]
 
 jobs:
-  hello:
+  Auto Test:
     runs-on: ubuntu-latest
 
     steps:
