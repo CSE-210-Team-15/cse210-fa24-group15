@@ -58,7 +58,7 @@ describe('Task Management Functions', () => {
   test('should handle task with special characters in name', () => {
     // Create a task with special characters
     const specialTask = new MockTask('Task @#$%^', 7200000, 'High', 'To Do');
-    
+
     // Save and load the special task
     saveTasks([specialTask]);
     const loadedTasks = loadTasks();
@@ -87,7 +87,7 @@ describe('Task Management Functions', () => {
 
   test('should handle tasks with zero estimated time', () => {
     const zeroTimeTask = new MockTask('Zero Time Task', 0, 'Low', 'To Do');
-    
+
     saveTasks([zeroTimeTask]);
     const loadedTasks = loadTasks();
 
@@ -98,7 +98,7 @@ describe('Task Management Functions', () => {
   test('should handle multiple saves and loads', () => {
     // Initial save
     saveTasks(tasks);
-    
+
     // Add a new task and save again
     const newTask = new MockTask('Task 3', 2700000, 'High', 'To Do');
     tasks.push(newTask);
@@ -130,7 +130,7 @@ describe('Task Management Functions', () => {
 
   test('should not modify original tasks array when saving', () => {
     const originalTasksLength = tasks.length;
-    
+
     // Save tasks
     saveTasks(tasks);
 
