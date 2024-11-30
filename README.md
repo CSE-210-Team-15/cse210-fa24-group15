@@ -37,18 +37,17 @@ Welcome to the project! This guide will walk you through setting up the developm
 
 # Development Workflow
 
-1. Formatting and Linting
-
-- To format the code:
-
-  ```
-  npm run format
-  ```
+1. Linting and Formatting
 
 - To check linting errors:
 
   ```
   npm run lint
+  ```
+
+- To format the code:
+  ```
+  npm run format
   ```
 
 2. Testing
