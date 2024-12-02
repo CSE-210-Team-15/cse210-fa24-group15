@@ -81,10 +81,10 @@ const handleDragover = (event) => {
 /**
  * Perform the appropriate action(s) when dragging a task to
  * a different column
- * 
+ *
  * To Do -> In Progress: render buttons, auto start timer
  * In Progress -> Done: render buttons, auto stop timer
- * 
+ *
  * @param {HTMLElement} task       DOM task element
  * @param {string}      sourceColumn source column name
  * @param {string}      targetColumn target column name
@@ -100,15 +100,13 @@ const updateTaskState = (task, sourceColumn, targetColumn) => {
 
   // if source = in progress and target = done, stop timer and hide edit and play/pause
   if (sourceColumn === 'In Progress' && targetColumn === 'Done') {
-    renderTaskButtons(task, targetColumn)
+    renderTaskButtons(task, targetColumn);
     // only stop timer if it's currently active
-    if (timerButton
-        .querySelector('i')
-        .classList.contains('bi-stop-circle')){
-          timerButton.click();
+    if (timerButton.querySelector('i').classList.contains('bi-stop-circle')) {
+      timerButton.click();
     }
   }
-}
+};
 
 const handleDrop = (event) => {
   event.preventDefault();
@@ -377,14 +375,13 @@ const createTask = (
   return task;
 };
 
-
 /**
- * Renders appropriate buttons on tasks based on the column 
+ * Renders appropriate buttons on tasks based on the column
  * they are under
- * 
+ *
  * To Do: no play/pause button
  * Done: no edit and no play/pause button
- * 
+ *
  * @param {HTMLElement} task       DOM task element
  * @param {string}      columnName column name
  */
@@ -409,7 +406,7 @@ const renderTaskButtons = (task, columnName) => {
       timerButton.style.display = 'block';
       editButton.style.display = 'block';
   }
-}
+};
 
 const handleEdit = (event) => {
   const task = event.target.closest('.task');
