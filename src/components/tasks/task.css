@@ -19,8 +19,12 @@
   transition: 0.3s;
 }
 
-#time {
-  width: 4rem;
+#timeHour {
+  width: 6rem;
+}
+
+#timeMin {
+  width: 6rem;
 }
 
 .task.dragging {
