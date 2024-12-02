@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const coins = JSON.parse(
     localStorage.getItem('coins') || document.getElementById('coins')
   );
-  //|| document.getElementById('coins');
+  // const coins = document.getElementById('coins');
   updateCoinCount();
   // Show popup on button click
   shopButton.addEventListener('click', () => {

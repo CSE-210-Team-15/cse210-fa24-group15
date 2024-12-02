@@ -3,8 +3,7 @@ import Pet from './Pet.js';
 export default class Game {
   constructor() {
     this._coins = 100;
-    this._pets = {
-    };
+    this._pets = {};
   }
 
   get coins() {
@@ -45,7 +44,4 @@ export default class Game {
   }
 }
 
-// export for testing
-export {
-  Game
-}
+export { Game };
