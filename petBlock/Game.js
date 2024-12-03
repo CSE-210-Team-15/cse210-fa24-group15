@@ -1,3 +1,5 @@
+const Pet = require('./Pet')
+
 class Game {
   constructor() {
     this._coins = 100;
