@@ -1,5 +1,7 @@
-import Game from './petBlock/Game.js';
-import Pet from './petBlock/Pet.js';
+// import Game from './petBlock/Game.js';
+// import Pet from './petBlock/Pet.js';
+const Game = require('./petBlock/Game')
+const Pet = require('./petBlock/Pet')
 
 // Function to generate a random price for pets
 function getRandomPrice(min = 10, max = 100) {
@@ -27,7 +29,8 @@ function generateRandomPets(numPets = 5) {
 
   return pets;
 }
-const game = new Game();
+// const game = new Game();
+game = new Game();
 game.pets = generateRandomPets();
 
 function updateCoinCount() {
