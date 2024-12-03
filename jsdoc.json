@@ -1,0 +1,18 @@
+{
+    "source": {
+      "include": [
+        "./script.js",
+        "./petBlock",
+        "./src"
+      ],
+      "exclude": [
+        "node_modules"
+      ],
+      "includePattern": ".+\\.js$"
+    },
+    "opts": {
+      "destination": "./out",
+      "recurse": true
+    },
+    "comment": "cmd: npx jsdoc -c jsdoc.json"
+}
