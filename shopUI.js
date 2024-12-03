@@ -23,6 +23,22 @@ function updateCoinCount() {
   console.log('Pet Set: ', game.serializePets());
 }
 
+function addPetUI() {
+  const pets = document.getElementById('petsdiv');
+  pets.innerHTML = '';
+  Object.values(game.pets).forEach((petData) => {
+    const pet = petData[0]; // Access the Pet instance
+    const imageUrl = petData[1]; // Access the pet image URL
+
+    if (pet.bought) {
+      const img = document.createElement('img');
+      img.classList.add('pet');
+      img.src = imageUrl;
+      pets.appendChild(img);
+    }
+  });
+}
+
 function renderShop() {
   // let savedPets = JSON.parse(localStorage.getItem('pets'))
   // if (savedPets) {
@@ -80,6 +96,7 @@ function renderShop() {
           );
           updateCoinCount();
           renderShop();
+          addPetUI();
         }
       } else {
         alert('Not enough coins to feed this pet.');
@@ -120,6 +137,7 @@ function renderShop() {
         console.log(`Bought ${pet.name}, remaining coins: ${game.coins}`);
         updateCoinCount();
         renderShop(); // Refresh the shop after buying
+        addPetUI(); // Show the pet immediately after buying
       } else {
         alert('Not enough coins to buy this pet.');
       }
@@ -157,6 +175,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     popup.style.display = 'flex';
     renderShop();
   });
+
+  // Call addPetUI to display pets after reload
+  addPetUI();
 
   // Close popup on close button click
   popup.addEventListener('click', (event) => {

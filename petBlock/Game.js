@@ -5,23 +5,22 @@ export default class Game {
     this._coins = 100;
     this._pets = {};
     const petNames = [
-      'Dog',
-      'Cat',
-      'Horse',
-      'Rabbit',
-      'Parrot',
-      'Hamster',
-      'Fish',
-      'Turtle',
+      'piplup',
+      'rattata',
+      'turtwig',
+      'squirtle',
+      'vulpix',
+      'snorlax',
+      'eevee',
     ];
-    const petPrices = [11, 30, 35, 70, 90, 100];
+    const petPrices = [11, 30, 35, 70, 90, 80, 100];
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       const name = petNames[i];
       const price = petPrices[i];
       this._pets[name] = [
         new Pet(name, price),
-        'https://via.placeholder.com/100',
+        './src/components/pets/assets/' + name + '.png',
       ];
     }
   }
