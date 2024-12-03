@@ -33,7 +33,7 @@ including adding fields to task creation and saving task objects to localstorage
 ### Status of the Pipeline
 
 - Development (Local)
-  - Make a small change or add a feature.
+  - Make a small change or add a feature
 - Linting and coding styling
   - Enabled ESLint for linting and Prettier for code styling on our local editor (via IDE setting and extension). Can run scripts for linting and formatting before committing the code
   - Enabled pre-commit checks for consistent linting and formatting through Husky.
