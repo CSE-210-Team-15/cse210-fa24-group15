@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/components/tasks/task.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/components/tasks/task.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * @file This is task.js
  * @description This is task.js!
  */
@@ -45,8 +73,8 @@ const handleDragover = (event) => {
     .textContent.trim();
 
   if (
-    (sourceColumn === 'In Progress' && targetColumn === 'To Do') || // Block In Progress to To Do
-    (sourceColumn === 'Done' &&
+    (sourceColumn === 'In Progress' &amp;&amp; targetColumn === 'To Do') || // Block In Progress to To Do
+    (sourceColumn === 'Done' &amp;&amp;
       (targetColumn === 'To Do' || targetColumn === 'In Progress')) // Block Done to To Do or In Progress
   ) {
     return; // Prevent drop specifically in these cases
@@ -64,14 +92,14 @@ const handleDragover = (event) => {
       target.appendChild(draggedTask);
     } else {
       const { bottom } = lastTask.getBoundingClientRect();
-      event.clientY > bottom && target.appendChild(draggedTask);
+      event.clientY > bottom &amp;&amp; target.appendChild(draggedTask);
     }
   } else {
     // target is another
     const { top, height } = target.getBoundingClientRect();
     const distance = top + height / 2;
 
-    if (event.clientY < distance) {
+    if (event.clientY &lt; distance) {
       target.before(draggedTask);
     } else {
       target.after(draggedTask);
@@ -298,19 +326,19 @@ const createTask = (
   const task = document.createElement('div');
   task.className = 'task';
   task.draggable = true;
-  task.innerHTML = `<div style="display: flex; flex-direction: column; margin: 2px">
-        <div id="name" style="font-weight: bolder;">${nameText}</div>
-        <div class="time-tracking">
-            Actual Time/Estimated Time: <span id="time-spent">${formatTimeHHMMSS(newTask.timeSpent)}</span> / 
-            <span id="estimated-time">${formatTimeHHMMSS(timeInSeconds)}</span>
-        </div>
-        <div id="difficulty">Difficulty: ${difficultyText}</div>
-        <menu>
-            <button data-edit><i class="bi bi-pencil-square"></i></button>
-            <button data-delete><i class="bi bi-trash"></i></button>
-            <button data-timer><i class="bi bi-play-circle"></i></button>
-        </menu>
-    </div>`;
+  task.innerHTML = `&lt;div style="display: flex; flex-direction: column; margin: 2px">
+        &lt;div id="name" style="font-weight: bolder;">${nameText}&lt;/div>
+        &lt;div class="time-tracking">
+            Actual Time/Estimated Time: &lt;span id="time-spent">${formatTimeHHMMSS(newTask.timeSpent)}&lt;/span> / 
+            &lt;span id="estimated-time">${formatTimeHHMMSS(timeInSeconds)}&lt;/span>
+        &lt;/div>
+        &lt;div id="difficulty">Difficulty: ${difficultyText}&lt;/div>
+        &lt;menu>
+            &lt;button data-edit>&lt;i class="bi bi-pencil-square">&lt;/i>&lt;/button>
+            &lt;button data-delete>&lt;i class="bi bi-trash">&lt;/i>&lt;/button>
+            &lt;button data-timer>&lt;i class="bi bi-play-circle">&lt;/i>&lt;/button>
+        &lt;/menu>
+    &lt;/div>`;
 
   task.addEventListener('dragstart', handleDragstart);
   task.addEventListener('dragend', handleDragend);
@@ -414,22 +442,22 @@ const createTaskInput = (
   const input = document.createElement('div');
   input.className = 'task-Container';
 
-  input.innerHTML = `<div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
-    <div class="task-row">
+  input.innerHTML = `&lt;div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}&lt;/div>
+    &lt;div class="task-row">
     Estimated Time: 
-    <input type="number" class="task-input" id="timeHour" value="${timeHour}" placeholder="Hours" data-placeholder="Estimated Time" min="0" max=99>
-    <input type="number" class="task-input" id="timeMin" value="${timeMin}" placeholder="Minutes" data-placeholder="Estimated Time" min="0" max="59">
-    </div>
-    <div class="task-row">
+    &lt;input type="number" class="task-input" id="timeHour" value="${timeHour}" placeholder="Hours" data-placeholder="Estimated Time" min="0" max=99>
+    &lt;input type="number" class="task-input" id="timeMin" value="${timeMin}" placeholder="Minutes" data-placeholder="Estimated Time" min="0" max="59">
+    &lt;/div>
+    &lt;div class="task-row">
     Difficulty: 
-    <select class="task-input" id="difficulty">
-    <option value="select" ${difficultyText.toLowerCase() === 'select difficulty' ? 'selected' : ''}>Select Difficulty</option>
-    <option value="easy" ${difficultyText.toLowerCase() === 'easy' ? 'selected' : ''}>Easy</option>
-    <option value="medium" ${difficultyText.toLowerCase() === 'medium' ? 'selected' : ''}>Medium</option>
-    <option value="hard" ${difficultyText.toLowerCase() === 'hard' ? 'selected' : ''}>Hard</option>
-    </select>
-    <button id = "createButton">Create</button>
-    </div>
+    &lt;select class="task-input" id="difficulty">
+    &lt;option value="select" ${difficultyText.toLowerCase() === 'select difficulty' ? 'selected' : ''}>Select Difficulty&lt;/option>
+    &lt;option value="easy" ${difficultyText.toLowerCase() === 'easy' ? 'selected' : ''}>Easy&lt;/option>
+    &lt;option value="medium" ${difficultyText.toLowerCase() === 'medium' ? 'selected' : ''}>Medium&lt;/option>
+    &lt;option value="hard" ${difficultyText.toLowerCase() === 'hard' ? 'selected' : ''}>Hard&lt;/option>
+    &lt;/select>
+    &lt;button id = "createButton">Create&lt;/button>
+    &lt;/div>
     `;
   const createButton = input.querySelector('#createButton');
   createButton.addEventListener('click', () => {
@@ -469,3 +497,26 @@ module.exports = {
 // exports.updateTaskColumn = updateTaskColumn;
 // exports.deleteTaskFromLocalStorage = deleteTaskFromLocalStorage;
 // exports.Task = Task;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#createTaskInput">createTaskInput</a></li><li><a href="global.html#deleteTaskFromLocalStorage">deleteTaskFromLocalStorage</a></li><li><a href="global.html#formatTimeHHMMSS">formatTimeHHMMSS</a></li><li><a href="global.html#handleAdd">handleAdd</a></li><li><a href="global.html#handleBlur">handleBlur</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleDragend">handleDragend</a></li><li><a href="global.html#handleDragover">handleDragover</a></li><li><a href="global.html#handleDragstart">handleDragstart</a></li><li><a href="global.html#handleDrop">handleDrop</a></li><li><a href="global.html#handleEdit">handleEdit</a></li><li><a href="global.html#loadTasks">loadTasks</a></li><li><a href="global.html#observeTaskChanges">observeTaskChanges</a></li><li><a href="global.html#saveTasks">saveTasks</a></li><li><a href="global.html#updateTaskCount">updateTaskCount</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Dec 02 2024 18:32:58 GMT-0800 (北美太平洋标准时间)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,3 +1,7 @@
+/**
+ * @file This is script.js
+ * @description This is script.js!
+ */
 const modal = document.querySelector('.confirm-modal');
 const columnsContainer = document.querySelector('.columns');
 const columns = columnsContainer.querySelectorAll('.column');
