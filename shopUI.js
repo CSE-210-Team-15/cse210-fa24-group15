@@ -1,44 +1,33 @@
 import Game from './petBlock/Game.js';
-import Pet from './petBlock/Pet.js';
 
-// Function to generate a random price for pets
-function getRandomPrice(min = 10, max = 100) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+let game = new Game();
+
+let savedPets = JSON.parse(localStorage.getItem('pets'));
+if (savedPets) {
+  game.pets = game.deserializePets(savedPets) || game.pets;
 }
-// Function to create a list of random pets
-function generateRandomPets(numPets = 5) {
-  const petNames = [
-    'Dog',
-    'Cat',
-    'Horse',
-    'Rabbit',
-    'Parrot',
-    'Hamster',
-    'Fish',
-    'Turtle',
-  ];
-  const pets = {};
+console.log(game);
+game.coins = JSON.parse(localStorage.getItem('coins')) || 100;
 
-  for (let i = 0; i < numPets; i++) {
-    const name = petNames[i];
-    const price = getRandomPrice();
-    pets[name] = [new Pet(name, price), 'https://via.placeholder.com/100'];
-  }
-
-  return pets;
-}
-const game = new Game();
-game.pets = generateRandomPets();
+// For testing, hardcode to 100
+// game.coins = 100;
 
 function updateCoinCount() {
   const coinCountMain = document.getElementById('shopButton');
+  //const coinCountShop = document.getElementById('coinCount');
   const coinCountShop = document.getElementById('coinCount');
   coinCountMain.textContent = game.coins;
   coinCountShop.textContent = game.coins;
   localStorage.setItem('coins', JSON.stringify(game.coins));
+  localStorage.setItem('pets', JSON.stringify(game.serializePets()));
+  console.log('Pet Set: ', game.serializePets());
 }
 
 function renderShop() {
+  // let savedPets = JSON.parse(localStorage.getItem('pets'))
+  // if (savedPets) {
+  //   game.pets = game.deserializePets(savedPets);
+  // }
   console.log(game.pets);
   const popup = document.querySelector('.shop-popup');
   popup.style.display = 'flex';
@@ -127,7 +116,7 @@ function renderShop() {
       const pet = game.pets[index][0]; // Access the Pet instance
       if (game.coins >= pet.price) {
         game.buyPet(pet.name); // Mark the pet as bought
-        localStorage.setItem('pets', JSON.stringify(game.pets));
+        // localStorage.setItem('pets', JSON.stringify(game.serializePets()));
         console.log(`Bought ${pet.name}, remaining coins: ${game.coins}`);
         updateCoinCount();
         renderShop(); // Refresh the shop after buying
@@ -136,9 +125,11 @@ function renderShop() {
       }
     });
   });
+  //localStorage.setItem('pets', JSON.stringify(game.serializePets()));
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // localStorage.setItem('pets', JSON.stringify(game.serializePets()));
   // Load the shop popup HTML
   const response = await fetch('shop.html');
   const html = await response.text();
@@ -152,11 +143,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const popupContentBox = document.querySelector('.shop-popup-content');
   popup.style.display = 'none';
   const shopButton = document.getElementById('shopButton');
-  const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
-  const coins = JSON.parse(
-    localStorage.getItem('coins') || document.getElementById('coins')
-  );
-  // const coins = document.getElementById('coins');
+
+  // game.coins = JSON.parse(
+  // localStorage.getItem('coins')) || 100;
+  // let savedPets = JSON.parse(localStorage.getItem('pets'))
+  // if (savedPets) {
+  //   game.pets = game.deserializePets(savedPets);
+  // }
+
   updateCoinCount();
   // Show popup on button click
   shopButton.addEventListener('click', () => {

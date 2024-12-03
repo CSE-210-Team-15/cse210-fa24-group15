@@ -1,12 +1,12 @@
 let defaultHp = 100;
 
 export default class Pet {
-  constructor(name, price) {
-    this._hp = defaultHp;
-    this._bought = false;
+  constructor(name, price, feedprice = 20, hp = defaultHp, bought = 0) {
+    this._hp = hp;
+    this._bought = bought;
     this._name = name;
     this._price = price;
-    this._feedprice = 20;
+    this._feedprice = feedprice;
   }
 
   get name() {
@@ -39,7 +39,7 @@ export default class Pet {
     }
     if (this._hp <= 0) {
       this._hp = 100;
-      this._bought = false;
+      this._bought = 0;
     }
   }
 }
