@@ -1,6 +1,4 @@
-import Pet from './Pet.js';
-
-export default class Game {
+class Game {
   constructor() {
     this._coins = 100;
     this._pets = {};
