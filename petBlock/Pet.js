@@ -1,6 +1,6 @@
 let defaultHp = 100;
 
-export default class Pet {
+class Pet {
   constructor(name, price) {
     this._hp = defaultHp;
     this._bought = false;
@@ -43,3 +43,5 @@ export default class Pet {
     }
   }
 }
+
+export { Pet }
