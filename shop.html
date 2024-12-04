@@ -3,25 +3,21 @@
     <div class="header">
       <h2>Shop</h2>
       <div id="coins">
-        <img 
-          src="src/components/pets/assets/coin.png"
-          alt="Coins"
-        />
+        <img src="src/components/pets/assets/coin.png" alt="Coins" />
         <span id="coinCount"></span>
       </div>
     </div>
-    <div class = "list">
+    <div class="list">
       <h3>My Pet</h3>
-      <div class="pet-list" id = "owned"></div>
-      <hr>
-      <h3 style = "margin-top: 2rem;">Unlock New!</h3>
-      <div class="pet-list" id = "shop"></div>
+      <div class="pet-list" id="owned"></div>
+      <hr />
+      <h3 style="margin-top: 2rem">Unlock New!</h3>
+      <div class="pet-list" id="shop"></div>
     </div>
-
   </div>
 </div>
 <style>
-  h3{
+  h3 {
     padding-left: 10px;
   }
   .shop-popup {
@@ -54,7 +50,7 @@
     margin-top: 1rem;
   }
 
-  .list{
+  .list {
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -74,7 +70,7 @@
     position: absolute; /* Allow placement at the right */
     right: 20px; /* Adjust as needed */
     display: flex;
-    align-items: center; 
+    align-items: center;
     height: 1.5em; /* Same height as h2 */
   }
 
@@ -85,7 +81,10 @@
 
   .pet-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Flexible grid for responsive items */
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(150px, 1fr)
+    ); /* Flexible grid for responsive items */
     gap: 2.5rem; /* Spacing between items */
     justify-content: center; /* Center the rows when they are not full */
     align-items: start; /* Align items with rows above */
@@ -118,7 +117,7 @@
   .price-button:hover {
     background-color: darkgoldenrod;
   }
-  .pet-status{
+  .pet-status {
     width: 150px;
     display: flex;
     flex-direction: row;
@@ -126,5 +125,4 @@
     padding: 0px 10px;
     margin-bottom: 10px;
   }
-
 </style>

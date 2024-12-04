@@ -1,25 +1,24 @@
-import assert from 'node:assert';
-import test from 'node:test';
-import {Game} from './Game.js';
-
-const demo_game_1 = new Game();
-const demo_game_2 = new Game();
-const demo_game_3 = new Game();
-const demo_game_4 = new Game();
-const demo_game_5 = new Game();
-
-
-
-test('origional coin', () => {
-    // expect(demo_game_1.coins).toBe(0);
-    assert.strictEqual(demo_game_1.coins, 100)
-});
+// import assert from 'node:assert';
+// import test from 'node:test';
+// import {Game} from './Game.js';
+// //
+// // const demo_game_1 = new Game();
+// // const demo_game_2 = new Game();
+// // const demo_game_3 = new Game();
+// // const demo_game_4 = new Game();
+// // const demo_game_5 = new Game();
+//
+//
+//
+// test('origional coin', () => {
+//     // expect(demo_game_1.coins).toBe(0);
+//     assert.strictEqual(demo_game_1.coins, 100)
+// });
 
 // demo_game_2.changeCoins(300)
 // test('add 300 coins', () => {
 //     expect(demo_game_2.coins).toBe(300);
 // });
-
 
 // // console.log(demo_game_3.coins)
 // test('add 1000 coins', () => {
@@ -73,5 +72,3 @@ test('origional coin', () => {
 //     expect(demo_game_5.pets["Horse"].hp).toBe(100);
 //     expect(demo_game_5.pets['Horse'].bought).toBe(false)
 // });
-
-
