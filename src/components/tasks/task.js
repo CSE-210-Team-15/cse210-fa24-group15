@@ -170,7 +170,9 @@ const deleteTaskFromLocalStorage = (task) => {
 
   // Find index of the task to be deleted
   const taskIndex = tasksJSON.findIndex(
-    (storedTask) => storedTask.name === task.querySelector('#name').innerText
+    (storedTask) =>
+      storedTask.name.toLowerCase() ===
+      task.querySelector('#name').innerText.toLowerCase()
   );
 
   // Remove task from array
@@ -309,7 +311,9 @@ const createTask = (
   let newTask;
   if (isPopulate) {
     const tasks = loadTasks();
-    newTask = tasks.find((t) => t.name === nameText);
+    newTask = tasks.find(
+      (t) => t.name.toLowerCase() === nameText.toLowerCase()
+    );
   } else {
     newTask = new Task(nameText, timeInSeconds, difficultyText, columnName);
     const tasks = loadTasks();
@@ -320,19 +324,64 @@ const createTask = (
   const task = document.createElement('div');
   task.className = 'task';
   task.draggable = true;
-  task.innerHTML = `<div style="display: flex; flex-direction: column; margin: 2px">
-        <div id="name" style="font-weight: bolder;">${nameText}</div>
-        <div class="time-tracking">
-            Actual Time/Estimated Time: <span id="time-spent">${formatTimeHHMMSS(newTask.timeSpent)}</span> / 
-            <span id="estimated-time">${formatTimeHHMMSS(timeInSeconds)}</span>
-        </div>
-        <div id="difficulty">Difficulty: ${difficultyText}</div>
-        <menu>
-            <button data-edit><i class="bi bi-pencil-square"></i></button>
-            <button data-delete><i class="bi bi-trash"></i></button>
-            <button data-timer><i class="bi bi-play-circle"></i></button>
-        </menu>
-    </div>`;
+
+  const taskContainer = document.createElement('div');
+  taskContainer.style.display = 'flex';
+  taskContainer.style.flexDirection = 'column';
+  taskContainer.style.margin = '2px';
+
+  const taskName = document.createElement('div');
+  taskName.id = 'name';
+  taskName.style.fontWeight = 'bolder';
+  taskName.textContent = nameText;
+
+  const timeTracking = document.createElement('div');
+  timeTracking.className = 'time-tracking';
+  const actualTime = document.createElement('span');
+  actualTime.id = 'time-spent';
+  actualTime.textContent = formatTimeHHMMSS(newTask.timeSpent);
+  const estimatedTime = document.createElement('span');
+  estimatedTime.id = 'estimated-time';
+  estimatedTime.textContent = formatTimeHHMMSS(timeInSeconds);
+  timeTracking.textContent = 'Actual Time/Estimated Time: ';
+  timeTracking.appendChild(actualTime);
+  timeTracking.appendChild(document.createTextNode(' / '));
+  timeTracking.appendChild(estimatedTime);
+
+  const taskDifficulty = document.createElement('div');
+  taskDifficulty.id = 'difficulty';
+  taskDifficulty.textContent = `Difficulty: ${difficultyText}`;
+
+  const menu = document.createElement('menu');
+
+  const editButton = document.createElement('button');
+  editButton.dataset.edit = true;
+  const editIcon = document.createElement('i');
+  editIcon.className = 'bi bi-pencil-square';
+  editButton.appendChild(editIcon);
+
+  const deleteButton = document.createElement('button');
+  deleteButton.dataset.delete = true;
+  const deleteIcon = document.createElement('i');
+  deleteIcon.className = 'bi bi-trash';
+  deleteButton.appendChild(deleteIcon);
+
+  const timerBtn = document.createElement('button');
+  timerBtn.dataset.timer = true;
+  const timerIcon = document.createElement('i');
+  timerIcon.className = 'bi bi-play-circle';
+  timerBtn.appendChild(timerIcon);
+
+  menu.appendChild(editButton);
+  menu.appendChild(deleteButton);
+  menu.appendChild(timerBtn);
+
+  taskContainer.appendChild(taskName);
+  taskContainer.appendChild(timeTracking);
+  taskContainer.appendChild(taskDifficulty);
+  taskContainer.appendChild(menu);
+
+  task.appendChild(taskContainer);
 
   task.addEventListener('dragstart', handleDragstart);
   task.addEventListener('dragend', handleDragend);
@@ -471,32 +520,75 @@ const createTaskInput = (
   const input = document.createElement('div');
   input.className = 'task-Container';
 
-  input.innerHTML = `<div class="task-input" id="name" contenteditable="true" data-placeholder="Task name">${nameText}</div>
-    <div class="task-row">
-    Estimated Time: 
-    <input type="number" class="task-input" id="timeHour" value="${timeHour}" placeholder="Hours" data-placeholder="Estimated Time" min="0" max=99>
-    <input type="number" class="task-input" id="timeMin" value="${timeMin}" placeholder="Minutes" data-placeholder="Estimated Time" min="0" max="59">
-    </div>
-    <div class="task-row">
-    Difficulty: 
-    <select class="task-input" id="difficulty">
-    <option value="select" ${difficultyText.toLowerCase() === 'select difficulty' ? 'selected' : ''}>Select Difficulty</option>
-    <option value="easy" ${difficultyText.toLowerCase() === 'easy' ? 'selected' : ''}>Easy</option>
-    <option value="medium" ${difficultyText.toLowerCase() === 'medium' ? 'selected' : ''}>Medium</option>
-    <option value="hard" ${difficultyText.toLowerCase() === 'hard' ? 'selected' : ''}>Hard</option>
-    </select>
-    <button id = "createButton">Create</button>
-    </div>
-    `;
-  const createButton = input.querySelector('#createButton');
+  const nameDiv = document.createElement('div');
+  nameDiv.className = 'task-input';
+  nameDiv.id = 'name';
+  nameDiv.contentEditable = 'true';
+  nameDiv.dataset.placeholder = 'Task name';
+  nameDiv.textContent = nameText;
+  input.appendChild(nameDiv);
+
+  const timeRow = document.createElement('div');
+  timeRow.className = 'task-row';
+  timeRow.textContent = 'Estimated Time: ';
+  input.appendChild(timeRow);
+
+  const timeHourInput = document.createElement('input');
+  timeHourInput.type = 'number';
+  timeHourInput.className = 'task-input';
+  timeHourInput.id = 'timeHour';
+  timeHourInput.value = timeHour;
+  timeHourInput.placeholder = 'Hours';
+  timeHourInput.min = '0';
+  timeRow.appendChild(timeHourInput);
+
+  const timeMinInput = document.createElement('input');
+  timeMinInput.type = 'number';
+  timeMinInput.className = 'task-input';
+  timeMinInput.id = 'timeMin';
+  timeMinInput.value = timeMin;
+  timeMinInput.placeholder = 'Minutes';
+  timeMinInput.min = '0';
+  timeMinInput.max = '59';
+  timeRow.appendChild(timeMinInput);
+
+  const difficultyRow = document.createElement('div');
+  difficultyRow.className = 'task-row';
+  difficultyRow.textContent = 'Difficulty: ';
+  input.appendChild(difficultyRow);
+
+  const difficultySelect = document.createElement('select');
+  difficultySelect.className = 'task-input';
+  difficultySelect.id = 'difficulty';
+  difficultyRow.appendChild(difficultySelect);
+
+  const difficulties = ['Select Difficulty', 'Easy', 'Medium', 'Hard'];
+  difficulties.forEach((difficulty) => {
+    const option = document.createElement('option');
+    option.value = difficulty.toLowerCase();
+    option.textContent = difficulty;
+    if (difficultyText.toLowerCase() === difficulty.toLowerCase()) {
+      option.selected = true;
+    }
+    difficultySelect.appendChild(option);
+  });
+
+  const createButton = document.createElement('button');
+  createButton.id = 'createButton';
+  createButton.textContent = 'Create';
+  difficultyRow.appendChild(createButton);
+
   createButton.addEventListener('click', () => {
-    const nameInput = input.querySelector('#name');
+    const nameText = input.querySelector('#name').textContent.trim();
     const timeHourInput = input.querySelector('#timeHour').value;
     const timeMinInput = input.querySelector('#timeMin').value;
-    const difficultySelect = input.querySelector('#difficulty');
+    const difficultyText = input.querySelector('#difficulty').value;
 
-    const nameText = nameInput.textContent.trim();
-    const difficultyText = difficultySelect.value;
+    const tasks = loadTasks();
+    if (tasks.find((t) => t.name.toLowerCase() === nameText.toLowerCase())) {
+      alert('Task with the same name already exists.');
+      return;
+    }
 
     if (
       !nameText ||
@@ -507,6 +599,12 @@ const createTaskInput = (
       alert('Please fill all the fields.');
       return;
     }
+
+    if (timeHourInput < 0 || timeMinInput < 1) {
+      alert('Please enter a valid time.');
+      return;
+    }
+
     handleBlur({ target: input });
   });
 
