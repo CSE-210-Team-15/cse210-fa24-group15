@@ -20,7 +20,7 @@ export default class Game {
       const price = petPrices[i];
       this._pets[name] = [
         new Pet(name, price),
-        './src/components/pets/assets/' + name + '.png',
+        'src/components/pets/assets/' + name + '.png',
       ];
     }
   }
@@ -77,6 +77,7 @@ export default class Game {
         hp: pet.hp,
         bought: pet.bought,
         imageUrl: imageUrl,
+        timestamp: pet.timestamp,
       };
     });
     return serializedPets;
@@ -90,7 +91,8 @@ export default class Game {
         petData.price,
         petData.feedprice,
         petData.hp,
-        petData.bought
+        petData.bought,
+        petData.timestamp
       );
       pets[name] = [pet, petData.imageUrl];
     });
