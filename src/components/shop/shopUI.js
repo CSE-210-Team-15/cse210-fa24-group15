@@ -1,4 +1,4 @@
-import game from './gameManager.js';
+import game from '../../../gameManager.js';
 
 // For testing, hardcode to 100
 // game.coins = 100;

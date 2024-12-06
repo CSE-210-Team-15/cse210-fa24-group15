@@ -1,4 +1,4 @@
-import Game from './petBlock/Game.js';
+import Game from './src/components/petBlock/Game.js';
 
 const game = new Game();
 export default game;

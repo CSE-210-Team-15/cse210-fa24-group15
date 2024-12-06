@@ -1,5 +1,5 @@
 import game from '../../../gameManager.js';
-import { updateCoinCount } from '../../../shopUI.js';
+import { updateCoinCount } from '../shop/shopUI.js';
 let modal = null;
 let columnsContainer = null;
 let columns = null;
