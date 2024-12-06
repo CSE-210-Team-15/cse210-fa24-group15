@@ -1,7 +1,6 @@
 {
     "source": {
       "include": [
-        "./petBlock",
         "./src"
       ],
       "exclude": [
