@@ -1,7 +1,6 @@
 {
     "source": {
       "include": [
-        "./script.js",
         "./petBlock",
         "./src"
       ],
