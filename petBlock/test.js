@@ -1,6 +1,6 @@
-// import assert from 'node:assert';
-// import test from 'node:test';
-// import {Game} from './Game.js';
+import assert from 'node:assert';
+import test from 'node:test';
+import {Game} from './Game.js';
 // //
 // // const demo_game_1 = new Game();
 // // const demo_game_2 = new Game();
@@ -10,10 +10,33 @@
 //
 //
 //
-// test('origional coin', () => {
-//     // expect(demo_game_1.coins).toBe(0);
-//     assert.strictEqual(demo_game_1.coins, 100)
-// });
+const demo_game_1 = new Game()
+demo_game_1._coins = 0
+
+test('origional coin', () => {
+    assert.strictEqual(demo_game_1.coins, 0)
+});
+
+test('set coins to 100, then +50, -75', () => {
+    demo_game_1._coins = 100
+    assert.strictEqual(demo_game_1.coins, 100)
+    demo_game_1.changeCoins(50)
+    assert.strictEqual(demo_game_1.coins, 150)
+    demo_game_1.changeCoins(-75)
+    assert.strictEqual(demo_game_1.coins, 75)
+});
+
+const demo_game_2 = new Game()
+demo_game_2._coins = 0
+demo_game_2.changeCoins(200)
+demo_game_2._pets = demo_game_2.serializePets()
+console.log('Pet Set: ', demo_game_2._pets);
+test('game 2 has 200 coins', () => {
+    assert.strictEqual(demo_game_2.coins, 200)
+});
+test('game 2 pets', () => {
+
+});
 
 // demo_game_2.changeCoins(300)
 // test('add 300 coins', () => {
