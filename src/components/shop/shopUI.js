@@ -69,6 +69,7 @@ function renderShop() {
       if (!pet.changeHp(-timeDifferenceInSeconds)) {
         alert(`Your pet ${pet.name} has died from starving`);
         pet.bought = 0;
+        addPetUI();
       }
       pet.timestamp = Date.now(); // Update the timestamp to current time
       localStorage.setItem('pets', JSON.stringify(game.serializePets()));
