@@ -600,7 +600,10 @@ const createTaskInput = (
       return;
     }
 
-    if (timeHourInput < 0 || timeMinInput < 1) {
+    if (
+      (timeHourInput < 1 && timeMinInput < 1) ||
+      (timeHourInput > 0 && timeMinInput < 0)
+    ) {
       alert('Please enter a valid time.');
       return;
     }
