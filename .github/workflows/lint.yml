@@ -27,7 +27,7 @@ jobs:
 
       # Run Prettier
       - name: Run Prettier
-        run: npx prettier . --check --ignore-pattern 'out/**'
+        run: npx prettier . --check
 
       # Run ESLint
       - name: Run ESLint
