@@ -9,13 +9,16 @@ As our project grows, we need a solution to create and maintain consistent, clea
 
 ## Considered Options
 
-### 1. **Manual Documentation**  
+### 1. **Manual Documentation**
+
 Writing documentation manually using external tools like Word, Notion, or Google Docs, which are separate from the codebase.
 
-### 2. **Using JSDoc**  
+### 2. **Using JSDoc**
+
 Embedding structured comments directly in the code and leveraging JSDoc to automatically generate documentation.
 
-### 3. **Integrating Full-Fledged Documentation Tools (e.g., Swagger/OpenAPI)**  
+### 3. **Integrating Full-Fledged Documentation Tools (e.g., Swagger/OpenAPI)**
+
 Employing API-focused tools that require maintaining separate definition files for documenting APIs.
 
 ---
@@ -30,13 +33,16 @@ JSDoc is a lightweight tool that integrates seamlessly into the codebase. It sim
 ## Pros and Cons of the Options
 
 ### 1. **Manual Documentation**
-- **Pros:** Flexible, no changes to code required.  
+
+- **Pros:** Flexible, no changes to code required.
 - **Cons:** Prone to becoming outdated, labor-intensive, and lacks standardization.
 
 ### 2. **Using JSDoc**
-- **Pros:** Integrates with the code, automates documentation updates, and improves code clarity.  
+
+- **Pros:** Integrates with the code, automates documentation updates, and improves code clarity.
 - **Cons:** Requires adherence to JSDoc syntax and some initial learning for team members.
 
 ### 3. **Integrating Full-Fledged Documentation Tools**
-- **Pros:** Advanced features for APIs.  
+
+- **Pros:** Advanced features for APIs.
 - **Cons:** Overkill for non-API-focused projects, adds complexity.

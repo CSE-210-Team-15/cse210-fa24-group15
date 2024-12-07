@@ -1,3 +1,10 @@
 out/scripts/prettify/prettify.js
 out/scripts/prettify/lang-css.js
+out/scripts/linenumber.js
 out/scripts/line-numbers.js
+out/styles/jsdoc-default.css
+out/styles/prettify-tomorrow.css
+out/styles/prettify-jsdocs.css
+out/global.html
+out/index.html
+out/task.js.html
