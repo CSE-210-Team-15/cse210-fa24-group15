@@ -1,18 +1,9 @@
-import Game from './petBlock/Game.js';
-
-let game = new Game();
-
-let savedPets = JSON.parse(localStorage.getItem('pets'));
-if (savedPets) {
-  game.pets = game.deserializePets(savedPets) || game.pets;
-}
-console.log(game);
-game.coins = JSON.parse(localStorage.getItem('coins')) || 100;
+import game from '../../../gameManager.js';
 
 // For testing, hardcode to 100
 // game.coins = 100;
 
-function updateCoinCount() {
+export function updateCoinCount() {
   const coinCountMain = document.getElementById('shopButton');
   //const coinCountShop = document.getElementById('coinCount');
   const coinCountShop = document.getElementById('coinCount');
@@ -40,10 +31,6 @@ function addPetUI() {
 }
 
 function renderShop() {
-  // let savedPets = JSON.parse(localStorage.getItem('pets'))
-  // if (savedPets) {
-  //   game.pets = game.deserializePets(savedPets);
-  // }
   console.log(game.pets);
   const popup = document.querySelector('.shop-popup');
   popup.style.display = 'flex';
@@ -58,6 +45,26 @@ function renderShop() {
   Object.values(game.pets).forEach((petData) => {
     const pet = petData[0]; // Access the Pet instance
     const imageUrl = petData[1]; // Access the pet image URL
+
+    // Pet HP system
+    const currentTime = Date.now();
+    const petTimestamp = new Date(pet.timestamp).getTime();
+    // test for 5 seconds
+    const timeDifferenceInHours = Math.floor(
+      (currentTime - petTimestamp) / (1000 * 60 * 12)
+    );
+    // Deduct HP based on the time difference (e.g., 1 HP per hour)
+    if (pet.bought === 1 && timeDifferenceInHours > 0) {
+      console.log(`Pet dropped ${timeDifferenceInHours} HP`);
+      // Pet dies when hp goes below 0
+      if (!pet.changeHp(-timeDifferenceInHours)) {
+        alert(`Your pet ${pet.name} has died from starving`);
+        pet.bought = 0;
+        addPetUI();
+      }
+      pet.timestamp = Date.now(); // Update the timestamp to current time
+      localStorage.setItem('pets', JSON.stringify(game.serializePets()));
+    }
 
     if (pet.bought) {
       const petHTML = `
@@ -91,8 +98,9 @@ function renderShop() {
         } else {
           game.changeCoins(-pet.feedprice); // Deduct coins
           pet.changeHp(10); // Change HP by a fixed amount (e.g., 10)
+          pet.timestamp = Date.now();
           console.log(
-            `Fed ${pet.name}, new HP: ${pet.hp}, remaining coins: ${game.coins}`
+            `Fed ${pet.name}, new HP: ${pet.hp}, remaining coins: ${game.coins}, timestamp: ${pet.timestamp}`
           );
           updateCoinCount();
           renderShop();
@@ -133,6 +141,7 @@ function renderShop() {
       const pet = game.pets[index][0]; // Access the Pet instance
       if (game.coins >= pet.price) {
         game.buyPet(pet.name); // Mark the pet as bought
+        pet.timestamp = Date.now();
         // localStorage.setItem('pets', JSON.stringify(game.serializePets()));
         console.log(`Bought ${pet.name}, remaining coins: ${game.coins}`);
         updateCoinCount();
@@ -143,6 +152,7 @@ function renderShop() {
       }
     });
   });
+
   //localStorage.setItem('pets', JSON.stringify(game.serializePets()));
 }
 
@@ -162,13 +172,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   popup.style.display = 'none';
   const shopButton = document.getElementById('shopButton');
 
-  // game.coins = JSON.parse(
-  // localStorage.getItem('coins')) || 100;
-  // let savedPets = JSON.parse(localStorage.getItem('pets'))
-  // if (savedPets) {
-  //   game.pets = game.deserializePets(savedPets);
-  // }
-
   updateCoinCount();
   // Show popup on button click
   shopButton.addEventListener('click', () => {
@@ -181,7 +184,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Close popup on close button click
   popup.addEventListener('click', (event) => {
+    console.log('Clicked element:', event.target);
     if (!popupContentBox.contains(event.target)) {
+      console.log('Click detected outside popupContentBox');
       popup.style.display = 'none';
     }
   });

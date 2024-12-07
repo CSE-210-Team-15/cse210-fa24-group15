@@ -1,3 +1,5 @@
+import game from '../../../gameManager.js';
+import { updateCoinCount } from '../shop/shopUI.js';
 let modal = null;
 let columnsContainer = null;
 let columns = null;
@@ -78,6 +80,11 @@ const handleDragover = (event) => {
   updateTaskColumn(draggedTask, targetColumn);
 };
 
+function parseTimeToSeconds(timeString) {
+  const [hours, minutes, seconds] = timeString.split(':').map(Number);
+  return hours * 3600 + minutes * 60 + seconds;
+}
+
 /**
  * Perform the appropriate action(s) when dragging a task to
  * a different column
@@ -104,6 +111,38 @@ const updateTaskState = (task, sourceColumn, targetColumn) => {
     // only stop timer if it's currently active
     if (timerButton.querySelector('i').classList.contains('bi-stop-circle')) {
       timerButton.click();
+    }
+    const actualTimeElement = task.querySelector('#time-spent');
+    const estimatedTimeElement = task.querySelector('#estimated-time');
+    const actualTime = actualTimeElement
+      ? parseTimeToSeconds(actualTimeElement.textContent)
+      : 0;
+    const estimatedTime = estimatedTimeElement
+      ? parseTimeToSeconds(estimatedTimeElement.textContent)
+      : 0;
+    console.log(actualTime);
+    console.log(estimatedTime);
+    let difficulty = task
+      .querySelector('#difficulty')
+      .textContent.replace('Difficulty: ', '')
+      .trim();
+    let coin;
+    if (difficulty == 'easy') {
+      coin = 10;
+    } else if (difficulty == 'medium') {
+      coin = 30;
+    } else if (difficulty == 'hard') {
+      coin = 50;
+    } else {
+      console.log('notfound');
+    }
+    if (actualTime > estimatedTime) {
+      coin = coin / 2;
+      game.changeCoins(coin);
+      updateCoinCount();
+    } else {
+      game.changeCoins(coin);
+      updateCoinCount();
     }
   }
 };
@@ -527,8 +566,6 @@ const handleBlur = (event, task = null) => {
     totalSeconds = task.estTime;
   }
 
-  console.log(!(task === null));
-
   const newTask = createTask(
     nameText,
     totalSeconds,
@@ -538,6 +575,20 @@ const handleBlur = (event, task = null) => {
     false,
     !(task === null)
   );
+  if (columnName == 'Done') {
+    if (difficultyText == 'easy') {
+      game.changeCoins(10);
+      updateCoinCount();
+    } else if (difficultyText == 'medium') {
+      game.changeCoins(30);
+      updateCoinCount();
+    } else if (difficultyText == 'hard') {
+      game.changeCoins(50);
+      updateCoinCount();
+    } else {
+      console.log('notfound');
+    }
+  }
   input.replaceWith(newTask);
 };
 
@@ -621,12 +672,6 @@ const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
     const nameText = nameInput.textContent.trim();
     const difficultyText = difficultySelect.value;
 
-    // const tasks = loadTasks();
-    // if (tasks.find((t) => t.name.toLowerCase() === nameText.toLowerCase())) {
-    //   alert('Task with the same name already exists.');
-    //   return;
-    // }
-
     if (isEdit) {
       if (!nameText || difficultyText === 'select difficulty') {
         alert('Please fill all the fields.');
@@ -635,6 +680,11 @@ const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
       handleBlur({ target: input }, getTaskFromName(name));
       deleteTaskFromLocalStorage(task);
     } else {
+      const tasks = loadTasks();
+      if (tasks.find((t) => t.name.toLowerCase() === nameText.toLowerCase())) {
+        alert('Task with the same name already exists.');
+        return;
+      }
       const timeHourInput = input.querySelector('#timeHour').value;
       const timeMinInput = input.querySelector('#timeMin').value;
       if (
