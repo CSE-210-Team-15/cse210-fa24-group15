@@ -267,8 +267,7 @@ const populateTasksFromStorage = () => {
         0,
         task.difficulty,
         task.column,
-        true,
-        false
+        true
       );
       column.querySelector('.tasks').appendChild(taskElement);
     }
@@ -355,8 +354,7 @@ const createTask = (
   timeSpent,
   difficultyText,
   columnName,
-  isPopulate,
-  isEdit
+  isPopulate
 ) => {
   let newTask;
   if (isPopulate) {
@@ -556,13 +554,11 @@ const handleBlur = (event, task = null) => {
   const columnName = columnElement.querySelector('h3').textContent.trim();
 
   let totalSeconds = 0;
-  let timeSpent = 0;
   if (task === null) {
     const hours = input.querySelector('#timeHour').value;
     const minutes = input.querySelector('#timeMin').value;
     totalSeconds = hours * 3600 + minutes * 60;
   } else {
-    timeSpent = task.timeSpent;
     totalSeconds = task.estTime;
   }
 
@@ -572,8 +568,7 @@ const handleBlur = (event, task = null) => {
     0,
     difficultyText,
     columnName,
-    false,
-    !(task === null)
+    false
   );
   if (columnName == 'Done') {
     if (difficultyText == 'easy') {
@@ -600,7 +595,6 @@ const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
   let timeHour = '';
   let timeMin = '';
   let difficultyText = difficulty;
-  console.log(difficultyText);
 
   const nameDiv = document.createElement('div');
   nameDiv.className = 'task-input';
