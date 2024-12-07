@@ -51,13 +51,13 @@ function renderShop() {
     const petTimestamp = new Date(pet.timestamp).getTime();
     // test for 5 seconds
     const timeDifferenceInHours = Math.floor(
-      (currentTime - petTimestamp) / (1000 * 60 * 60)
+      (currentTime - petTimestamp) / (1000 * 60 * 12)
     );
     // Deduct HP based on the time difference (e.g., 1 HP per hour)
     if (pet.bought === 1 && timeDifferenceInHours > 0) {
-      console.log(`Pet dropped ${timeDifferenceInHours * 5} HP`);
+      console.log(`Pet dropped ${timeDifferenceInHours} HP`);
       // Pet dies when hp goes below 0
-      if (!pet.changeHp(-(timeDifferenceInHours * 5))) {
+      if (!pet.changeHp(-timeDifferenceInHours)) {
         alert(`Your pet ${pet.name} has died from starving`);
         pet.bought = 0;
         addPetUI();
