@@ -1,18 +1,9 @@
-import Game from '../petBlock/Game.js';
-
-let game = new Game();
-
-let savedPets = JSON.parse(localStorage.getItem('pets'));
-if (savedPets) {
-  game.pets = game.deserializePets(savedPets) || game.pets;
-}
-console.log(game);
-game.coins = JSON.parse(localStorage.getItem('coins')) || 100;
+import game from '../../../gameManager.js';
 
 // For testing, hardcode to 100
 // game.coins = 100;
 
-function updateCoinCount() {
+export function updateCoinCount() {
   const coinCountMain = document.getElementById('shopButton');
   //const coinCountShop = document.getElementById('coinCount');
   const coinCountShop = document.getElementById('coinCount');
