@@ -473,6 +473,14 @@ const renderTaskButtons = (task, columnName) => {
 const handleEdit = (event) => {
   const task = event.target.closest('.task');
 
+  // Stop the timer if it's running
+  const timerButton = task.querySelector('[data-timer]');
+  const timerIcon = timerButton.querySelector('i');
+
+  if (timerIcon.classList.contains('bi-stop-circle')) {
+    timerButton.click(); // This will stop the timer
+  }
+
   // Extract current values from task
   const nameText = task.querySelector('#name').innerText;
   const difficultyText = task.querySelector('#difficulty').innerText;
