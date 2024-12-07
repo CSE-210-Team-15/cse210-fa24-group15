@@ -203,6 +203,13 @@ const loadTasks = () => {
   return tasksJSON.map(Task.fromJSON);
 };
 
+const getTaskFromName = (name) => {
+  const tasks = loadTasks();
+  // const taskName = taskElement.querySelector('#name').textContent;
+  const task = tasks.find((t) => t.name === name);
+  return task;
+};
+
 const deleteTaskFromLocalStorage = (task) => {
   // Load tasks from local storage
   const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
@@ -257,6 +264,7 @@ const populateTasksFromStorage = () => {
       const taskElement = createTask(
         task.name,
         task.estTime,
+        0,
         task.difficulty,
         task.column,
         true
@@ -310,8 +318,8 @@ document.addEventListener('DOMContentLoaded', () => {
 class Task {
   constructor(name, estTime, difficulty, column) {
     this.name = name;
-    this.estTime = estTime; // should be in minutes
-    this.timeSpent = 0; // will be in minutes
+    this.estTime = estTime; // In seconds
+    this.timeSpent = 0; // In seconds
     this.difficulty = difficulty;
     this.column = column;
   }
@@ -343,6 +351,7 @@ const formatTimeHHMMSS = (seconds) => {
 const createTask = (
   nameText,
   timeInSeconds,
+  timeSpent,
   difficultyText,
   columnName,
   isPopulate
@@ -499,15 +508,22 @@ const renderTaskButtons = (task, columnName) => {
 const handleEdit = (event) => {
   const task = event.target.closest('.task');
 
+  // Stop the timer if it's running
+  const timerButton = task.querySelector('[data-timer]');
+  const timerIcon = timerButton.querySelector('i');
+
+  if (timerIcon.classList.contains('bi-stop-circle')) {
+    timerButton.click(); // This will stop the timer
+  }
+
   // Extract current values from task
   const nameText = task.querySelector('#name').innerText;
-  const hours = task.querySelector('#timeHour');
-  const minutes = task.querySelector('#timeMin');
   const difficultyText = task.querySelector('#difficulty').innerText;
+  console.log(task);
 
   // Create editable input fields with current values
-  deleteTaskFromLocalStorage(task);
-  const input = createTaskInput(nameText, hours, minutes, difficultyText);
+  const input = createTaskInput(nameText, difficultyText, true, task);
+  // deleteTaskFromLocalStorage(task);
   task.replaceWith(input);
   input.querySelector('#name').focus();
 
@@ -521,9 +537,8 @@ const handleEdit = (event) => {
   selection.addRange(range);
 };
 
-const handleBlur = (event) => {
+const handleBlur = (event, task = null) => {
   const input = event.target.closest('.task-Container');
-
   // Extract values from each field
   const nameText = input.querySelector('#name').innerText.trim() || 'Untitled';
   let difficultyText;
@@ -536,13 +551,19 @@ const handleBlur = (event) => {
   const columnElement = event.target.closest('.column');
   const columnName = columnElement.querySelector('h3').textContent.trim();
 
-  const hours = input.querySelector('#timeHour').value;
-  const minutes = input.querySelector('#timeMin').value;
-  const totalSeconds = hours * 3600 + minutes * 60;
+  let totalSeconds = 0;
+  if (task === null) {
+    const hours = input.querySelector('#timeHour').value;
+    const minutes = input.querySelector('#timeMin').value;
+    totalSeconds = hours * 3600 + minutes * 60;
+  } else {
+    totalSeconds = task.estTime;
+  }
 
-  const task = createTask(
+  const newTask = createTask(
     nameText,
     totalSeconds,
+    0,
     difficultyText,
     columnName,
     false
@@ -561,17 +582,17 @@ const handleBlur = (event) => {
       console.log('notfound');
     }
   }
-  input.replaceWith(task);
+  input.replaceWith(newTask);
 };
 
-const createTaskInput = (
-  nameText = '',
-  timeHour = '',
-  timeMin = '',
-  difficultyText = ''
-) => {
+const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
   const input = document.createElement('div');
   input.className = 'task-Container';
+
+  let nameText = name;
+  let timeHour = '';
+  let timeMin = '';
+  let difficultyText = difficulty;
 
   const nameDiv = document.createElement('div');
   nameDiv.className = 'task-input';
@@ -581,29 +602,31 @@ const createTaskInput = (
   nameDiv.textContent = nameText;
   input.appendChild(nameDiv);
 
-  const timeRow = document.createElement('div');
-  timeRow.className = 'task-row';
-  timeRow.textContent = 'Estimated Time: ';
-  input.appendChild(timeRow);
+  if (!isEdit) {
+    const timeRow = document.createElement('div');
+    timeRow.className = 'task-row';
+    timeRow.textContent = 'Estimated Time: ';
+    input.appendChild(timeRow);
 
-  const timeHourInput = document.createElement('input');
-  timeHourInput.type = 'number';
-  timeHourInput.className = 'task-input';
-  timeHourInput.id = 'timeHour';
-  timeHourInput.value = timeHour;
-  timeHourInput.placeholder = 'Hours';
-  timeHourInput.min = '0';
-  timeRow.appendChild(timeHourInput);
+    const timeHourInput = document.createElement('input');
+    timeHourInput.type = 'number';
+    timeHourInput.className = 'task-input';
+    timeHourInput.id = 'timeHour';
+    timeHourInput.value = timeHour;
+    timeHourInput.placeholder = 'Hours';
+    timeHourInput.min = '0';
+    timeRow.appendChild(timeHourInput);
 
-  const timeMinInput = document.createElement('input');
-  timeMinInput.type = 'number';
-  timeMinInput.className = 'task-input';
-  timeMinInput.id = 'timeMin';
-  timeMinInput.value = timeMin;
-  timeMinInput.placeholder = 'Minutes';
-  timeMinInput.min = '0';
-  timeMinInput.max = '59';
-  timeRow.appendChild(timeMinInput);
+    const timeMinInput = document.createElement('input');
+    timeMinInput.type = 'number';
+    timeMinInput.className = 'task-input';
+    timeMinInput.id = 'timeMin';
+    timeMinInput.value = timeMin;
+    timeMinInput.placeholder = 'Minutes';
+    timeMinInput.min = '0';
+    timeMinInput.max = '59';
+    timeRow.appendChild(timeMinInput);
+  }
 
   const difficultyRow = document.createElement('div');
   difficultyRow.className = 'task-row';
@@ -628,40 +651,45 @@ const createTaskInput = (
 
   const createButton = document.createElement('button');
   createButton.id = 'createButton';
-  createButton.textContent = 'Create';
+  if (isEdit) {
+    createButton.textContent = 'Edit';
+  } else {
+    createButton.textContent = 'Create';
+  }
   difficultyRow.appendChild(createButton);
 
   createButton.addEventListener('click', () => {
-    const nameText = input.querySelector('#name').textContent.trim();
-    const timeHourInput = input.querySelector('#timeHour').value;
-    const timeMinInput = input.querySelector('#timeMin').value;
-    const difficultyText = input.querySelector('#difficulty').value;
+    const nameInput = input.querySelector('#name');
+    const difficultySelect = input.querySelector('#difficulty');
+    const nameText = nameInput.textContent.trim();
+    const difficultyText = difficultySelect.value;
 
-    const tasks = loadTasks();
-    if (tasks.find((t) => t.name.toLowerCase() === nameText.toLowerCase())) {
-      alert('Task with the same name already exists.');
-      return;
+    if (isEdit) {
+      if (!nameText || difficultyText === 'select difficulty') {
+        alert('Please fill all the fields.');
+        return;
+      }
+      handleBlur({ target: input }, getTaskFromName(name));
+      deleteTaskFromLocalStorage(task);
+    } else {
+      const tasks = loadTasks();
+      if (tasks.find((t) => t.name.toLowerCase() === nameText.toLowerCase())) {
+        alert('Task with the same name already exists.');
+        return;
+      }
+      const timeHourInput = input.querySelector('#timeHour').value;
+      const timeMinInput = input.querySelector('#timeMin').value;
+      if (
+        !nameText ||
+        !timeHourInput ||
+        !timeMinInput ||
+        difficultyText === 'select difficulty'
+      ) {
+        alert('Please fill all the fields.');
+        return;
+      }
+      handleBlur({ target: input });
     }
-
-    if (
-      !nameText ||
-      !timeHourInput ||
-      !timeMinInput ||
-      difficultyText === 'select'
-    ) {
-      alert('Please fill all the fields.');
-      return;
-    }
-
-    if (
-      (timeHourInput < 1 && timeMinInput < 1) ||
-      (timeHourInput > 0 && timeMinInput < 0)
-    ) {
-      alert('Please enter a valid time.');
-      return;
-    }
-
-    handleBlur({ target: input });
   });
 
   return input;
