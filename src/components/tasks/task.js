@@ -439,35 +439,33 @@ const createTask = (
   let timerInterval;
   let isTimerRunning = false;
 
-  if (true) {
-    timerButton.addEventListener('click', () => {
-      if (!isTimerRunning) {
-        // Start timer
-        isTimerRunning = true;
-        timerButton
-          .querySelector('i')
-          .classList.replace('bi-play-circle', 'bi-stop-circle');
+  timerButton.addEventListener('click', () => {
+    if (!isTimerRunning) {
+      // Start timer
+      isTimerRunning = true;
+      timerButton
+        .querySelector('i')
+        .classList.replace('bi-play-circle', 'bi-stop-circle');
 
-        timerInterval = setInterval(() => {
-          const tasks = loadTasks();
-          const taskData = tasks.find((t) => t.name === nameText);
-          if (taskData) {
-            taskData.timeSpent += 1; // Add 1 second
-            const timeSpentElement = task.querySelector('#time-spent');
-            timeSpentElement.textContent = formatTimeHHMMSS(taskData.timeSpent);
-            saveTasks(tasks);
-          }
-        }, 1000); // Update every second
-      } else {
-        // Stop timer
-        isTimerRunning = false;
-        timerButton
-          .querySelector('i')
-          .classList.replace('bi-stop-circle', 'bi-play-circle');
-        clearInterval(timerInterval);
-      }
-    });
-  }
+      timerInterval = setInterval(() => {
+        const tasks = loadTasks();
+        const taskData = tasks.find((t) => t.name === nameText);
+        if (taskData) {
+          taskData.timeSpent += 1; // Add 1 second
+          const timeSpentElement = task.querySelector('#time-spent');
+          timeSpentElement.textContent = formatTimeHHMMSS(taskData.timeSpent);
+          saveTasks(tasks);
+        }
+      }, 1000); // Update every second
+    } else {
+      // Stop timer
+      isTimerRunning = false;
+      timerButton
+        .querySelector('i')
+        .classList.replace('bi-stop-circle', 'bi-play-circle');
+      clearInterval(timerInterval);
+    }
+  });
 
   // render buttons based on column
   renderTaskButtons(task, columnName);
