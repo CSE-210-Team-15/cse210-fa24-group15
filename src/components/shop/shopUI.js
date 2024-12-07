@@ -1,18 +1,9 @@
-import Game from '../petBlock/Game.js';
-
-let game = new Game();
-
-let savedPets = JSON.parse(localStorage.getItem('pets'));
-if (savedPets) {
-  game.pets = game.deserializePets(savedPets) || game.pets;
-}
-console.log(game);
-game.coins = JSON.parse(localStorage.getItem('coins')) || 100;
+import game from '../../../gameManager.js';
 
 // For testing, hardcode to 100
 // game.coins = 100;
 
-function updateCoinCount() {
+export function updateCoinCount() {
   const coinCountMain = document.getElementById('shopButton');
   //const coinCountShop = document.getElementById('coinCount');
   const coinCountShop = document.getElementById('coinCount');
@@ -59,14 +50,14 @@ function renderShop() {
     const currentTime = Date.now();
     const petTimestamp = new Date(pet.timestamp).getTime();
     // test for 5 seconds
-    const timeDifferenceInSeconds = Math.floor(
-      (currentTime - petTimestamp) / 1000
+    const timeDifferenceInHours = Math.floor(
+      (currentTime - petTimestamp) / (1000 * 60 * 12)
     );
     // Deduct HP based on the time difference (e.g., 1 HP per hour)
-    if (pet.bought === 1 && timeDifferenceInSeconds > 0) {
-      console.log(`Pet dropped ${timeDifferenceInSeconds} HP`);
+    if (pet.bought === 1 && timeDifferenceInHours > 0) {
+      console.log(`Pet dropped ${timeDifferenceInHours} HP`);
       // Pet dies when hp goes below 0
-      if (!pet.changeHp(-timeDifferenceInSeconds)) {
+      if (!pet.changeHp(-timeDifferenceInHours)) {
         alert(`Your pet ${pet.name} has died from starving`);
         pet.bought = 0;
         addPetUI();
