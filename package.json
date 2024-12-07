@@ -6,6 +6,7 @@
     "eslint": "^9.15.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "http-server": "^14.1.1",
     "husky": "^8.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
@@ -18,7 +19,11 @@
     "prepare": "husky && husky install",
     "prettier": "npx prettier . --check",
     "prettier:fix": "npm run prettier -- --write",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "open:coverage": "open coverage/index.html",
+    "test:watch": "jest --watch",
+    "test:coveragedetail": "jest --coverage --coverageReporters=text-summary"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx,jsx}": [
@@ -35,6 +40,18 @@
     "jsdoc": "^4.0.4"
   },
   "jest": {
-    "testEnvironment": "jest-environment-jsdom"
+    "testEnvironment": "jest-environment-jsdom",
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/**/*.test.{js,jsx}",
+      "!**/node_modules/**"
+    ]
   }
 }
