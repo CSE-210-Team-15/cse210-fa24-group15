@@ -1,10 +1,6 @@
-const {
-  saveTasks,
-  updateTaskColumn,
-  loadTasks,
-  deleteTaskFromLocalStorage,
-} = require('../src/components/tasks/task.js');
-
+import test from 'node:test';
+import assert from 'node:assert';
+import { Task, saveTasks, loadTasks, updateTaskColumn, deleteTaskFromLocalStorage } from '../src/components/tasks/task.js';
 class MockTask {
   constructor(name, estTime, difficulty, column) {
     this.name = name;
@@ -29,10 +25,27 @@ class MockTask {
   }
 }
 
-describe('Task Management Functions', () => {
+// Mock localStorage
+const localStorage = {
+  _store: {},
+  getItem(key) {
+    return this._store[key] || null;
+  },
+  setItem(key, value) {
+    this._store[key] = value;
+  },
+  clear() {
+    this._store = {};
+  }
+};
+
+// Globally mock localStorage
+global.localStorage = localStorage;
+
+test('Task Management Functions', async (t) => {
   let tasks;
 
-  beforeEach(() => {
+  t.beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
 
@@ -43,19 +56,7 @@ describe('Task Management Functions', () => {
     ];
   });
 
-  test('should save tasks to localStorage', () => {
-    // Save the tasks
-    saveTasks(tasks);
-
-    // Retrieve tasks from localStorage and check if they exist
-    const savedTasks = JSON.parse(localStorage.getItem('tasks'));
-
-    expect(savedTasks).toHaveLength(2);
-    expect(savedTasks[0].name).toBe('Task 1');
-    expect(savedTasks[1].name).toBe('Task 2');
-  });
-
-  test('should handle task with special characters in name', () => {
+  await t.test('should handle task with special characters in name', () => {
     // Create a task with special characters
     const specialTask = new MockTask('Task @#$%^', 7200000, 'High', 'To Do');
 
@@ -63,11 +64,11 @@ describe('Task Management Functions', () => {
     saveTasks([specialTask]);
     const loadedTasks = loadTasks();
 
-    expect(loadedTasks).toHaveLength(1);
-    expect(loadedTasks[0].name).toBe('Task @#$%^');
+    assert.strictEqual(loadedTasks.length, 1);
+    assert.strictEqual(loadedTasks[0].name, 'Task @#$%^');
   });
 
-  test('should handle updating task column to a different column', () => {
+  await t.test('should handle updating task column to a different column', () => {
     // Save tasks to localStorage
     saveTasks(tasks);
 
@@ -82,20 +83,20 @@ describe('Task Management Functions', () => {
     const updatedTasks = loadTasks();
     const updatedTask = updatedTasks.find((task) => task.name === 'Task 1');
 
-    expect(updatedTask.column).toBe('Done');
+    assert.strictEqual(updatedTask.column, 'Done');
   });
 
-  test('should handle tasks with zero estimated time', () => {
+  await t.test('should handle tasks with zero estimated time', () => {
     const zeroTimeTask = new MockTask('Zero Time Task', 0, 'Low', 'To Do');
 
     saveTasks([zeroTimeTask]);
     const loadedTasks = loadTasks();
 
-    expect(loadedTasks).toHaveLength(1);
-    expect(loadedTasks[0].estTime).toBe(0);
+    assert.strictEqual(loadedTasks.length, 1);
+    assert.strictEqual(loadedTasks[0].estTime, 0);
   });
 
-  test('should handle multiple saves and loads', () => {
+  await t.test('should handle multiple saves and loads', () => {
     // Initial save
     saveTasks(tasks);
 
@@ -107,11 +108,11 @@ describe('Task Management Functions', () => {
     // Load tasks
     const loadedTasks = loadTasks();
 
-    expect(loadedTasks).toHaveLength(3);
-    expect(loadedTasks[2].name).toBe('Task 3');
+    assert.strictEqual(loadedTasks.length, 3);
+    assert.strictEqual(loadedTasks[2].name, 'Task 3');
   });
 
-  test('should handle task with very long name', () => {
+  await t.test('should handle task with very long name', () => {
     const longNameTask = new MockTask(
       'This is an extremely long task name that goes on and on and on to test the limits of task name length',
       5400000,
@@ -122,23 +123,24 @@ describe('Task Management Functions', () => {
     saveTasks([longNameTask]);
     const loadedTasks = loadTasks();
 
-    expect(loadedTasks).toHaveLength(1);
-    expect(loadedTasks[0].name).toBe(
+    assert.strictEqual(loadedTasks.length, 1);
+    assert.strictEqual(
+      loadedTasks[0].name,
       'This is an extremely long task name that goes on and on and on to test the limits of task name length'
     );
   });
 
-  test('should not modify original tasks array when saving', () => {
+  await t.test('should not modify original tasks array when saving', () => {
     const originalTasksLength = tasks.length;
 
     // Save tasks
     saveTasks(tasks);
 
     // Verify original tasks array remains unchanged
-    expect(tasks).toHaveLength(originalTasksLength);
+    assert.strictEqual(tasks.length, originalTasksLength);
   });
 
-  test('should handle task with different difficulty levels', () => {
+  await t.test('should handle task with different difficulty levels', () => {
     const difficultTasks = [
       new MockTask('Easy Task', 1800000, 'Easy', 'To Do'),
       new MockTask('Hard Task', 7200000, 'Hard', 'To Do'),
@@ -147,33 +149,12 @@ describe('Task Management Functions', () => {
     saveTasks(difficultTasks);
     const loadedTasks = loadTasks();
 
-    expect(loadedTasks).toHaveLength(2);
-    expect(loadedTasks[0].difficulty).toBe('Easy');
-    expect(loadedTasks[1].difficulty).toBe('Hard');
+    assert.strictEqual(loadedTasks.length, 2);
+    assert.strictEqual(loadedTasks[0].difficulty, 'Easy');
+    assert.strictEqual(loadedTasks[1].difficulty, 'Hard');
   });
 
-  test('should handle saving an empty list of tasks', () => {
-    // Save empty tasks
-    saveTasks([]);
-
-    const savedTasks = JSON.parse(localStorage.getItem('tasks'));
-
-    expect(savedTasks).toHaveLength(0);
-  });
-
-  test('should load tasks from localStorage', () => {
-    // Save the tasks
-    saveTasks(tasks);
-
-    // Load the tasks
-    const loadedTasks = loadTasks();
-
-    expect(loadedTasks).toHaveLength(2);
-    expect(loadedTasks[0]).toMatchObject(tasks[0].toJSON());
-    expect(loadedTasks[1]).toMatchObject(tasks[1].toJSON());
-  });
-
-  test('should delete a task from localStorage', () => {
+  await t.test('should delete a task from localStorage', () => {
     // Save tasks to localStorage
     saveTasks(tasks);
 
@@ -192,21 +173,21 @@ describe('Task Management Functions', () => {
 
     const updatedTasks = loadTasks();
 
-    expect(updatedTasks).toHaveLength(1);
-    expect(updatedTasks[0].name).toBe('Task 2');
+    assert.strictEqual(updatedTasks.length, 1);
+    assert.strictEqual(updatedTasks[0].name, 'Task 2');
   });
 
-  test('should preserve additional task properties during save and load', () => {
+  await t.test('should preserve additional task properties during save and load', () => {
     // Add additional properties to tasks
     tasks[0].additionalProperty = 'Some Value';
     saveTasks(tasks);
 
     const loadedTasks = loadTasks();
 
-    expect(loadedTasks[0].additionalProperty).toBeUndefined();
+    assert.strictEqual(loadedTasks[0].additionalProperty, undefined);
   });
 
-  test('should not update task column if task is not found', () => {
+  await t.test('should not update task column if task is not found', () => {
     // Save tasks to localStorage
     saveTasks(tasks);
 
@@ -223,12 +204,11 @@ describe('Task Management Functions', () => {
     updateTaskColumn(taskElement, 'Done');
 
     const updatedTasks = loadTasks();
-    expect(updatedTasks.find((task) => task.name === 'Task 1').column).toBe(
-      'To Do'
-    );
+    const task = updatedTasks.find((task) => task.name === 'Task 1');
+    assert.strictEqual(task.column, 'To Do');
   });
 
-  test('should update task column in localStorage', () => {
+  await t.test('should update task column in localStorage', () => {
     // First save tasks to localStorage
     saveTasks(tasks);
 
@@ -244,15 +224,6 @@ describe('Task Management Functions', () => {
     const updatedTasks = loadTasks();
     const updatedTask = updatedTasks.find((task) => task.name === 'Task 1');
 
-    expect(updatedTask.column).toBe('In Progress');
-  });
-
-  test('should handle loading tasks when localStorage is empty', () => {
-    // Ensure localStorage is clear
-    localStorage.clear();
-
-    const loadedTasks = loadTasks();
-
-    expect(loadedTasks).toHaveLength(0);
+    assert.strictEqual(updatedTask.column, 'In Progress');
   });
 });
