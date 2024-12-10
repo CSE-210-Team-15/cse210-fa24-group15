@@ -81,7 +81,7 @@ button:is(:active, :hover) {
   text-transform: uppercase;
 }
 
-.column-title h3::after {
+.column-title p::after {
   content: attr(data-tasks);
   background: lightblue;
   margin-left: 0.25rem;

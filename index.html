@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Gamified Kanban Board to manage tasks with Pokemons!"
+    />
     <title>Gamified Kanban Board</title>
     <link
       rel="icon"
@@ -20,7 +24,6 @@
     <script type="module" src="src/components/tasks/task.js"></script>
     <script src="src/components/pets/pets.js" defer></script>
     <script type="module" src="src/components/shop/shopUI.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </head>
   <body>
     <div class="container" id="titleContainer">
@@ -31,21 +34,25 @@
     <div class="container columns">
       <div class="column">
         <div class="column-title">
-          <h3 data-tasks="0">To Do</h3>
-          <button data-add><i class="bi bi-plus"></i></button>
+          <p data-tasks="0">To Do</p>
+          <button data-add aria-label="add to do">
+            <i class="bi bi-plus"></i>
+          </button>
         </div>
         <div class="tasks"></div>
       </div>
       <div class="column">
         <div class="column-title">
-          <h3 data-tasks="0">In Progress</h3>
-          <button data-add><i class="bi bi-plus"></i></button>
+          <p data-tasks="0">In Progress</p>
+          <button data-add aria-label="add in rogress">
+            <i class="bi bi-plus"></i>
+          </button>
         </div>
         <div class="tasks"></div>
       </div>
       <div class="column">
         <div class="column-title">
-          <h3 data-tasks="0">Done</h3>
+          <p data-tasks="0">Done</p>
         </div>
         <div class="tasks"></div>
       </div>
