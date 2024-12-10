@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Manages tasks, drag-and-drop, timers, and coin rewards.
+ */
 import game from '../../../gameManager.js';
 import { updateCoinCount } from '../shop/shopUI.js';
 let modal = null;

@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Provides the functions required by the Pet class
+ * 
+ */
 let defaultHp = 100;
 
 export default class Pet {

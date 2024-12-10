@@ -1,3 +1,6 @@
+/**
+ * @fileoverview Handles shop, pet management, and game state updates.
+ */
 import game from '../../../gameManager.js';
 
 // For testing, hardcode to 100
