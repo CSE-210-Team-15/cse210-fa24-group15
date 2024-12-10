@@ -5,17 +5,20 @@ export default class Game {
     this._coins = 100;
     this._pets = {};
     const petNames = [
-      "piplup",
-      "rattata",
-      "turtwig",
-      "squirtle",
-      "vulpix",
-      "snorlax",
-      "eevee",
+      "Piplup",
+      "Rattata",
+      "Turtwig",
+      "Jigglypuff",
+      "Squirtle",
+      "Vulpix",
+      "Wooper",
+      "Snorlax",
+      "Dragonite",
+      "Eevee",
     ];
-    const petPrices = [11, 30, 35, 70, 90, 80, 100];
+    const petPrices = [100, 200, 400, 800, 1600, 2000, 2500, 3500, 5000, 10000];
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 10; i++) {
       const name = petNames[i];
       const price = petPrices[i];
       this._pets[name] = [
