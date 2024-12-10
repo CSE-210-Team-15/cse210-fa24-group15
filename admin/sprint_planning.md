@@ -28,18 +28,19 @@ Date: 18th November - 24th November
 
 Date: 15th November - 1st December
 
-- [ ] Pause and Play time in the respective columns
-- [ ] Set up logic for buying pets according to coins available
-- [ ] Set up logic for buying food according to coins available
-- [ ] Set up logic for hp level
-- [ ] Set up logic to render only pets purchased by the user on the screen
+- [x] Pause and Play time in the respective columns
+- [x] Set up logic for buying pets according to coins available
+- [x] Set up logic for buying food according to coins available
+- [x] Set up logic for hp level
+- [x] Set up logic to render only pets purchased by the user on the screen
 
 ### Sprint 4
 
 Date: 2nd December - 8th December
 
 - [ ] Complete Test Coverage / End-to-End Testing
-- [ ] Set up logic for converting task completion to coins
+- [x] Set up logic for converting task completion to coins
+- [x] Clean up the Repo
 
 ### Sprint 5 / Potential TO-DO
 
