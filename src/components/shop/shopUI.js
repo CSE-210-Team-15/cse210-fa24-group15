@@ -155,7 +155,7 @@ function renderShop() {
 
   //localStorage.setItem('pets', JSON.stringify(game.serializePets()));
 }
-
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
 document.addEventListener('DOMContentLoaded', async () => {
   // localStorage.setItem('pets', JSON.stringify(game.serializePets()));
   // Load the shop popup HTML
@@ -191,3 +191,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 });
+}

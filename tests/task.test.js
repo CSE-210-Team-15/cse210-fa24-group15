@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { Task, saveTasks, loadTasks, updateTaskColumn, deleteTaskFromLocalStorage } from '../src/components/tasks/task.js';
+import { saveTasks, loadTasks, updateTaskColumn, deleteTaskFromLocalStorage } from '../src/components/tasks/task.js';
 class MockTask {
   constructor(name, estTime, difficulty, column) {
     this.name = name;
@@ -41,6 +41,8 @@ const localStorage = {
 
 // Globally mock localStorage
 global.localStorage = localStorage;
+
+
 
 test('Task Management Functions', async (t) => {
   let tasks;

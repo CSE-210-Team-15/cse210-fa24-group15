@@ -275,6 +275,7 @@ const populateTasksFromStorage = () => {
 };
 
 //* event listeners
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
 document.addEventListener('DOMContentLoaded', () => {
   modal = document.querySelector('.confirm-modal');
   columnsContainer = document.querySelector('.columns');
@@ -313,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   populateTasksFromStorage();
 });
+}
 
 // Task object to store task information
 class Task {
@@ -695,13 +697,14 @@ const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
   return input;
 };
 
-module.exports = {
-  saveTasks,
-  loadTasks,
-  updateTaskColumn,
-  deleteTaskFromLocalStorage,
-  Task,
-};
+// module.exports = {
+//   saveTasks,
+//   loadTasks,
+//   updateTaskColumn,
+//   deleteTaskFromLocalStorage,
+//   Task,
+// };
+export { saveTasks, loadTasks, updateTaskColumn, deleteTaskFromLocalStorage, Task };
 
 // exports.saveTasks = saveTasks;
 // exports.loadTasks = loadTasks;
