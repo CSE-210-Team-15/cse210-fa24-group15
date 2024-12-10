@@ -19,12 +19,37 @@
   transition: 0.3s;
 }
 
-#timeHour {
-  width: 6rem;
+.task-row {
+  display: flex;
+  align-items: center;
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+#timeHour,
+#timeMin {
+  flex: 1; /* Make both inputs take equal space */
+  width: 5rem; /* Set a fixed width */
+  margin-left: 0.5rem;
 }
 
 #timeMin {
-  width: 6rem;
+  margin-left: 0.5rem;
+}
+
+#difficulty {
+  text-transform: capitalize;
+}
+
+.task-row #difficulty {
+  width: 9rem;
+  margin-left: 0.5rem;
+}
+
+#createButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 1rem; /* Optional: Add some margin for spacing */
 }
 
 .task.dragging {
@@ -56,8 +81,8 @@
 }
 
 .task-input {
-  outline: none;
-  overflow-wrap: anywhere;
+  outline: none; /* Remove default focus outline */
+  overflow-wrap: anywhere; /* Prevent line breaks */
   padding: 0.5rem 0.5rem 0.5rem; /* Unified padding for better structure */
   border: 1px solid black; /* Explicit border style */
   border-radius: 4px; /* Slightly more rounded corners */
