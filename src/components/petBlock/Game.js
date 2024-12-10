@@ -1,17 +1,17 @@
-import Pet from './Pet.js';
+import Pet from "./Pet.js";
 
 export default class Game {
   constructor() {
     this._coins = 100;
     this._pets = {};
     const petNames = [
-      'piplup',
-      'rattata',
-      'turtwig',
-      'squirtle',
-      'vulpix',
-      'snorlax',
-      'eevee',
+      "piplup",
+      "rattata",
+      "turtwig",
+      "squirtle",
+      "vulpix",
+      "snorlax",
+      "eevee",
     ];
     const petPrices = [11, 30, 35, 70, 90, 80, 100];
 
@@ -20,7 +20,7 @@ export default class Game {
       const price = petPrices[i];
       this._pets[name] = [
         new Pet(name, price),
-        'src/components/pets/assets/' + name + '.png',
+        "src/components/pets/assets/" + name + ".png",
       ];
     }
   }
@@ -92,7 +92,7 @@ export default class Game {
         petData.feedprice,
         petData.hp,
         petData.bought,
-        petData.timestamp
+        petData.timestamp,
       );
       pets[name] = [pet, petData.imageUrl];
     });

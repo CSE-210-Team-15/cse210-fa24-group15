@@ -7,7 +7,7 @@ export default class Pet {
     feedprice = 20,
     hp = defaultHp,
     bought = 0,
-    timestamp = Date.now()
+    timestamp = Date.now(),
   ) {
     this._hp = hp;
     this._bought = bought;

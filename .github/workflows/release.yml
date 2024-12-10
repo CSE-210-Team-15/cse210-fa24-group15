@@ -3,7 +3,7 @@ name: Automated Release
 on:
   push:
     tags:
-      - 'v*.*.*' # Trigger on semantic versioning tags (e.g., v1.0.0)
+      - "v*.*.*" # Trigger on semantic versioning tags (e.g., v1.0.0)
 
 jobs:
   create-release:
