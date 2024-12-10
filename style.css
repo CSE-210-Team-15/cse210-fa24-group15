@@ -81,9 +81,9 @@ button:is(:active, :hover) {
   text-transform: uppercase;
 }
 
-.column-title p::after {
+.column-title h3::after {
   content: attr(data-tasks);
-  background: lightblue;
+  background: rgb(202, 188, 247);
   margin-left: 0.25rem;
   border-radius: 0.25rem;
   padding: 0 0.25rem;
@@ -276,7 +276,7 @@ button:is(:active, :hover) {
   margin: 2rem 0;
   padding: 10px;
   background-color: gold;
-  color: white;
+  color: black;
   text-align: center;
   border-radius: 5px;
   cursor: pointer;
