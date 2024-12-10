@@ -29,4 +29,4 @@ jobs:
 
       # Run tests
       - name: Run tests
-        run: npm test
+        run: node --test --experimental-test-coverage
