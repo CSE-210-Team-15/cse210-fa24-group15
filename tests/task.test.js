@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { saveTasks, loadTasks, updateTaskColumn, deleteTaskFromLocalStorage } from '../src/components/tasks/task.js';
+import {
+  saveTasks,
+  loadTasks,
+  updateTaskColumn,
+  deleteTaskFromLocalStorage,
+} from '../src/components/tasks/task.js';
 class MockTask {
   constructor(name, estTime, difficulty, column) {
     this.name = name;
@@ -36,13 +41,11 @@ const localStorage = {
   },
   clear() {
     this._store = {};
-  }
+  },
 };
 
 // Globally mock localStorage
 global.localStorage = localStorage;
-
-
 
 test('Task Management Functions', async (t) => {
   let tasks;
@@ -70,23 +73,26 @@ test('Task Management Functions', async (t) => {
     assert.strictEqual(loadedTasks[0].name, 'Task @#$%^');
   });
 
-  await t.test('should handle updating task column to a different column', () => {
-    // Save tasks to localStorage
-    saveTasks(tasks);
+  await t.test(
+    'should handle updating task column to a different column',
+    () => {
+      // Save tasks to localStorage
+      saveTasks(tasks);
 
-    const taskElement = {
-      querySelector: () => ({ textContent: 'Task 1' }),
-    };
+      const taskElement = {
+        querySelector: () => ({ textContent: 'Task 1' }),
+      };
 
-    // Update task from 'To Do' to 'Done'
-    updateTaskColumn(taskElement, 'Done');
+      // Update task from 'To Do' to 'Done'
+      updateTaskColumn(taskElement, 'Done');
 
-    // Load tasks and verify the column was updated
-    const updatedTasks = loadTasks();
-    const updatedTask = updatedTasks.find((task) => task.name === 'Task 1');
+      // Load tasks and verify the column was updated
+      const updatedTasks = loadTasks();
+      const updatedTask = updatedTasks.find((task) => task.name === 'Task 1');
 
-    assert.strictEqual(updatedTask.column, 'Done');
-  });
+      assert.strictEqual(updatedTask.column, 'Done');
+    }
+  );
 
   await t.test('should handle tasks with zero estimated time', () => {
     const zeroTimeTask = new MockTask('Zero Time Task', 0, 'Low', 'To Do');
@@ -179,15 +185,18 @@ test('Task Management Functions', async (t) => {
     assert.strictEqual(updatedTasks[0].name, 'Task 2');
   });
 
-  await t.test('should preserve additional task properties during save and load', () => {
-    // Add additional properties to tasks
-    tasks[0].additionalProperty = 'Some Value';
-    saveTasks(tasks);
+  await t.test(
+    'should preserve additional task properties during save and load',
+    () => {
+      // Add additional properties to tasks
+      tasks[0].additionalProperty = 'Some Value';
+      saveTasks(tasks);
 
-    const loadedTasks = loadTasks();
+      const loadedTasks = loadTasks();
 
-    assert.strictEqual(loadedTasks[0].additionalProperty, undefined);
-  });
+      assert.strictEqual(loadedTasks[0].additionalProperty, undefined);
+    }
+  );
 
   await t.test('should not update task column if task is not found', () => {
     // Save tasks to localStorage

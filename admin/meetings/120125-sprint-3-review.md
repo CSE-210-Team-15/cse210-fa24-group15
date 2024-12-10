@@ -19,11 +19,11 @@ The team has made significant progress across key areas of the project. Code qua
 - Joey: Enabled auto-start for the tasks when dragged to "In-Progress"
 - Yuan: Worked on testing of the game logic
 - Steve: Implemented the game logic (reducing coins when a pet is purchased) for the Shop-UI
-- Gavin: Worked on pet and game logic 
+- Gavin: Worked on pet and game logic
 - Sakshi: Worked on unit testing
 - Kuber: Resolved Codacy issues in the code, worked on input validation (unique task names and valid time estimated)
-- Li: Worked on JSDoc Documentation 
+- Li: Worked on JSDoc Documentation
 
 ## Spillover
 
-We are still having codacy quality issues, which we plan to address in the following sprint. Testing is also facing issues with import and required statements. We also want to increase the test coverage overall. 
+We are still having codacy quality issues, which we plan to address in the following sprint. Testing is also facing issues with import and required statements. We also want to increase the test coverage overall.
