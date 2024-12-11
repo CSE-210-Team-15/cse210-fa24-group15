@@ -4,8 +4,23 @@ const game = new Game();
 export default game;
 
 // Initialize game state
-let savedPets = JSON.parse(localStorage.getItem("pets"));
-if (savedPets) {
-  game.pets = game.deserializePets(savedPets) || game.pets;
+let savedPets;
+let savedCoins;
+
+try {
+  savedPets =
+    typeof localStorage !== "undefined"
+      ? JSON.parse(localStorage.getItem("pets"))
+      : null;
+  savedCoins =
+    typeof localStorage !== "undefined"
+      ? JSON.parse(localStorage.getItem("coins"))
+      : 100;
+} catch (error) {
+  savedPets = null;
+  savedCoins = 100;
+  console.error(error);
 }
-game.coins = JSON.parse(localStorage.getItem("coins")) || 100;
+
+game.pets = savedPets ? game.deserializePets(savedPets) : game.pets;
+game.coins = savedCoins || 100;
