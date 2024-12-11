@@ -11,24 +11,10 @@ let currentTask = null;
 //* functions
 
 /**
- * Handles the dragover event to allow dragging and dropping tasks.
- *
- * This function prevents default dragover behavior, identifies the dragged task,
- * and determines where to place it within the target list or relative to other tasks.
- *
- * @param {DragEvent} event - The dragover event triggered by dragging an element.
- *
+ * @function handleDragover
+ * @description Allows task dragging and dropping, validates column transitions, and updates task position.
+ * @param {DragEvent} event - The dragover event.
  * @returns {void}
- *
- * The function performs the following actions:
- * 1. Prevents the default behavior to allow dropping.
- * 2. Identifies the currently dragged task using the ".dragging" class.
- * 3. Finds the closest droppable target (either a `.task` or `.tasks` container).
- * 4. If the target is a `.tasks` container:
- *    - Appends the dragged task if the container is empty.
- *    - Appends the dragged task after the last task if the cursor is below it.
- * 5. If the target is a `.task` element:
- *    - Inserts the dragged task before or after the target based on cursor position.
  */
 const handleDragover = (event) => {
   event.preventDefault(); // allow drop
@@ -194,13 +180,21 @@ const observeTaskChanges = () => {
   }
 };
 
-// Function to save tasks to local storage
+/**
+ * @function saveTasks
+ * @description Function to save tasks to local storage
+ * @param {Array} tasks - The array of task objects to be saved.
+ */
 const saveTasks = (tasks) => {
   const tasksJSON = tasks.map((task) => task.toJSON());
   localStorage.setItem("tasks", JSON.stringify(tasksJSON));
 };
 
-// Function to load tasks from local storage
+/**
+ * @function loadTasks
+ * @description Function to load tasks from local storage
+ * @returns {Array} An array of Task objects.
+ */
 const loadTasks = () => {
   const tasksJSON = JSON.parse(localStorage.getItem("tasks") || "[]");
   return tasksJSON.map(Task.fromJSON);
@@ -232,7 +226,12 @@ const deleteTaskFromLocalStorage = (task) => {
   }
 };
 
-// Updates task column in local storage
+/**
+ * @function updateTaskColumn
+ * @description Updates task column in local storage
+ * @param {HTMLElement} taskElement - The DOM element of the task being moved.
+ * @param {string} newColumn - The name of the new column to update the task to.
+ */
 const updateTaskColumn = (taskElement, newColumn) => {
   const tasks = loadTasks();
   const taskName = taskElement.querySelector("#name").textContent;
@@ -245,7 +244,10 @@ const updateTaskColumn = (taskElement, newColumn) => {
   }
 };
 
-// Function to populate tasks from local storage on page load
+/**
+ * @function populateTasksFromStorage
+ * @description Function to populate tasks from local storage on page load
+ */
 const populateTasksFromStorage = () => {
   const tasks = loadTasks();
   const columnMap = {
@@ -277,7 +279,10 @@ const populateTasksFromStorage = () => {
   });
 };
 
-//* event listeners
+/**
+ * @function DOMContentLoaded
+ * @description Event listeners
+ */
 document.addEventListener("DOMContentLoaded", () => {
   modal = document.querySelector(".confirm-modal");
   columnsContainer = document.querySelector(".columns");
@@ -343,7 +348,12 @@ class Task {
   }
 }
 
-// Helper function to convert seconds to HH:MM:SS format
+/**
+ * @function formatTimeHHMMSS
+ * @description Helper function to convert seconds to HH:MM:SS format
+ * @param {number} seconds - The time in seconds.
+ * @returns {string} The formatted time in "HH:MM:SS" format.
+ */
 const formatTimeHHMMSS = (seconds) => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);

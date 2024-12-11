@@ -33,6 +33,10 @@ function addPetUI() {
   });
 }
 
+/**
+ * @function renderShop
+ * @description Update the store UI based on the pet status and change the stored data based on the status change
+ */
 function renderShop() {
   console.log(game.pets);
   const popup = document.querySelector(".shop-popup");
