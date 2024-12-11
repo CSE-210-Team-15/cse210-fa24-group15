@@ -162,39 +162,40 @@ function renderShop() {
 
   //localStorage.setItem('pets', JSON.stringify(game.serializePets()));
 }
+if (typeof window !== "undefined" && typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", async () => {
+    // localStorage.setItem('pets', JSON.stringify(game.serializePets()));
+    // Load the shop popup HTML
+    const response = await fetch("shop.html");
+    const html = await response.text();
 
-document.addEventListener("DOMContentLoaded", async () => {
-  // localStorage.setItem('pets', JSON.stringify(game.serializePets()));
-  // Load the shop popup HTML
-  const response = await fetch("shop.html");
-  const html = await response.text();
+    // Create a container for the popup
+    const template = document.createElement("template");
+    template.innerHTML = html;
+    document.body.appendChild(template.content.cloneNode(true));
 
-  // Create a container for the popup
-  const template = document.createElement("template");
-  template.innerHTML = html;
-  document.body.appendChild(template.content.cloneNode(true));
+    const popup = document.querySelector(".shop-popup");
+    const popupContentBox = document.querySelector(".shop-popup-content");
+    popup.style.display = "none";
+    const shopButton = document.getElementById("shopButton");
 
-  const popup = document.querySelector(".shop-popup");
-  const popupContentBox = document.querySelector(".shop-popup-content");
-  popup.style.display = "none";
-  const shopButton = document.getElementById("shopButton");
+    updateCoinCount();
+    // Show popup on button click
+    shopButton.addEventListener("click", () => {
+      popup.style.display = "flex";
+      renderShop();
+    });
 
-  updateCoinCount();
-  // Show popup on button click
-  shopButton.addEventListener("click", () => {
-    popup.style.display = "flex";
-    renderShop();
+    // Call addPetUI to display pets after reload
+    addPetUI();
+
+    // Close popup on close button click
+    popup.addEventListener("click", (event) => {
+      console.log("Clicked element:", event.target);
+      if (!popupContentBox.contains(event.target)) {
+        console.log("Click detected outside popupContentBox");
+        popup.style.display = "none";
+      }
+    });
   });
-
-  // Call addPetUI to display pets after reload
-  addPetUI();
-
-  // Close popup on close button click
-  popup.addEventListener("click", (event) => {
-    console.log("Clicked element:", event.target);
-    if (!popupContentBox.contains(event.target)) {
-      console.log("Click detected outside popupContentBox");
-      popup.style.display = "none";
-    }
-  });
-});
+}
