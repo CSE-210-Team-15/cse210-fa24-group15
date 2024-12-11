@@ -385,15 +385,16 @@ const createTask = (
 
   const timeTracking = document.createElement('div');
   timeTracking.className = 'time-tracking';
-  const actualTime = document.createElement('span');
+
+  const actualTime = document.createElement('div');
   actualTime.id = 'time-spent';
-  actualTime.textContent = formatTimeHHMMSS(newTask.timeSpent);
+  actualTime.textContent = `Time Spent: ${formatTimeHHMMSS(newTask.timeSpent)}`;
+
   const estimatedTime = document.createElement('span');
   estimatedTime.id = 'estimated-time';
-  estimatedTime.textContent = formatTimeHHMMSS(timeInSeconds);
-  timeTracking.textContent = 'Actual Time/Estimated Time: ';
+  estimatedTime.textContent = `Estimated Time: ${formatTimeHHMMSS(timeInSeconds)}`;
+
   timeTracking.appendChild(actualTime);
-  timeTracking.appendChild(document.createTextNode(' / '));
   timeTracking.appendChild(estimatedTime);
 
   const taskDifficulty = document.createElement('div');
@@ -453,7 +454,7 @@ const createTask = (
         if (taskData) {
           taskData.timeSpent += 1; // Add 1 second
           const timeSpentElement = task.querySelector('#time-spent');
-          timeSpentElement.textContent = formatTimeHHMMSS(taskData.timeSpent);
+          timeSpentElement.textContent = `Time Spent: ${formatTimeHHMMSS(taskData.timeSpent)}`;
           saveTasks(tasks);
         }
       }, 1000); // Update every second
@@ -598,7 +599,7 @@ const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
   nameDiv.className = 'task-input';
   nameDiv.id = 'name';
   nameDiv.contentEditable = 'true';
-  nameDiv.dataset.placeholder = 'Task name';
+  nameDiv.dataset.placeholder = 'Task Name';
   nameDiv.textContent = nameText;
   input.appendChild(nameDiv);
 
@@ -652,7 +653,7 @@ const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
   const createButton = document.createElement('button');
   createButton.id = 'createButton';
   if (isEdit) {
-    createButton.textContent = 'Edit';
+    createButton.textContent = 'Save';
   } else {
     createButton.textContent = 'Create';
   }
@@ -686,6 +687,14 @@ const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
         difficultyText === 'select difficulty'
       ) {
         alert('Please fill all the fields.');
+        return;
+      }
+      if (
+        timeHourInput < 0 ||
+        timeMinInput < 0 ||
+        (timeHourInput == 0 && timeMinInput == 0)
+      ) {
+        alert('Please enter a valid time.');
         return;
       }
       handleBlur({ target: input });
