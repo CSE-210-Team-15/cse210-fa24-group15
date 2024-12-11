@@ -1,8 +1,8 @@
 /**
  * @fileoverview Manages tasks, drag-and-drop, timers, and coin rewards.
  */
-import game from '../../../gameManager.js';
-import { updateCoinCount } from '../shop/shopUI.js';
+import game from "../../../gameManager.js";
+import { updateCoinCount } from "../shop/shopUI.js";
 let modal = null;
 let columnsContainer = null;
 let columns = null;
@@ -33,22 +33,22 @@ let currentTask = null;
 const handleDragover = (event) => {
   event.preventDefault(); // allow drop
 
-  const draggedTask = document.querySelector('.dragging');
-  const target = event.target.closest('.task, .tasks');
+  const draggedTask = document.querySelector(".dragging");
+  const target = event.target.closest(".task, .tasks");
 
   const sourceColumn = draggedTask
-    .closest('.column')
-    .querySelector('h3')
+    .closest(".column")
+    .querySelector("h3")
     .textContent.trim();
   const targetColumn = target
-    .closest('.column')
-    .querySelector('h3')
+    .closest(".column")
+    .querySelector("h3")
     .textContent.trim();
 
   if (
-    (sourceColumn === 'In Progress' && targetColumn === 'To Do') || // Block In Progress to To Do
-    (sourceColumn === 'Done' &&
-      (targetColumn === 'To Do' || targetColumn === 'In Progress')) // Block Done to To Do or In Progress
+    (sourceColumn === "In Progress" && targetColumn === "To Do") || // Block In Progress to To Do
+    (sourceColumn === "Done" &&
+      (targetColumn === "To Do" || targetColumn === "In Progress")) // Block Done to To Do or In Progress
   ) {
     return; // Prevent drop specifically in these cases
   }
@@ -57,7 +57,7 @@ const handleDragover = (event) => {
     return;
   }
 
-  if (target.classList.contains('tasks')) {
+  if (target.classList.contains("tasks")) {
     // target is the tasks element
     const lastTask = target.lastElementChild;
     if (!lastTask) {
@@ -84,7 +84,7 @@ const handleDragover = (event) => {
 };
 
 function parseTimeToSeconds(timeString) {
-  const [hours, minutes, seconds] = timeString.split(':').map(Number);
+  const [hours, minutes, seconds] = timeString.split(":").map(Number);
   return hours * 3600 + minutes * 60 + seconds;
 }
 
@@ -100,23 +100,23 @@ function parseTimeToSeconds(timeString) {
  * @param {string}      targetColumn target column name
  */
 const updateTaskState = (task, sourceColumn, targetColumn) => {
-  const timerButton = task.querySelector('[data-timer]');
+  const timerButton = task.querySelector("[data-timer]");
 
   // if source = todo and target = in progress, start timer and render play/pause button
-  if (sourceColumn === 'To Do' && targetColumn === 'In Progress') {
+  if (sourceColumn === "To Do" && targetColumn === "In Progress") {
     renderTaskButtons(task, targetColumn);
     timerButton.click();
   }
 
   // if source = in progress and target = done, stop timer and hide edit and play/pause
-  if (sourceColumn === 'In Progress' && targetColumn === 'Done') {
+  if (sourceColumn === "In Progress" && targetColumn === "Done") {
     renderTaskButtons(task, targetColumn);
     // only stop timer if it's currently active
-    if (timerButton.querySelector('i').classList.contains('bi-stop-circle')) {
+    if (timerButton.querySelector("i").classList.contains("bi-stop-circle")) {
       timerButton.click();
     }
-    const actualTimeElement = task.querySelector('#time-spent');
-    const estimatedTimeElement = task.querySelector('#estimated-time');
+    const actualTimeElement = task.querySelector("#time-spent");
+    const estimatedTimeElement = task.querySelector("#estimated-time");
     const actualTime = actualTimeElement
       ? parseTimeToSeconds(actualTimeElement.textContent)
       : 0;
@@ -126,18 +126,18 @@ const updateTaskState = (task, sourceColumn, targetColumn) => {
     console.log(actualTime);
     console.log(estimatedTime);
     let difficulty = task
-      .querySelector('#difficulty')
-      .textContent.replace('Difficulty: ', '')
+      .querySelector("#difficulty")
+      .textContent.replace("Difficulty: ", "")
       .trim();
     let coin;
-    if (difficulty == 'easy') {
+    if (difficulty == "easy") {
       coin = 10;
-    } else if (difficulty == 'medium') {
+    } else if (difficulty == "medium") {
       coin = 30;
-    } else if (difficulty == 'hard') {
+    } else if (difficulty == "hard") {
       coin = 50;
     } else {
-      console.log('notfound');
+      console.log("notfound");
     }
     if (actualTime > estimatedTime) {
       coin = coin / 2;
@@ -155,54 +155,54 @@ const handleDrop = (event) => {
 };
 
 const handleDragend = (event) => {
-  event.target.classList.remove('dragging');
+  event.target.classList.remove("dragging");
 };
 
 const handleDragstart = (event) => {
-  event.dataTransfer.effectsAllowed = 'move';
-  event.dataTransfer.setData('text/plain', '');
-  requestAnimationFrame(() => event.target.classList.add('dragging'));
+  event.dataTransfer.effectsAllowed = "move";
+  event.dataTransfer.setData("text/plain", "");
+  requestAnimationFrame(() => event.target.classList.add("dragging"));
 };
 
 const handleDelete = (event) => {
-  currentTask = event.target.closest('.task');
+  currentTask = event.target.closest(".task");
 
   // show preview
-  document.querySelector('.confirm-modal').querySelector('.preview').innerText =
+  document.querySelector(".confirm-modal").querySelector(".preview").innerText =
     currentTask.innerText.substring(0, 100);
 
-  document.querySelector('.confirm-modal').showModal();
+  document.querySelector(".confirm-modal").showModal();
 };
 
 const handleAdd = (event) => {
-  const tasksEl = event.target.closest('.column').lastElementChild;
+  const tasksEl = event.target.closest(".column").lastElementChild;
   const input = createTaskInput();
   tasksEl.appendChild(input);
   input.focus();
 };
 
 const updateTaskCount = (column) => {
-  const colTasks = column.querySelector('.tasks').children;
+  const colTasks = column.querySelector(".tasks").children;
   const taskCount = colTasks.length;
-  column.querySelector('.column-title h3').dataset.tasks = taskCount;
+  column.querySelector(".column-title h3").dataset.tasks = taskCount;
 };
 
 const observeTaskChanges = () => {
   for (const column of columns) {
     const observer = new MutationObserver(() => updateTaskCount(column));
-    observer.observe(column.querySelector('.tasks'), { childList: true });
+    observer.observe(column.querySelector(".tasks"), { childList: true });
   }
 };
 
 // Function to save tasks to local storage
 const saveTasks = (tasks) => {
   const tasksJSON = tasks.map((task) => task.toJSON());
-  localStorage.setItem('tasks', JSON.stringify(tasksJSON));
+  localStorage.setItem("tasks", JSON.stringify(tasksJSON));
 };
 
 // Function to load tasks from local storage
 const loadTasks = () => {
-  const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
+  const tasksJSON = JSON.parse(localStorage.getItem("tasks") || "[]");
   return tasksJSON.map(Task.fromJSON);
 };
 
@@ -215,27 +215,27 @@ const getTaskFromName = (name) => {
 
 const deleteTaskFromLocalStorage = (task) => {
   // Load tasks from local storage
-  const tasksJSON = JSON.parse(localStorage.getItem('tasks') || '[]');
+  const tasksJSON = JSON.parse(localStorage.getItem("tasks") || "[]");
 
   // Find index of the task to be deleted
   const taskIndex = tasksJSON.findIndex(
     (storedTask) =>
       storedTask.name.toLowerCase() ===
-      task.querySelector('#name').innerText.toLowerCase()
+      task.querySelector("#name").innerText.toLowerCase(),
   );
 
   // Remove task from array
   if (taskIndex !== -1) {
     tasksJSON.splice(taskIndex, 1);
     // Save updated array back to local storage
-    localStorage.setItem('tasks', JSON.stringify(tasksJSON));
+    localStorage.setItem("tasks", JSON.stringify(tasksJSON));
   }
 };
 
 // Updates task column in local storage
 const updateTaskColumn = (taskElement, newColumn) => {
   const tasks = loadTasks();
-  const taskName = taskElement.querySelector('#name').textContent;
+  const taskName = taskElement.querySelector("#name").textContent;
 
   const task = tasks.find((t) => t.name === taskName);
   if (task) {
@@ -249,15 +249,15 @@ const updateTaskColumn = (taskElement, newColumn) => {
 const populateTasksFromStorage = () => {
   const tasks = loadTasks();
   const columnMap = {
-    'To Do': columns[0],
-    'In Progress': columns[1],
+    "To Do": columns[0],
+    "In Progress": columns[1],
     Done: columns[2],
   };
 
   // Clear existing tasks from all columns
   columns.forEach((column) => {
-    const tasksContainer = column.querySelector('.tasks');
-    tasksContainer.innerHTML = '';
+    const tasksContainer = column.querySelector(".tasks");
+    tasksContainer.innerHTML = "";
   });
 
   // Populate tasks into their respective columns
@@ -270,36 +270,36 @@ const populateTasksFromStorage = () => {
         0,
         task.difficulty,
         task.column,
-        true
+        true,
       );
-      column.querySelector('.tasks').appendChild(taskElement);
+      column.querySelector(".tasks").appendChild(taskElement);
     }
   });
 };
 
 //* event listeners
-document.addEventListener('DOMContentLoaded', () => {
-  modal = document.querySelector('.confirm-modal');
-  columnsContainer = document.querySelector('.columns');
-  columns = columnsContainer.querySelectorAll('.column');
+document.addEventListener("DOMContentLoaded", () => {
+  modal = document.querySelector(".confirm-modal");
+  columnsContainer = document.querySelector(".columns");
+  columns = columnsContainer.querySelectorAll(".column");
   observeTaskChanges();
   // dragover and drop
-  let tasksElements = columnsContainer.querySelectorAll('.tasks');
+  let tasksElements = columnsContainer.querySelectorAll(".tasks");
   for (const tasksEl of tasksElements) {
-    tasksEl.addEventListener('dragover', handleDragover);
-    tasksEl.addEventListener('drop', handleDrop);
+    tasksEl.addEventListener("dragover", handleDragover);
+    tasksEl.addEventListener("drop", handleDrop);
   }
   // add, edit and delete task
-  columnsContainer.addEventListener('click', (event) => {
-    if (event.target.closest('button[data-add]')) {
+  columnsContainer.addEventListener("click", (event) => {
+    if (event.target.closest("button[data-add]")) {
       handleAdd(event);
-    } else if (event.target.closest('button[data-edit]')) {
+    } else if (event.target.closest("button[data-edit]")) {
       handleEdit(event);
-    } else if (event.target.closest('button[data-delete]')) {
+    } else if (event.target.closest("button[data-delete]")) {
       handleDelete(event);
     }
     // confirm deletion
-    modal.addEventListener('submit', () => {
+    modal.addEventListener("submit", () => {
       if (currentTask) {
         deleteTaskFromLocalStorage(currentTask); // Call the function to delete from local storage
         currentTask.remove(); // Remove the task from the DOM
@@ -308,11 +308,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // cancel deletion
     modal
-      .querySelector('#cancel')
-      .addEventListener('click', () => modal.close());
+      .querySelector("#cancel")
+      .addEventListener("click", () => modal.close());
 
     // clear current task
-    modal.addEventListener('close', () => (currentTask = null));
+    modal.addEventListener("close", () => (currentTask = null));
   });
   populateTasksFromStorage();
 });
@@ -348,7 +348,7 @@ const formatTimeHHMMSS = (seconds) => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const secs = seconds % 60;
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
 
 const createTask = (
@@ -357,13 +357,13 @@ const createTask = (
   timeSpent,
   difficultyText,
   columnName,
-  isPopulate
+  isPopulate,
 ) => {
   let newTask;
   if (isPopulate) {
     const tasks = loadTasks();
     newTask = tasks.find(
-      (t) => t.name.toLowerCase() === nameText.toLowerCase()
+      (t) => t.name.toLowerCase() === nameText.toLowerCase(),
     );
   } else {
     newTask = new Task(nameText, timeInSeconds, difficultyText, columnName);
@@ -372,55 +372,56 @@ const createTask = (
     saveTasks(tasks);
   }
 
-  const task = document.createElement('div');
-  task.className = 'task';
+  const task = document.createElement("div");
+  task.className = "task";
   task.draggable = true;
 
-  const taskContainer = document.createElement('div');
-  taskContainer.style.display = 'flex';
-  taskContainer.style.flexDirection = 'column';
-  taskContainer.style.margin = '2px';
+  const taskContainer = document.createElement("div");
+  taskContainer.style.display = "flex";
+  taskContainer.style.flexDirection = "column";
+  taskContainer.style.margin = "2px";
 
-  const taskName = document.createElement('div');
-  taskName.id = 'name';
-  taskName.style.fontWeight = 'bolder';
+  const taskName = document.createElement("div");
+  taskName.id = "name";
+  taskName.style.fontWeight = "bolder";
   taskName.textContent = nameText;
 
-  const timeTracking = document.createElement('div');
-  timeTracking.className = 'time-tracking';
-  const actualTime = document.createElement('span');
-  actualTime.id = 'time-spent';
-  actualTime.textContent = formatTimeHHMMSS(newTask.timeSpent);
-  const estimatedTime = document.createElement('span');
-  estimatedTime.id = 'estimated-time';
-  estimatedTime.textContent = formatTimeHHMMSS(timeInSeconds);
-  timeTracking.textContent = 'Actual Time/Estimated Time: ';
+  const timeTracking = document.createElement("div");
+  timeTracking.className = "time-tracking";
+
+  const actualTime = document.createElement("div");
+  actualTime.id = "time-spent";
+  actualTime.textContent = `Time Spent: ${formatTimeHHMMSS(newTask.timeSpent)}`;
+
+  const estimatedTime = document.createElement("span");
+  estimatedTime.id = "estimated-time";
+  estimatedTime.textContent = `Estimated Time: ${formatTimeHHMMSS(timeInSeconds)}`;
+
   timeTracking.appendChild(actualTime);
-  timeTracking.appendChild(document.createTextNode(' / '));
   timeTracking.appendChild(estimatedTime);
 
-  const taskDifficulty = document.createElement('div');
-  taskDifficulty.id = 'difficulty';
+  const taskDifficulty = document.createElement("div");
+  taskDifficulty.id = "difficulty";
   taskDifficulty.textContent = `Difficulty: ${difficultyText}`;
 
-  const menu = document.createElement('menu');
+  const menu = document.createElement("menu");
 
-  const editButton = document.createElement('button');
+  const editButton = document.createElement("button");
   editButton.dataset.edit = true;
-  const editIcon = document.createElement('i');
-  editIcon.className = 'bi bi-pencil-square';
+  const editIcon = document.createElement("i");
+  editIcon.className = "bi bi-pencil-square";
   editButton.appendChild(editIcon);
 
-  const deleteButton = document.createElement('button');
+  const deleteButton = document.createElement("button");
   deleteButton.dataset.delete = true;
-  const deleteIcon = document.createElement('i');
-  deleteIcon.className = 'bi bi-trash';
+  const deleteIcon = document.createElement("i");
+  deleteIcon.className = "bi bi-trash";
   deleteButton.appendChild(deleteIcon);
 
-  const timerBtn = document.createElement('button');
+  const timerBtn = document.createElement("button");
   timerBtn.dataset.timer = true;
-  const timerIcon = document.createElement('i');
-  timerIcon.className = 'bi bi-play-circle';
+  const timerIcon = document.createElement("i");
+  timerIcon.className = "bi bi-play-circle";
   timerBtn.appendChild(timerIcon);
 
   menu.appendChild(editButton);
@@ -434,29 +435,29 @@ const createTask = (
 
   task.appendChild(taskContainer);
 
-  task.addEventListener('dragstart', handleDragstart);
-  task.addEventListener('dragend', handleDragend);
+  task.addEventListener("dragstart", handleDragstart);
+  task.addEventListener("dragend", handleDragend);
 
   // Add timer functionality
-  const timerButton = task.querySelector('[data-timer]');
+  const timerButton = task.querySelector("[data-timer]");
   let timerInterval;
   let isTimerRunning = false;
 
-  timerButton.addEventListener('click', () => {
+  timerButton.addEventListener("click", () => {
     if (!isTimerRunning) {
       // Start timer
       isTimerRunning = true;
       timerButton
-        .querySelector('i')
-        .classList.replace('bi-play-circle', 'bi-stop-circle');
+        .querySelector("i")
+        .classList.replace("bi-play-circle", "bi-stop-circle");
 
       timerInterval = setInterval(() => {
         const tasks = loadTasks();
         const taskData = tasks.find((t) => t.name === nameText);
         if (taskData) {
           taskData.timeSpent += 1; // Add 1 second
-          const timeSpentElement = task.querySelector('#time-spent');
-          timeSpentElement.textContent = formatTimeHHMMSS(taskData.timeSpent);
+          const timeSpentElement = task.querySelector("#time-spent");
+          timeSpentElement.textContent = `Time Spent: ${formatTimeHHMMSS(taskData.timeSpent)}`;
           saveTasks(tasks);
         }
       }, 1000); // Update every second
@@ -464,8 +465,8 @@ const createTask = (
       // Stop timer
       isTimerRunning = false;
       timerButton
-        .querySelector('i')
-        .classList.replace('bi-stop-circle', 'bi-play-circle');
+        .querySelector("i")
+        .classList.replace("bi-stop-circle", "bi-play-circle");
       clearInterval(timerInterval);
     }
   });
@@ -486,53 +487,53 @@ const createTask = (
  * @param {string}      columnName column name
  */
 const renderTaskButtons = (task, columnName) => {
-  const timerButton = task.querySelector('[data-timer]');
-  const editButton = task.querySelector('[data-edit]');
+  const timerButton = task.querySelector("[data-timer]");
+  const editButton = task.querySelector("[data-edit]");
 
   switch (columnName) {
-    case 'To Do':
-      timerButton.style.display = 'none';
-      editButton.style.display = 'block';
+    case "To Do":
+      timerButton.style.display = "none";
+      editButton.style.display = "block";
       break;
-    case 'In Progress':
-      timerButton.style.display = 'block';
-      editButton.style.display = 'block';
+    case "In Progress":
+      timerButton.style.display = "block";
+      editButton.style.display = "block";
       break;
-    case 'Done':
-      timerButton.style.display = 'none';
-      editButton.style.display = 'none';
+    case "Done":
+      timerButton.style.display = "none";
+      editButton.style.display = "none";
       break;
     default:
-      timerButton.style.display = 'block';
-      editButton.style.display = 'block';
+      timerButton.style.display = "block";
+      editButton.style.display = "block";
   }
 };
 
 const handleEdit = (event) => {
-  const task = event.target.closest('.task');
+  const task = event.target.closest(".task");
 
   // Stop the timer if it's running
-  const timerButton = task.querySelector('[data-timer]');
-  const timerIcon = timerButton.querySelector('i');
+  const timerButton = task.querySelector("[data-timer]");
+  const timerIcon = timerButton.querySelector("i");
 
-  if (timerIcon.classList.contains('bi-stop-circle')) {
+  if (timerIcon.classList.contains("bi-stop-circle")) {
     timerButton.click(); // This will stop the timer
   }
 
   // Extract current values from task
-  const nameText = task.querySelector('#name').innerText;
-  const difficultyText = task.querySelector('#difficulty').innerText;
+  const nameText = task.querySelector("#name").innerText;
+  const difficultyText = task.querySelector("#difficulty").innerText;
   console.log(task);
 
   // Create editable input fields with current values
   const input = createTaskInput(nameText, difficultyText, true, task);
   // deleteTaskFromLocalStorage(task);
   task.replaceWith(input);
-  input.querySelector('#name').focus();
+  input.querySelector("#name").focus();
 
   // Move cursor to the end of the task name field
   const selection = window.getSelection();
-  const nameField = input.querySelector('#name');
+  const nameField = input.querySelector("#name");
   const range = document.createRange();
   range.selectNodeContents(nameField);
   range.collapse(false);
@@ -541,23 +542,23 @@ const handleEdit = (event) => {
 };
 
 const handleBlur = (event, task = null) => {
-  const input = event.target.closest('.task-Container');
+  const input = event.target.closest(".task-Container");
   // Extract values from each field
-  const nameText = input.querySelector('#name').innerText.trim() || 'Untitled';
+  const nameText = input.querySelector("#name").innerText.trim() || "Untitled";
   let difficultyText;
-  if (input.querySelector('#difficulty').value !== 'select') {
-    difficultyText = input.querySelector('#difficulty').value;
+  if (input.querySelector("#difficulty").value !== "select") {
+    difficultyText = input.querySelector("#difficulty").value;
   } else {
-    difficultyText = 'No difficulty set';
+    difficultyText = "No difficulty set";
   }
   // Create a task element with extracted values
-  const columnElement = event.target.closest('.column');
-  const columnName = columnElement.querySelector('h3').textContent.trim();
+  const columnElement = event.target.closest(".column");
+  const columnName = columnElement.querySelector("h3").textContent.trim();
 
   let totalSeconds = 0;
   if (task === null) {
-    const hours = input.querySelector('#timeHour').value;
-    const minutes = input.querySelector('#timeMin').value;
+    const hours = input.querySelector("#timeHour").value;
+    const minutes = input.querySelector("#timeMin").value;
     totalSeconds = hours * 3600 + minutes * 60;
   } else {
     totalSeconds = task.estTime;
@@ -569,81 +570,81 @@ const handleBlur = (event, task = null) => {
     0,
     difficultyText,
     columnName,
-    false
+    false,
   );
-  if (columnName == 'Done') {
-    if (difficultyText == 'easy') {
+  if (columnName == "Done") {
+    if (difficultyText == "easy") {
       game.changeCoins(10);
       updateCoinCount();
-    } else if (difficultyText == 'medium') {
+    } else if (difficultyText == "medium") {
       game.changeCoins(30);
       updateCoinCount();
-    } else if (difficultyText == 'hard') {
+    } else if (difficultyText == "hard") {
       game.changeCoins(50);
       updateCoinCount();
     } else {
-      console.log('notfound');
+      console.log("notfound");
     }
   }
   input.replaceWith(newTask);
 };
 
-const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
-  const input = document.createElement('div');
-  input.className = 'task-Container';
+const createTaskInput = (name = "", difficulty = "", isEdit, task = null) => {
+  const input = document.createElement("div");
+  input.className = "task-Container";
 
   let nameText = name;
-  let timeHour = '';
-  let timeMin = '';
+  let timeHour = "";
+  let timeMin = "";
   let difficultyText = difficulty;
 
-  const nameDiv = document.createElement('div');
-  nameDiv.className = 'task-input';
-  nameDiv.id = 'name';
-  nameDiv.contentEditable = 'true';
-  nameDiv.dataset.placeholder = 'Task name';
+  const nameDiv = document.createElement("div");
+  nameDiv.className = "task-input";
+  nameDiv.id = "name";
+  nameDiv.contentEditable = "true";
+  nameDiv.dataset.placeholder = "Task Name";
   nameDiv.textContent = nameText;
   input.appendChild(nameDiv);
 
   if (!isEdit) {
-    const timeRow = document.createElement('div');
-    timeRow.className = 'task-row';
-    timeRow.textContent = 'Estimated Time: ';
+    const timeRow = document.createElement("div");
+    timeRow.className = "task-row";
+    timeRow.textContent = "Estimated Time: ";
     input.appendChild(timeRow);
 
-    const timeHourInput = document.createElement('input');
-    timeHourInput.type = 'number';
-    timeHourInput.className = 'task-input';
-    timeHourInput.id = 'timeHour';
+    const timeHourInput = document.createElement("input");
+    timeHourInput.type = "number";
+    timeHourInput.className = "task-input";
+    timeHourInput.id = "timeHour";
     timeHourInput.value = timeHour;
-    timeHourInput.placeholder = 'Hours';
-    timeHourInput.min = '0';
+    timeHourInput.placeholder = "Hours";
+    timeHourInput.min = "0";
     timeRow.appendChild(timeHourInput);
 
-    const timeMinInput = document.createElement('input');
-    timeMinInput.type = 'number';
-    timeMinInput.className = 'task-input';
-    timeMinInput.id = 'timeMin';
+    const timeMinInput = document.createElement("input");
+    timeMinInput.type = "number";
+    timeMinInput.className = "task-input";
+    timeMinInput.id = "timeMin";
     timeMinInput.value = timeMin;
-    timeMinInput.placeholder = 'Minutes';
-    timeMinInput.min = '0';
-    timeMinInput.max = '59';
+    timeMinInput.placeholder = "Minutes";
+    timeMinInput.min = "0";
+    timeMinInput.max = "59";
     timeRow.appendChild(timeMinInput);
   }
 
-  const difficultyRow = document.createElement('div');
-  difficultyRow.className = 'task-row';
-  difficultyRow.textContent = 'Difficulty: ';
+  const difficultyRow = document.createElement("div");
+  difficultyRow.className = "task-row";
+  difficultyRow.textContent = "Difficulty: ";
   input.appendChild(difficultyRow);
 
-  const difficultySelect = document.createElement('select');
-  difficultySelect.className = 'task-input';
-  difficultySelect.id = 'difficulty';
+  const difficultySelect = document.createElement("select");
+  difficultySelect.className = "task-input";
+  difficultySelect.id = "difficulty";
   difficultyRow.appendChild(difficultySelect);
 
-  const difficulties = ['Select Difficulty', 'Easy', 'Medium', 'Hard'];
+  const difficulties = ["Select Difficulty", "Easy", "Medium", "Hard"];
   difficulties.forEach((difficulty) => {
-    const option = document.createElement('option');
+    const option = document.createElement("option");
     option.value = difficulty.toLowerCase();
     option.textContent = difficulty;
     if (difficultyText.toLowerCase() === difficulty.toLowerCase()) {
@@ -652,24 +653,24 @@ const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
     difficultySelect.appendChild(option);
   });
 
-  const createButton = document.createElement('button');
-  createButton.id = 'createButton';
+  const createButton = document.createElement("button");
+  createButton.id = "createButton";
   if (isEdit) {
-    createButton.textContent = 'Edit';
+    createButton.textContent = "Save";
   } else {
-    createButton.textContent = 'Create';
+    createButton.textContent = "Create";
   }
   difficultyRow.appendChild(createButton);
 
-  createButton.addEventListener('click', () => {
-    const nameInput = input.querySelector('#name');
-    const difficultySelect = input.querySelector('#difficulty');
+  createButton.addEventListener("click", () => {
+    const nameInput = input.querySelector("#name");
+    const difficultySelect = input.querySelector("#difficulty");
     const nameText = nameInput.textContent.trim();
     const difficultyText = difficultySelect.value;
 
     if (isEdit) {
-      if (!nameText || difficultyText === 'select difficulty') {
-        alert('Please fill all the fields.');
+      if (!nameText || difficultyText === "select difficulty") {
+        alert("Please fill all the fields.");
         return;
       }
       handleBlur({ target: input }, getTaskFromName(name));
@@ -677,18 +678,26 @@ const createTaskInput = (name = '', difficulty = '', isEdit, task = null) => {
     } else {
       const tasks = loadTasks();
       if (tasks.find((t) => t.name.toLowerCase() === nameText.toLowerCase())) {
-        alert('Task with the same name already exists.');
+        alert("Task with the same name already exists.");
         return;
       }
-      const timeHourInput = input.querySelector('#timeHour').value;
-      const timeMinInput = input.querySelector('#timeMin').value;
+      const timeHourInput = input.querySelector("#timeHour").value;
+      const timeMinInput = input.querySelector("#timeMin").value;
       if (
         !nameText ||
         !timeHourInput ||
         !timeMinInput ||
-        difficultyText === 'select difficulty'
+        difficultyText === "select difficulty"
       ) {
-        alert('Please fill all the fields.');
+        alert("Please fill all the fields.");
+        return;
+      }
+      if (
+        timeHourInput < 0 ||
+        timeMinInput < 0 ||
+        (timeHourInput == 0 && timeMinInput == 0)
+      ) {
+        alert("Please enter a valid time.");
         return;
       }
       handleBlur({ target: input });

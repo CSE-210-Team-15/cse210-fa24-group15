@@ -1,4 +1,3 @@
-
 ## Sprint 3 Retrospective:
 
 ### Liked
@@ -8,10 +7,9 @@
 - Manageable expectations were set.
 - Everyone had a clear understanding of who worked on what aspect of the projet.
 
-
 ### Lacked
 
-- Since we were in teams, while the teams knew what was beinng done by others, tracking exact  progress of the other team was tricky.
+- Since we were in teams, while the teams knew what was beinng done by others, tracking exact progress of the other team was tricky.
 - Communication was tricky as most members were not available given thanksgiving break/ travel.
 
 ### Learned
@@ -20,4 +18,4 @@
 
 ### Conclusion:
 
-The team is comfortable with the tasks allocated. There was a little struggle in communication in the later half of the sprint. We plan to have more meetings in a week virtually to checkin on progress to improve any communication gaps. 
+The team is comfortable with the tasks allocated. There was a little struggle in communication in the later half of the sprint. We plan to have more meetings in a week virtually to checkin on progress to improve any communication gaps.
