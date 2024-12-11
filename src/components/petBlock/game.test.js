@@ -120,7 +120,6 @@ test("game 4 check serialization & deserialization 2", () => {
   demo_game_4.changeHp("piplup", -10);
   demo_game_4.changeHp("eevee", -25);
 
-  // const deserialized_game_4 = demo_game_4.deserializePets(serialized_game_4);
   demo_game_4_temp.pets = demo_game_4_temp.deserializePets(serialized_game_4);
   assert.notDeepStrictEqual(demo_game_4, demo_game_4_temp);
 

@@ -115,6 +115,11 @@ button:is(:active, :hover) {
   transition: 0.3s;
 }
 
+#name {
+  font-size: 1.2rem;
+  padding-bottom: 1rem;
+}
+
 .task.dragging {
   cursor: default;
   box-shadow: none;
