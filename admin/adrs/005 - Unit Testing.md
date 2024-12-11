@@ -17,40 +17,40 @@ Jest and Node Test Runner
 
 ### Jest
 
-##### Pros:
+##### Pros
 
 - Easy to learn
 - Easy to setup
 
-##### Cons:
+##### Cons
 
 - Bad support for ES Modules
 
 ### Node Test Runner
 
-##### Pros:
+##### Pros
 
 - Easy to learn and setup
 - Supports ES Modules
 
-##### Cons:
+##### Cons
 
 - New to the industry
 
 ### Mocha
 
-##### Pros:
+##### Pros
 
 - Supports both back end and front end testing
 - Supports Node JS debugger
 
-##### Cons:
+##### Cons
 
 - Not as easy to use as Jest or Test Runner
 
 ### Cypress
 
-##### Pros:
+##### Pros
 
 - No setup required
 - Run on browser, with interactive interface
