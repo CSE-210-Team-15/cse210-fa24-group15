@@ -1,29 +1,29 @@
-import game from '../../../gameManager.js';
+import game from "../../../gameManager.js";
 
 // For testing, hardcode to 100
 // game.coins = 100;
 
 export function updateCoinCount() {
-  const coinCountMain = document.getElementById('shopButton');
+  const coinCountMain = document.getElementById("shopButton");
   //const coinCountShop = document.getElementById('coinCount');
-  const coinCountShop = document.getElementById('coinCount');
+  const coinCountShop = document.getElementById("coinCount");
   coinCountMain.textContent = game.coins;
   coinCountShop.textContent = game.coins;
-  localStorage.setItem('coins', JSON.stringify(game.coins));
-  localStorage.setItem('pets', JSON.stringify(game.serializePets()));
-  console.log('Pet Set: ', game.serializePets());
+  localStorage.setItem("coins", JSON.stringify(game.coins));
+  localStorage.setItem("pets", JSON.stringify(game.serializePets()));
+  console.log("Pet Set: ", game.serializePets());
 }
 
 function addPetUI() {
-  const pets = document.getElementById('petsdiv');
-  pets.innerHTML = '';
+  const pets = document.getElementById("petsdiv");
+  pets.innerHTML = "";
   Object.values(game.pets).forEach((petData) => {
     const pet = petData[0]; // Access the Pet instance
     const imageUrl = petData[1]; // Access the pet image URL
 
     if (pet.bought) {
-      const img = document.createElement('img');
-      img.classList.add('pet');
+      const img = document.createElement("img");
+      img.classList.add("pet");
       img.src = imageUrl;
       pets.appendChild(img);
     }
@@ -32,14 +32,14 @@ function addPetUI() {
 
 function renderShop() {
   console.log(game.pets);
-  const popup = document.querySelector('.shop-popup');
-  popup.style.display = 'flex';
-  const owned = document.getElementById('owned');
-  const shop = document.getElementById('shop');
+  const popup = document.querySelector(".shop-popup");
+  popup.style.display = "flex";
+  const owned = document.getElementById("owned");
+  const shop = document.getElementById("shop");
 
   // Clear previous content
-  owned.innerHTML = '';
-  shop.innerHTML = '';
+  owned.innerHTML = "";
+  shop.innerHTML = "";
 
   // Loop through game.pets for owned pets (bought === true)
   Object.values(game.pets).forEach((petData) => {
@@ -51,7 +51,7 @@ function renderShop() {
     const petTimestamp = new Date(pet.timestamp).getTime();
     // test for 5 seconds
     const timeDifferenceInHours = Math.floor(
-      (currentTime - petTimestamp) / (1000 * 60 * 12)
+      (currentTime - petTimestamp) / (1000 * 60 * 12),
     );
     // Deduct HP based on the time difference (e.g., 1 HP per hour)
     if (pet.bought === 1 && timeDifferenceInHours > 0) {
@@ -63,7 +63,7 @@ function renderShop() {
         addPetUI();
       }
       pet.timestamp = Date.now(); // Update the timestamp to current time
-      localStorage.setItem('pets', JSON.stringify(game.serializePets()));
+      localStorage.setItem("pets", JSON.stringify(game.serializePets()));
     }
 
     if (pet.bought) {
@@ -85,29 +85,29 @@ function renderShop() {
   });
 
   // Add event listener for feed button in owned pets
-  owned.querySelectorAll('.pet-item').forEach((petElement) => {
-    const index = petElement.getAttribute('data-index');
-    const feedButton = petElement.querySelector('.price-button');
+  owned.querySelectorAll(".pet-item").forEach((petElement) => {
+    const index = petElement.getAttribute("data-index");
+    const feedButton = petElement.querySelector(".price-button");
 
-    feedButton.addEventListener('click', (event) => {
+    feedButton.addEventListener("click", (event) => {
       event.stopPropagation();
       const pet = game.pets[index][0]; // Access the Pet instance
       if (game.coins >= pet.feedprice) {
         if (pet.hp >= 100) {
-          alert('this pet is at full health');
+          alert("this pet is at full health");
         } else {
           game.changeCoins(-pet.feedprice); // Deduct coins
           pet.changeHp(10); // Change HP by a fixed amount (e.g., 10)
           pet.timestamp = Date.now();
           console.log(
-            `Fed ${pet.name}, new HP: ${pet.hp}, remaining coins: ${game.coins}, timestamp: ${pet.timestamp}`
+            `Fed ${pet.name}, new HP: ${pet.hp}, remaining coins: ${game.coins}, timestamp: ${pet.timestamp}`,
           );
           updateCoinCount();
           renderShop();
           addPetUI();
         }
       } else {
-        alert('Not enough coins to feed this pet.');
+        alert("Not enough coins to feed this pet.");
       }
     });
   });
@@ -132,11 +132,11 @@ function renderShop() {
   });
 
   // Add event listener for buy button in shop pets
-  shop.querySelectorAll('.pet-item').forEach((petElement) => {
-    const index = petElement.getAttribute('data-index');
-    const buyButton = petElement.querySelector('.price-button');
+  shop.querySelectorAll(".pet-item").forEach((petElement) => {
+    const index = petElement.getAttribute("data-index");
+    const buyButton = petElement.querySelector(".price-button");
 
-    buyButton.addEventListener('click', (event) => {
+    buyButton.addEventListener("click", (event) => {
       event.stopPropagation();
       const pet = game.pets[index][0]; // Access the Pet instance
       if (game.coins >= pet.price) {
@@ -148,7 +148,7 @@ function renderShop() {
         renderShop(); // Refresh the shop after buying
         addPetUI(); // Show the pet immediately after buying
       } else {
-        alert('Not enough coins to buy this pet.');
+        alert("Not enough coins to buy this pet.");
       }
     });
   });
@@ -156,26 +156,26 @@ function renderShop() {
   //localStorage.setItem('pets', JSON.stringify(game.serializePets()));
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
   // localStorage.setItem('pets', JSON.stringify(game.serializePets()));
   // Load the shop popup HTML
-  const response = await fetch('shop.html');
+  const response = await fetch("shop.html");
   const html = await response.text();
 
   // Create a container for the popup
-  const template = document.createElement('template');
+  const template = document.createElement("template");
   template.innerHTML = html;
   document.body.appendChild(template.content.cloneNode(true));
 
-  const popup = document.querySelector('.shop-popup');
-  const popupContentBox = document.querySelector('.shop-popup-content');
-  popup.style.display = 'none';
-  const shopButton = document.getElementById('shopButton');
+  const popup = document.querySelector(".shop-popup");
+  const popupContentBox = document.querySelector(".shop-popup-content");
+  popup.style.display = "none";
+  const shopButton = document.getElementById("shopButton");
 
   updateCoinCount();
   // Show popup on button click
-  shopButton.addEventListener('click', () => {
-    popup.style.display = 'flex';
+  shopButton.addEventListener("click", () => {
+    popup.style.display = "flex";
     renderShop();
   });
 
@@ -183,11 +183,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   addPetUI();
 
   // Close popup on close button click
-  popup.addEventListener('click', (event) => {
-    console.log('Clicked element:', event.target);
+  popup.addEventListener("click", (event) => {
+    console.log("Clicked element:", event.target);
     if (!popupContentBox.contains(event.target)) {
-      console.log('Click detected outside popupContentBox');
-      popup.style.display = 'none';
+      console.log("Click detected outside popupContentBox");
+      popup.style.display = "none";
     }
   });
 });

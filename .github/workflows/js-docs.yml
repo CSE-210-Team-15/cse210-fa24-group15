@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22.9.0' # Use the appropriate Node.js version
+          node-version: "22.9.0" # Use the appropriate Node.js version
 
       # Step 3: Install dependencies (if any, adjust as needed)
       - name: Install dependencies

@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600&display=swap");
 
 :root {
-  --bg-color: #e2e8f0;
+  --bg-color: aliceblue;
   --text-color: #404040;
   --primary-color: #475569;
   --secondary-color: #cbd5e1;
@@ -83,7 +83,7 @@ button:is(:active, :hover) {
 
 .column-title h3::after {
   content: attr(data-tasks);
-  background: lightblue;
+  background: rgb(202, 188, 247);
   margin-left: 0.25rem;
   border-radius: 0.25rem;
   padding: 0 0.25rem;
@@ -113,6 +113,11 @@ button:is(:active, :hover) {
 .task {
   cursor: move;
   transition: 0.3s;
+}
+
+#name {
+  font-size: 1.2rem;
+  padding-bottom: 1rem;
 }
 
 .task.dragging {
@@ -276,7 +281,7 @@ button:is(:active, :hover) {
   margin: 2rem 0;
   padding: 10px;
   background-color: gold;
-  color: white;
+  color: black;
   text-align: center;
   border-radius: 5px;
   cursor: pointer;

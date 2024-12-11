@@ -22,7 +22,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22.9.0' # Ensure this matches your project requirements
+          node-version: "22.9.0" # Ensure this matches your project requirements
 
       - name: Install dependencies
         run: npm install
