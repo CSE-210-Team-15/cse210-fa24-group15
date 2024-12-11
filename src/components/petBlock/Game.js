@@ -1,6 +1,6 @@
 /**
  * @fileoverview Provides the functions required by the Game class
- * 
+ *
  */
 import Pet from "./Pet.js";
 
