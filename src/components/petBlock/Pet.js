@@ -1,6 +1,6 @@
 /**
  * @fileoverview Provides the functions required by the Pet class
- * 
+ *
  */
 let defaultHp = 100;
 
