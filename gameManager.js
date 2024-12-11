@@ -1,4 +1,4 @@
-import Game from './src/components/petBlock/Game.js';
+import Game from "./src/components/petBlock/Game.js";
 
 const game = new Game();
 export default game;
@@ -9,12 +9,12 @@ let savedCoins;
 
 try {
   savedPets =
-    typeof localStorage !== 'undefined'
-      ? JSON.parse(localStorage.getItem('pets'))
+    typeof localStorage !== "undefined"
+      ? JSON.parse(localStorage.getItem("pets"))
       : null;
   savedCoins =
-    typeof localStorage !== 'undefined'
-      ? JSON.parse(localStorage.getItem('coins'))
+    typeof localStorage !== "undefined"
+      ? JSON.parse(localStorage.getItem("coins"))
       : 100;
 } catch (error) {
   savedPets = null;
