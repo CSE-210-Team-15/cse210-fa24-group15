@@ -19,12 +19,6 @@ The team has finished all the tasks that we had planned for all the 4 sprints. E
 ### Individual Notes
 
 - Soumya: Adjusted Game Logic (added more pokemons and modified tests accordingly; Adjusted costs); Cleaned up CSS; Debugged testing errors; Improved web page accessibility
-
-* Renamed sprint review and retrospective documents
-* Cleaned up CSS
-* Removed unused variables
-* Improved webpage accessibility
-
 - Joey: Render correct buttons according to status of the tasks
 - Yuan: Rewrote the testing from Jest to Node Testrunner
 - Steve: Added task to coin conversion system; debugging file path changes error; debugging the coin intialization errors

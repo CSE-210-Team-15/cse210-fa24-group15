@@ -1,4 +1,4 @@
-## Sprint 4 Retrospective:
+## Sprint 4 Retrospective
 
 ### Liked
 
@@ -21,6 +21,6 @@
 - Clear communication when there are dependecies involved
 - Researching and importance of ADRs before finalizing any big design change.
 
-### Conclusion:
+### Conclusion
 
 We enjoyed working on this project. The team has always been enthusiastic about the app that we decided to build, right from ideation to the hype video. We finished everything that we set out to build in these 4 weeks. We do think that testing is something that we could have started a little earlier, and worked on it more. While the brownfield code was meant to help us focus on the game part and not the kanban, the code written wasn't written in the best way possible, which required us to change it quite a bit. It would have been much cleaner and better testable had we written it from scratch. Overall, we learned a lot in this process and enjoyed building the product.
