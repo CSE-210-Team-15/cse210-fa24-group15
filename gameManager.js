@@ -23,4 +23,8 @@ try {
 }
 
 game.pets = savedPets ? game.deserializePets(savedPets) : game.pets;
-game.coins = savedCoins || 100;
+if (savedCoins === null) {
+  game.coins = 100;
+} else {
+  game.coins = savedCoins;
+}
