@@ -42,6 +42,6 @@ Date: 2nd December - 8th December
 - [x] Set up logic for converting task completion to coins
 - [x] Clean up the Repo
 
-### Sprint 5 / Potential TO-DO
+### Someday in future - Potential TO-DO
 
 - [ ] Set up randomized pet loot-box / gambling meachanism
