@@ -1,4 +1,6 @@
-// dummy show/hide logic
+/**
+ * @fileoverview Dummy show/hide logic
+ */
 const toggleButton = document.getElementById("toggleButton");
 const pets = document.getElementById("petsdiv");
 

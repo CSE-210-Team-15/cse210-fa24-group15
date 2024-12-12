@@ -104,6 +104,165 @@
     
 
     
+    <h4 class="name" id="formatTimeHHMMSS"><span class="type-signature"></span>formatTimeHHMMSS<span class="signature">(seconds)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Helper function to convert seconds to HH:MM:SS format
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>seconds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The time in seconds.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tasks_task.js.html">tasks/task.js</a>, <a href="tasks_task.js.html#line350">line 350</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The formatted time in "HH:MM:SS" format.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="handleDragover"><span class="type-signature"></span>handleDragover<span class="signature">(event)</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
@@ -112,10 +271,7 @@
 
 
 <div class="description">
-    Handles the dragover event to allow dragging and dropping tasks.
-
-This function prevents default dragover behavior, identifies the dragged task,
-and determines where to place it within the target list or relative to other tasks.
+    Allows task dragging and dropping, validates column transitions, and updates task position.
 </div>
 
 
@@ -167,7 +323,7 @@ and determines where to place it within the target list or relative to other tas
 
             
 
-            <td class="description last">The dragover event triggered by dragging an element.</td>
+            <td class="description last">The dragover event.</td>
         </tr>
 
     
@@ -208,7 +364,113 @@ and determines where to place it within the target list or relative to other tas
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="task.js.html">task.js</a>, <a href="task.js.html#line28">line 28</a>
+        <a href="tasks_task.js.html">tasks/task.js</a>, <a href="tasks_task.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="loadTasks"><span class="type-signature"></span>loadTasks<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function to load tasks from local storage
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tasks_task.js.html">tasks/task.js</a>, <a href="tasks_task.js.html#line193">line 193</a>
     </li></ul></dd>
     
 
@@ -237,15 +499,7 @@ and determines where to place it within the target list or relative to other tas
 
         
 <div class="param-desc">
-    The function performs the following actions:
-1. Prevents the default behavior to allow dropping.
-2. Identifies the currently dragged task using the ".dragging" class.
-3. Finds the closest droppable target (either a `.task` or `.tasks` container).
-4. If the target is a `.tasks` container:
-   - Appends the dragged task if the container is empty.
-   - Appends the dragged task after the last task if the cursor is below it.
-5. If the target is a `.task` element:
-   - Inserts the dragged task before or after the target based on cursor position.
+    An array of Task objects.
 </div>
 
 
@@ -256,13 +510,189 @@ and determines where to place it within the target list or relative to other tas
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Array</span>
 
 
     </dd>
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="populateTasksFromStorage"><span class="type-signature"></span>populateTasksFromStorage<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function to populate tasks from local storage on page load
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tasks_task.js.html">tasks/task.js</a>, <a href="tasks_task.js.html#line247">line 247</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="renderShop"><span class="type-signature"></span>renderShop<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Update the store UI based on the pet status and change the stored data based on the status change
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="shop_shopUI.js.html">shop/shopUI.js</a>, <a href="shop_shopUI.js.html#line36">line 36</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -402,7 +832,304 @@ Done: no edit and no play/pause button
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="task.js.html">task.js</a>, <a href="task.js.html#line437">line 437</a>
+        <a href="tasks_task.js.html">tasks/task.js</a>, <a href="tasks_task.js.html#line498">line 498</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="saveTasks"><span class="type-signature"></span>saveTasks<span class="signature">(tasks)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function to save tasks to local storage
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tasks</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The array of task objects to be saved.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tasks_task.js.html">tasks/task.js</a>, <a href="tasks_task.js.html#line183">line 183</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="updateTaskColumn"><span class="type-signature"></span>updateTaskColumn<span class="signature">(taskElement, newColumn)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Updates task column in local storage
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>taskElement</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The DOM element of the task being moved.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newColumn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the new column to update the task to.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tasks_task.js.html">tasks/task.js</a>, <a href="tasks_task.js.html#line229">line 229</a>
     </li></ul></dd>
     
 
@@ -589,7 +1316,7 @@ In Progress -> Done: render buttons, auto stop timer
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="task.js.html">task.js</a>, <a href="task.js.html#line92">line 92</a>
+        <a href="tasks_task.js.html">tasks/task.js</a>, <a href="tasks_task.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -635,13 +1362,13 @@ In Progress -> Done: render buttons, auto stop timer
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#handleDragover">handleDragover</a></li><li><a href="global.html#renderTaskButtons">renderTaskButtons</a></li><li><a href="global.html#updateTaskState">updateTaskState</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#formatTimeHHMMSS">formatTimeHHMMSS</a></li><li><a href="global.html#handleDragover">handleDragover</a></li><li><a href="global.html#loadTasks">loadTasks</a></li><li><a href="global.html#populateTasksFromStorage">populateTasksFromStorage</a></li><li><a href="global.html#renderShop">renderShop</a></li><li><a href="global.html#renderTaskButtons">renderTaskButtons</a></li><li><a href="global.html#saveTasks">saveTasks</a></li><li><a href="global.html#updateTaskColumn">updateTaskColumn</a></li><li><a href="global.html#updateTaskState">updateTaskState</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Dec 06 2024 15:14:14 GMT-0800 (北美太平洋标准时间)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Dec 11 2024 15:33:20 GMT-0800 (北美太平洋标准时间)
 </footer>
 
 <script> prettyPrint(); </script>
