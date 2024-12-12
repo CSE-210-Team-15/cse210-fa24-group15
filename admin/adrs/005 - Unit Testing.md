@@ -11,7 +11,12 @@ Which software to use for making unit tests
 
 ## Decision Outcome
 
-Jest and Node Test Runner
+Jest - Rejected
+
+Switched to Node Test Runner because part of the team is using Common JS (CJS) and Part of the team is using ES modules (ESM). Jest doesn't support ES modules well, and it is easier to switch to ES modules for the code using Common JS than the other way around. Node Test Runner is a built in testing solution for Node JS. It is easy to use and no installation required.
+##### Usage
+- For testing: node --test
+- For Coverage Report: node --test --experimental-test-coverage
 
 ## Pros and Cons of the Options
 
@@ -57,4 +62,4 @@ Jest and Node Test Runner
 
 ##### Cons:
 
-- Best for React
+- Best for React usage, but this project is not using React
