@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import test from "node:test";
-import { Game } from "./Game.js";
+import { Game } from "../src/components/petBlock/Game.js";
 
 const demo_game_1 = new Game();
 demo_game_1._coins = 0;
